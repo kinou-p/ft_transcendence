@@ -1,0 +1,22 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Dockerfile.nginx                                   :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: apommier <apommier@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/03/19 09:28:32 by apommier          #+#    #+#              #
+#    Updated: 2023/03/19 09:28:33 by apommier         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+FROM nginx:latest
+
+RUN			apt update -y
+RUN         apt-get install -y openssl
+
+RUN         mkdir -p /etc/ssl/private
+RUN         mkdir -p /etc/ssl/certs
+RUN         openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt -subj "/C=FR/ST=17/L=StJeanDeLiversay/O=42/CN=apommier" 
+
+COPY		conf/nginx.conf /etc/nginx/conf.d/default.conf

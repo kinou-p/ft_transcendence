@@ -1,0 +1,67 @@
+version: "3.3" 
+
+services:
+
+  nginx:
+    build:
+      context : ./
+      dockerfile: ./dockerfiles/Dockerfile.nginx
+    container_name: nginx
+    #image: nginx:homemade
+    depends_on:
+      - backend
+    ports:
+      - 443:443
+    volumes:
+      - ./frontend:/var/www/html
+    restart: unless-stopped
+    networks:
+      - pongNetwork
+
+  backend:
+    build: 
+      context : ./
+      dockerfile: ./dockerfiles/Dockerfile.backEnd
+    container_name: webapp
+    #image: wordpress:homemade
+    env_file: .env
+    #volumes:
+    # - wp_files:/var/www/html
+    depends_on:
+      - postgresql
+    networks:
+      - pongNetwork
+    restart: unless-stopped
+
+  postgresql:
+    build: #./dockerfiles/Dockerfile.PostgreSQL
+      context : ./
+      dockerfile: ./dockerfiles/Dockerfile.PostgreSQL
+    container_name: postgresql
+    #image: mariadb:homemade
+    ports:
+      - 3306:3306
+    env_file: .env
+    #volumes:
+    #  - dbdata:/var/lib/mysql
+    networks:
+      - pongNetwork
+    restart: unless-stopped
+
+networks:
+  pongNetwork:
+    driver: bridge
+
+volumes:
+    front_files:
+      driver: local
+      driver_opts:
+        type: none
+        o: 'bind'
+        device: '/frontend'
+    dbdata:
+      driver: local
+      driver_opts:
+        type: none
+        o: 'bind'
+        device: '/home/apommier/data/mariadb'
