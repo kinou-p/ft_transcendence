@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-	<title>Ma première page web</title>
+    <meta charset="utf-8">
+    <link href="./css/header.css" rel="stylesheet">
+	<title>BEST PONG EVER</title>
 </head>
 <body>
-	<h1>Bienvenue sur ma page web !</h1>
-	<p>Je suis content de vous accueillir sur ma première page web.</p>
+    <div class="header">
+        <div class="box menu"> <p class="userTxt">Menu</p> </div>
+        <div class="box headerName">
+            <p class="center pong">PONG</p>
+        <!-- <p class="box headerName">PONG</p> -->
+        </div>
+        <div class="box username"> 
+            <p class="userTxt">UserName</p> 
+            <img class="pp center" src="./img/pp.jpg" alt="profile picture">
+        </div>
+        <!-- <h1 class="headerName">PONG</h1> -->
+        <!-- <p class="username">username</p> -->
+    </div>
+    <div class ="login">
+        
+        <form method="get" name="login" action="" class ="loginForm">
+            <p class="loginHere">Login Here</p>
+            <!-- <input type="text" name="prenom"> -->
+            <!-- <label>Login</label> :  -->
+            <input type="text" name="login" placeholder="login">
+            <!-- <label>Password</label> :  -->
+            <input type="text" name="password" placeholder="password">
+            <input class="submit" type="button" value="LOGIN">
+            <!-- <p>Texte à l'intérieur du formulaire</p> -->
+        </form>
+        <!-- <p>Texte après le formulaire</p>-->
+    </div>
+	<!-- <p>Je suis content de vous accuawdawdeillir sur ma première page web.</p> -->
+    <footer>
+        <p>@apommier | apommier@student.42.fr</p>
+    </footer>
 </body>
 </html>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Iso&display=swap" rel="stylesheet">

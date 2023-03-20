@@ -6,12 +6,12 @@
 #    By: apommier <apommier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 09:28:32 by apommier          #+#    #+#              #
-#    Updated: 2023/03/19 09:28:33 by apommier         ###   ########.fr        #
+#    Updated: 2023/03/20 19:48:53 by apommier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM nginx:latest
-
+    
 RUN			apt update -y
 RUN         apt-get install -y openssl
 

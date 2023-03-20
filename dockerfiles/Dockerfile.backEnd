@@ -1,13 +1,33 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Dockerfile.webPage                                 :+:      :+:    :+:    #
+#    Dockerfile.backEnd                                 :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: apommier <apommier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 09:28:33 by apommier          #+#    #+#              #
-#    Updated: 2023/03/19 11:36:48 by apommier         ###   ########.fr        #
+#    Updated: 2023/03/20 21:24:40 by apommier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# FROM node:latest
+# # RUN npm install
+# # RUN apt install -y npm 
+# # RUN npm install express --save
+# EXPOSE 8080
+# WORKDIR /home/node/app
+# COPY /backend/package*.json ./
+# # RUN ls
+# RUN npm install
+# # RUN npm install express && npm install  
+# CMD [ "node", "server.js" ]
+
+FROM node:alpine
 FROM node:latest
+WORKDIR /usr/src/app
+COPY /backend/package*.json ./
+RUN npm install
+COPY /backend/ .    
+EXPOSE 5000
+CMD ["npm", "start"]
+# CMD ["node", "server.js"]

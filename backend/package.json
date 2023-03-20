@@ -1,0 +1,15 @@
+{
+  "name": "dockernodejspong",
+  "version": "1.0.0",
+  "description": "Web server to run an online pong",
+  "author": "apommier",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {},
+  "license": "ISC"
+}

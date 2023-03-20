@@ -1,0 +1,174 @@
+body {
+	margin: 0%;
+	background-color: rgb(47, 47, 47);
+	color: white;	
+}
+
+footer {
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: rgb(0, 0, 0);
+}
+
+/* #footer {
+	position:absolute;
+	bottom:0;  /* on le colle en bas */
+	/* width:100%;
+	height:100px; */
+
+
+.pp {
+	height: 10vh;
+	width: 10vh;
+	border-radius: 50%;
+}
+
+.loginHere{
+	/* justify-content: center; */
+	font-size: 5vh;
+	font-family: 'Rubik Iso';
+	text-align: center;
+	margin-top: 10vh;
+	/* border: 5px solid rgb(255, 255, 255); */
+
+}
+
+::placeholder {
+	font-size: 3vh;
+	text-align: center;
+	align-items: center;
+	margin:auto;
+}
+
+.submit:hover {
+	background-color: blueviolet;
+}
+
+input{
+	height: 5vh;
+	border-radius: 100vh;
+}
+
+.pp:hover {
+	border: 5px solid rgb(255, 255, 255);
+}
+
+.userTxt:hover {
+	color:blueviolet;;
+}
+
+.userTxt {
+	margin-right: 5%;
+}
+
+.username {
+	display: flex;
+	font-size: 4vh;
+	max-width: 33%;
+	color: aqua;
+	/* text-align: right; */
+	/* width: 10%; */
+	justify-content: right;
+	/* align-self: flex-end; */
+	/* margin-left: auto; */
+	/* text-align: right; */
+}
+
+label{
+	/* border: 5px solid rgb(255, 255, 255); */
+	/* width: 15vw; */
+}
+
+.login {
+	/* text-align: center; */
+	/* justify-content: center; */
+}
+
+.loginForm {
+	/* margin-top: 20vh; */
+	align-items: center;
+	height: 50vh;
+	/* text-align: center; */
+	display: flex;
+	flex-direction: column;
+	/* border: 5px solid rgb(255, 255, 255); */
+	justify-content: space-around;
+
+}
+
+/* .menu:hover {
+	color:blueviolet;
+} */
+
+.menu {
+	color: aqua;
+	font-size: 4vh;
+	/* margin-left: %; */
+	/* padding-left: 2vw; */
+	/* margin-left: 20px; */
+	/* max-width: 33%; */
+	/* margin-right: auto; */
+	/* align-self: flex-start; */
+	/* justify-content: start; */
+	/* text-align: left; */
+}
+
+.pong{
+	font-family:'Rubik Iso';
+}
+
+.box {
+	/* border: 2px solid white; */
+	width: 33%;
+}
+
+.center {
+	/* text-align: center; */
+	align-self: center;
+}
+
+.headerName {
+	/* margin: auto; */
+	display:flex;
+	max-width: 33%;
+	/* align-items: center; */
+	height: 100%;
+	font-size: 50px;
+	/* text-align: center; */
+	/* align-self: center; */
+	/* margin: auto; */
+	/* border: 2px solid white; */
+	/* height: 100px; */
+	color:blueviolet;
+	/* align-items: center; */
+	/* text-align-last:center; */
+	font-size: 12vh;
+	justify-content: center;
+}
+
+.header {
+	display: flex;
+	/* border: 2px solid white; */
+	/* border: 5px solid white; */
+	margin: 0;
+	height: 15vh;
+	/* justify-content: space-between; */
+	align-items: center;
+	/* justify-content: center; */
+	/* margin: 0%; */
+	/* padding: 0%	; */
+	/* border: 0cap; */
+	/* width: 100%; */
+	/* margin-top: 0%; */
+	/* 	padding-top: 0%; */
+	background-color: rgb(0, 0, 0);
+	/* background-attachment: fixed */
+	/* color: white;	 */
+}
+
+h1 {
+	color:blueviolet
+	/* background-color: rgb(153, 32, 32) !important; */
+}

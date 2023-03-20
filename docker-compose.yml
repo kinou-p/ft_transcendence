@@ -10,28 +10,34 @@ services:
     #image: nginx:homemade
     depends_on:
       - backend
+      # - backend
     ports:
-      - 443:443
-    volumes:
-      - ./frontend:/var/www/html
+      - 80:80
+      # - 443:443
+
     restart: unless-stopped
     networks:
       - pongNetwork
 
+  # backend:
   backend:
     build: 
       context : ./
       dockerfile: ./dockerfiles/Dockerfile.backEnd
-    container_name: webapp
+    container_name: backend
+    ports:
+      - 5000:5000
     #image: wordpress:homemade
     env_file: .env
-    #volumes:
-    # - wp_files:/var/www/html
+    volumes:
+      - ./frontend:/var/www/html
+    # volumes:
+    #  - ./backend:/home/node/app
     depends_on:
       - postgresql
     networks:
       - pongNetwork
-    restart: unless-stopped
+    # restart: unless-stopped
 
   postgresql:
     build: #./dockerfiles/Dockerfile.PostgreSQL
@@ -65,3 +71,19 @@ volumes:
         type: none
         o: 'bind'
         device: '/home/apommier/data/mariadb'
+
+# version: "3.3"
+# services:
+#     backend:
+#         build:
+#             context: ./dockerfiles
+#             dockerfile: Dockerfile.backEnd
+#         ports:
+#             - "5000:5000"
+#     nginx:
+#         restart: always
+#         build:
+#             context: ./dockerfiles
+#             dockerfile: Dockerfile.nginx
+#         ports:
+#             - "80:80"
