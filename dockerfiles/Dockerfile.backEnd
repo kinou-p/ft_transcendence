@@ -6,7 +6,7 @@
 #    By: apommier <apommier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 09:28:33 by apommier          #+#    #+#              #
-#    Updated: 2023/03/20 21:24:40 by apommier         ###   ########.fr        #
+#    Updated: 2023/03/22 12:14:35 by apommier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ FROM node:latest
 WORKDIR /usr/src/app
 COPY /backend/package*.json ./
 RUN npm install
+#npm install body-parser
 COPY /backend/ .    
 EXPOSE 5000
-CMD ["npm", "start"]
-# CMD ["node", "server.js"]
+# CMD ["npm", "start"]
+CMD ["node", "server.js"]

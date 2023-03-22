@@ -42,6 +42,11 @@ footer {
 	margin:auto;
 }
 
+.submit{
+	height: 5vh;
+	border-radius: 100vh;
+}
+
 .submit:hover {
 	background-color: blueviolet;
 }
