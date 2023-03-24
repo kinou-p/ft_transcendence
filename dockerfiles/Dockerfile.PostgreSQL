@@ -6,8 +6,12 @@
 #    By: apommier <apommier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 09:28:30 by apommier          #+#    #+#              #
-#    Updated: 2023/03/19 11:24:21 by apommier         ###   ########.fr        #
+#    Updated: 2023/03/22 18:45:25 by apommier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM postgres:latest
+COPY database/init.sql /docker-entrypoint-initdb.d/
+# RUN sed -i 's/bind-address/bind-address = 0.0.0.0 #/i' /etc/mysql/mariadb.conf.d/50-server.cnf
+EXPOSE 5432
+CMD ["postgres"]

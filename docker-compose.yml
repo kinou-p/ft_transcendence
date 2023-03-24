@@ -7,10 +7,9 @@ services:
       context : ./
       dockerfile: ./dockerfiles/Dockerfile.nginx
     container_name: nginx
-    #image: nginx:homemade
+    env_file: .env
     depends_on:
       - backend
-      # - backend
     ports:
       - 80:80
       # - 443:443
@@ -20,15 +19,13 @@ services:
     networks:
       - pongNetwork
 
-  # backend:
-  backend:
+  backend:    
     build: 
       context : ./
       dockerfile: ./dockerfiles/Dockerfile.backEnd
     container_name: backend
     ports:
       - 5000:5000
-    #image: wordpress:homemade
     env_file: .env
     volumes:
       - ./frontend:/var/www/html
@@ -36,9 +33,9 @@ services:
     #  - ./backend:/home/node/app
     depends_on:
       - postgresql
+    restart: unless-stopped
     networks:
       - pongNetwork
-    # restart: unless-stopped
 
   postgresql:
     build: #./dockerfiles/Dockerfile.PostgreSQL
@@ -47,8 +44,9 @@ services:
     container_name: postgresql
     #image: mariadb:homemade
     ports:
-      - 3306:3306
-    env_file: .env
+      - 5432:5432
+      # - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    env_file: .env  
     #volumes:
     #  - dbdata:/var/lib/mysql
     networks:
