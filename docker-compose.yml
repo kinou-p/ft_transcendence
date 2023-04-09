@@ -15,43 +15,64 @@ services:
       # - 443:443
     volumes:
       - ./frontend:/var/www/html
-    restart: unless-stopped
+    # restart: unless-stopped
     networks:
       - pongNetwork
 
-  backend:    
-    build: 
+  backend:
+    image: node:latest
+    build:
       context : ./
       dockerfile: ./dockerfiles/Dockerfile.backEnd
     container_name: backend
     ports:
-      - 5000:5000
+      - 3000:3000
     env_file: .env
-    volumes:
-      - ./frontend:/var/www/html
     # volumes:
-    #  - ./backend:/home/node/app
+      # - ./backend:/usr/src/app/
     depends_on:
       - postgresql
-    restart: unless-stopped
+    # entrypoint: ["/bin/sh", "-c" , "npm install && npm run start:dev"]
+    # restart: unless-stopped
     networks:
       - pongNetwork
 
   postgresql:
-    build: #./dockerfiles/Dockerfile.PostgreSQL
-      context : ./
-      dockerfile: ./dockerfiles/Dockerfile.PostgreSQL
-    container_name: postgresql
-    #image: mariadb:homemade
+    image: postgres:14.1-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
-      # - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    env_file: .env  
-    #volumes:
-    #  - dbdata:/var/lib/mysql
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
     networks:
       - pongNetwork
-    restart: unless-stopped
+
+  # postgresql:
+  #   build: #./dockerfiles/Dockerfile.PostgreSQL
+  #     context : ./
+  #     dockerfile: ./dockerfiles/Dockerfile.PostgreSQL
+  #   container_name: postgreDB
+  #   #image: mariadb:homemade
+  #   ports:
+  #     - 5432:5432
+  #     # - ${POSTGRES_PORT}:${POSTGRES_PORT}
+  #   env_file: .env  
+  #   # environment:
+  #   #   - POSTGRES_USER:kinou
+  #   #   - POSTGRES_PASSWORD:pass
+  #   #   - POSTGRES_DB:postgreDB
+  #   #   - POSTGRES_ROOT_PASSWORD:pass
+  #   #   - POSTGRES_HOST:localhost
+  #     # - name:value
+  #   #volumes:
+  #   #  - dbdata:/var/lib/mysql
+  #   # networks:
+  #     # - pongNetwork
+  #   restart: unless-stopped
 
 networks:
   pongNetwork:
@@ -70,6 +91,14 @@ volumes:
         type: none
         o: 'bind'
         device: '/home/apommier/data/mariadb'
+    back:
+      driver: local
+      driver_opts:
+        type: none
+        o: 'bind'
+        device: '/backend'
+    db:
+      driver: local
 
 # version: "3.3"
 # services:
@@ -78,7 +107,7 @@ volumes:
 #             context: ./dockerfiles
 #             dockerfile: Dockerfile.backEnd
 #         ports:
-#             - "5000:5000"
+#             - "3000:3000"
 #     nginx:
 #         restart: always
 #         build:
