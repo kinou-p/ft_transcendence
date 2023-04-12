@@ -19,6 +19,26 @@ services:
     networks:
       - pongNetwork
 
+  react_app:
+    build:
+      context : ./
+      dockerfile: ./dockerfiles/Dockerfile.react
+    # image: node:latest
+    container_name: react_app
+    # env_file: .env
+    depends_on:
+      - nginx
+    ports:
+      - 8080:8080
+      # - 443:443
+    volumes:
+      - ./frontend:/var/www/html
+      # - ./frontend/pong/my-app:/app
+    # restart: unless-stopped
+    networks:
+      - pongNetwork
+    # entrypoint: ["sh", "-c" , "npm install && npm run start"]
+
   backend:
     image: node:latest
     build:
@@ -40,6 +60,7 @@ services:
   postgresql:
     image: postgres:14.1-alpine
     restart: unless-stopped
+    container_name: postgresql
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

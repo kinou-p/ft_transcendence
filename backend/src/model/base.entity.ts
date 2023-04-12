@@ -64,7 +64,7 @@ export abstract class BaseEntity {
 	nickname: string;
 
 	@Column({ nullable: true })
-	Password: string;
+	password: string;
 
 	@Column({ nullable: true })
 	email: string;

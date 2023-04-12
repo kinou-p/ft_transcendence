@@ -1,0 +1,20 @@
+# Utilisez l'image de base de Node.js version 14
+FROM node:latest
+
+# Définissez le répertoire de travail à /app
+WORKDIR /app
+
+# Copiez le fichier package.json et package-lock.json à l'intérieur de l'image
+COPY /frontend/pong/my-app/package*.json ./
+
+# Installez les dépendances de l'application
+RUN npm install
+
+# Copiez le reste des fichiers de l'application dans l'image
+COPY /frontend/pong/my-app/ .
+
+# Exposez le port 3000 pour accéder à l'application dans le navigateur
+EXPOSE 8080
+
+# Démarrez l'application avec la commande "npm start"
+CMD ["npm", "run", "start"]
