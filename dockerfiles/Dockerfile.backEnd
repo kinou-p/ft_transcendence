@@ -6,95 +6,23 @@
 #    By: apommier <apommier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 09:28:33 by apommier          #+#    #+#              #
-#    Updated: 2023/04/12 14:56:14 by apommier         ###   ########.fr        #
+#    Updated: 2023/04/17 05:22:39 by apommier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# FROM node:latest
-# # RUN npm install
-# # RUN apt install -y npm 
-# # RUN npm install express --save
-# EXPOSE 8080
-# WORKDIR /home/node/app
-# COPY /backend/package*.json ./
-# # RUN ls
-# RUN npm install
-# # RUN npm install express && npm install  
-# CMD [ "node", "server.js" ]
-
-# FROM node:latest
-# FROM node:alpine
-# WORKDIR /usr/src/app
-# # COPY /backend/* ./
-# RUN npm install
-# #npm install body-parser
-# COPY /backend/ .
-# COPY ./.env .
-# # RUN rm -rf node_modules
-# # EXPOSE 3000
-# # RUN curl -o /usr/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-# # CMD ["/usr/wait-for-it.sh", "postgresql:5432", "--", "node", "server.js"]
-# CMD ["npm", "start"]
-# # CMD dockerize -wait tcp://postgresql:5432 -timeout 60s
-# # CMD ["node", "app.js"]
-
-# FROM node:alpine
-
 FROM node:latest
-RUN apt-get update -y
-RUN apt-get install -y postgresql-client
 
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY /backend/package*.json ./
 RUN npm install
+
 COPY ./.env .
-#npm install body-parser
 COPY /backend/tsconfig*.json ./
+COPY /backend/src ./src
 
-
-# COPY /backend/src ./
-
-
-
-COPY /backend/dist /usr/src/app/dist  
 EXPOSE 3000
-# CMD ["npm", "start"]
-# CMD ["nest", "start", "--watch"]
-# CMD ["node", "server.js"]
 
-# RUN npm run build
+RUN npm run build
+RUN rm -rf ./src
 
-
-# WORKDIR /usr/src/app/dist
-# CMD ["tail", "-f", "/dev/null"]
-CMD ["npm", "run", "start:build"]
-# CMD ["npm", "run", "start"]
-
-
-
-# FROM node:latest
-
-# RUN apt-get update -y
-# RUN apt-get install -y postgresql-client
-
-# WORKDIR /usr/src/app
-
-# COPY /backend/package*.json ./
-# RUN npm install
-
-# COPY /backend .
-# RUN npm run build
-# # RUN rm -rf src
-
-# EXPOSE 3000
-
-# RUN	rm -rf src
-# COPY /backend/package*.json ./dist/
-# WORKDIR /usr/src/app/dist
-# # RUN ls
-# # CMD ["npm", "run", "start"]
-# # CMD ["nest", "start"]
-# # CMD ["npm", "run", "--prefix", "dist", "start:dev"]
-# # CMD ["npm", "run", "start", "&&", "rm", "-rf", "/usr/src/app/src"]
-# CMD ["tail", "-f", "/dev/null"]
-# # RUN rm -rf /usr/src/app/src
+CMD ["npm", "run", "start"]

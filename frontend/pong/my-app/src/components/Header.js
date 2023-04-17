@@ -6,15 +6,15 @@ function Header()
 {
 	return (
 		<div class="header">
-        	<div class="box menu"> <p class="userTxt">Menu</p> </div>
+        	<a href="http://localhost" class="box menu"> <p class="userTxt">Menu</p> </a>
         	<div class="box headerName">
         	    <p class="center pong">PONG</p>
         	</div>
-        	<div class="box username"> 
-        	    <p class="userTxt">UserName</p> 
+        	<a href="http://localhost/pong" class="box username"> 
+        	    <p class="userTxt">Play</p> 
         	    {/* <img class="pp center" src="../../public/logo192.png" alt="profile picture"> */}
 				<img src={logo} className="pp center" alt="logo" />
-        	</div>
+        	</a>
     	</div>
 	);
 }

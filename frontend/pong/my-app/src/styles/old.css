@@ -74,6 +74,7 @@ input{
 	max-width: 33%;
 	color: aqua;
 	justify-content: right;
+	text-decoration: none;
 }
 
 label{
@@ -96,6 +97,7 @@ label{
 	color: aqua;
 	/* font-size: 4vh; */
 	font-size: 2vw;
+	text-decoration: none;
 }
 
 .pong{

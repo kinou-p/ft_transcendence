@@ -12,11 +12,11 @@
 
 
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller.js';
-import { AppService, UsersService } from './app.service.js';
-import { User } from './model/item.entity.js';
+import { AppController } from './app.controller';
+import { AppService, UsersService } from './app.service';
+import { User } from './model/item.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { getTypeOrmConfig } from './config/config.service.js';
+import { getTypeOrmConfig } from './config/config.service';
 
 @Module({
   imports: [
