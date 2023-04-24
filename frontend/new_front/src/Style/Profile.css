@@ -1,0 +1,19 @@
+.profile {
+	flex-direction: row;
+}
+
+.profile-pic {
+	height: 250px;
+	width: 250px;
+	border-radius: 50%;
+	border-image-width: thick;
+	border-color: black;
+	margin-top: 20px;
+}
+
+canvas {
+	margin-top: 20px;
+    border: solid 0px #ccc;
+    background-color: #000;
+	border-radius: 3%;
+}
