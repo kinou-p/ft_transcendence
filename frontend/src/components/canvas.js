@@ -2,12 +2,13 @@
 
 import { useEffect } from 'react';
 import io from 'socket.io-client';
-const socket = io('http://localhost:4000');
 // const socket = io('http://192.168.1.14:4000');
 // const socket = io('http://86.209.110.20:4000');
 // const socket = io('http://172.29.113.91:4000');
 
 export function drawCanvas() {
+	const socket = io('http://localhost:4000');
+	console.log("start function");
 	const canvas = document.getElementById('myCanvas');
 	const ctx = canvas.getContext('2d');
 	
@@ -19,6 +20,7 @@ export function drawCanvas() {
 
 	//socket
 	let myId = 0;
+	let gameId = 0;
 
 	//general canvas
 	const scale = window.devicePixelRatio; 
@@ -67,12 +69,27 @@ export function drawCanvas() {
 //========================================================================================================
 //========================================================================================================
 
+	function matchmaking()
+	{
+		console.log(`id ion matcj= ${myId}`)
+		const info = {
+			id: myId,
+		};
+		socket.emit('pong:matchmaking', info);
+	}
+
+	socket.on('pong:gameId', (data) => {
+		gameId = data;
+	});
+
 	socket.on('connect', () => {
 		console.log('Connected to NestJS server');
 	});
 
 	socket.on('pong:clientId', (data) => {
+		console.log("receive id")
 		myId = data;
+		console.log(`id is= ${myId}`)
 	});
 
 	socket.on('pong:info', (data) => {
@@ -86,6 +103,8 @@ export function drawCanvas() {
 
 	function send_info()
 	{
+		if (gameId === 0)
+			return ;
 		const info = {
 			id: myId,
 			width: canvas.width,
@@ -95,19 +114,24 @@ export function drawCanvas() {
 			vY: vY,
 			ballX: ballX,
 			ballY: ballY,
+			gameId: gameId,
 		};
 		socket.emit('pong:message', info);
 	}
 
 	socket.on('pong:paddle', (data) => {
+		console.log("paddle info receive")
 		oPaddleY = (data.paddleY / data.height) * canvas.height
 	});
 
 	function send_point()
 	{
+		if (gameId === 0)
+			return ;
 		console.log("send point");
 		const info = {
 			id: myId,
+			gameId: gameId,
 			point: hisScore,
 		}
 		socket.emit('pong:point', info);
@@ -129,18 +153,24 @@ export function drawCanvas() {
 
 	function send_paddle_info()
 	{
+		if (gameId === 0)
+			return ;
 		const info = {
 			id: myId,
 			paddleY: paddleY,
 			// width: canvas.width,
 			height: canvas.height,
+			gameId: gameId,
 		};
 		socket.emit('pong:paddle', info);
 	}
 
 	function send_forced_info()
 	{
+		if (gameId === 0)
+			return ;
 		const info = {
+			gameId: gameId,
 			width: canvas.width,
 			height: canvas.height,
 			id: myId,
@@ -200,8 +230,19 @@ export function drawCanvas() {
 //========================================================================================================
 //========================================================================================================
 
+matchmaking();
+// while (!gameId)
+// 	;
+
+
 function draw(timestamp)
 {
+	if (gameId === 0 )
+	{
+		requestAnimationFrame(draw)
+		return;
+	}
+
 		const deltaTime = timestamp - lastUpdateTime;
 		lastUpdateTime = timestamp;
 

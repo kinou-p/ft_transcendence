@@ -1,7 +1,6 @@
 import '../styles/old.css';
 import { login } from '../script/login.js'
-
-
+ 
 function Home()
 {
 	return (
@@ -12,7 +11,7 @@ function Home()
          	    <input type="text" name="password" placeholder="password"></input>
          	    <button class="submit" onClick={login}>LOGIN</button>
          	</form>
-		 	<button></button>
+		 	{/* <button></button> */}
     	</div>
 	);
 }
