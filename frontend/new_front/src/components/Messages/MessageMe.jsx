@@ -1,6 +1,8 @@
 import React from "react"
 import styled from "styled-components"
 import DefaultPic from '../../assets/profile.jpg'
+import { useRef } from "react";
+import { useEffect } from "react";
 import '../../Style/Messages.css'
 
 const MeStyleP = styled.p`
@@ -12,8 +14,13 @@ const MeStyleP = styled.p`
 `
 
 function MessageMe(){
+	const scrollRef = useRef();
+
+	useEffect(() => {
+	scrollRef.current?.scrollIntoView({ behavior: "smooth"})
+}, [])
 	return (
-		<div className="meMessage">
+		<div className="meMessage" ref={scrollRef}>
 			<div>
 				<img className="messageInfo" src={DefaultPic} alt="profile" />
 			</div>
