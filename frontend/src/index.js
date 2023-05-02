@@ -23,7 +23,6 @@ root.render(
 			<Route exact path="/pong" element={<PlayButton />}/>
 			<Route exact path="/pong/play" element={<Field />}/>
 			<Route exact path="/login42" element={<Login42 />}/>
-			{/* <Route exact path="/chat" element={<Field />}/> */}
     	</Routes>
   	</BrowserRouter>
   </>

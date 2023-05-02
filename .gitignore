@@ -1,2 +1,9 @@
 #.env
 backend/node_modules/
+backend/dist/
+
+pong/node_modules/
+pong/dist/
+
+*/node_modules/
+*/dist/

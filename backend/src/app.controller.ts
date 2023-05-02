@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, InternalServerErrorException } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, InternalServerErrorException } from '@nestjs/common';
 // import { AppService } from './app.service.js';
 import { UsersService } from './app.service';
 import { User } from './model/item.entity';
@@ -51,5 +51,11 @@ export class AppController
   async create(@Body() user: User)
   {
     return this.usersService.create(user);
+  }
+
+  @Get('user/:id')
+  async getUser(@Param('id') id: number)
+  {
+    return this.usersService.findOne(id);
   }
 }

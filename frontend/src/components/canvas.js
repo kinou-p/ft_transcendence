@@ -8,6 +8,7 @@ import io from 'socket.io-client';
 
 export function drawCanvas() {
 	const socket = io('http://localhost:4000');
+	// const socket = io()
 	console.log("start function");
 	const canvas = document.getElementById('myCanvas');
 	const ctx = canvas.getContext('2d');

@@ -18,7 +18,7 @@ function Field()
 	// };
 
 	return (
-		<div class="field" id="canvas_container">
+		<div className="field" id="canvas_container">
 			<canvas id="myCanvas"></canvas>
 			{/* <button onClick={handleButtonClick}>Draw on Canvas</button> */}
 			{/* {buttonClicked && <canvas id="myCanvas"></canvas>}

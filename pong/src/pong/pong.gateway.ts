@@ -32,16 +32,9 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	handleDisconnect(client: Socket)
 	{
 		console.log(`Client disconnected: ${client.id}`);
-
-		const disconnectedClientId = Object.keys(this.clients).find(clientId => this.clients[clientId] === client);
-		if (disconnectedClientId)
-		{
-			delete this.clients[disconnectedClientId];
-			console.log(`Client disconnected: ${disconnectedClientId}`);
-			console.log(`Total connected clients: ${Object.keys(this.clients).length}`);
-		}
-
-		// console.log(`Total connected clients: ${this.clients.size}`);
+		this.waitingClients.delete(client);
+		delete this.clients[client.id];
+		console.log(`Total connected clients: ${Object.keys(this.clients).length}`);
 	}
 
 	@SubscribeMessage('pong:matchmaking')
