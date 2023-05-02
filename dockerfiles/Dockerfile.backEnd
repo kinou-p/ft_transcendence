@@ -6,29 +6,23 @@
 #    By: apommier <apommier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 09:28:33 by apommier          #+#    #+#              #
-#    Updated: 2023/03/22 12:14:35 by apommier         ###   ########.fr        #
+#    Updated: 2023/04/17 05:22:39 by apommier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# FROM node:latest
-# # RUN npm install
-# # RUN apt install -y npm 
-# # RUN npm install express --save
-# EXPOSE 8080
-# WORKDIR /home/node/app
-# COPY /backend/package*.json ./
-# # RUN ls
-# RUN npm install
-# # RUN npm install express && npm install  
-# CMD [ "node", "server.js" ]
-
-FROM node:alpine
 FROM node:latest
-WORKDIR /usr/src/app
+
+WORKDIR /app
 COPY /backend/package*.json ./
 RUN npm install
-#npm install body-parser
-COPY /backend/ .    
-EXPOSE 5000
-# CMD ["npm", "start"]
-CMD ["node", "server.js"]
+
+COPY ./.env .
+COPY /backend/tsconfig*.json ./
+COPY /backend/src ./src
+
+EXPOSE 3000
+
+RUN npm run build
+RUN rm -rf ./src
+
+CMD ["npm", "run", "start"]
