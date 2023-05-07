@@ -2,8 +2,11 @@
 backend/node_modules/
 backend/dist/
 
+api/node_modules/
+api/dist/
+
 pong/node_modules/
 pong/dist/
 
 */node_modules/
-*/dist/
+*/dist/ 

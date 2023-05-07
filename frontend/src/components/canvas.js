@@ -27,9 +27,9 @@ export function drawCanvas() {
 	const scale = window.devicePixelRatio; 
 	canvas.width = canvas.offsetWidth;
 	canvas.height = canvas.offsetHeight;
-	
+
 	//paddle var
-	const paddleWidth = canvas.width * 0.01;
+	let paddleWidth = canvas.width * 0.01;
 	let paddleHeight = canvas.height * 0.25;
 	let paddleY = canvas.height / 2 - (paddleHeight / 2);
 	let paddleX = canvas.width / 40;
@@ -61,7 +61,7 @@ export function drawCanvas() {
 	
 	let lastUpdateTime = performance.now();
 
-	let maxAngle = 50;
+	const maxAngle = 50;
 	let maxBounceAngle = (maxAngle * Math.PI) / 180;
 
 //========================================================================================================

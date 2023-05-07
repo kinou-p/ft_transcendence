@@ -4,8 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  
-	
+
 	private clients: Record<string, Socket> = {};
 
 	afterInit(server: Server)
