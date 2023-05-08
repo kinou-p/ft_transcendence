@@ -49,7 +49,7 @@ export class loginClass {
 	// console.log(response);
 			token = response.data.access_token;
 			// setToken(token);
-	// console.log(`token= ${token}`);
+			// console.log(`token= ${token}`);
 			  axios.get('https://api.intra.42.fr/oauth/token/info', {
 				headers: {
 				  Authorization: `Bearer ${token}`

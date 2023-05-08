@@ -10,6 +10,7 @@ import Head from './components/Head';
 import Field from './components/Field';
 import PlayButton from './components/PlayButton';
 import reportWebVitals from './reportWebVitals';
+import SuccessToken from './script/tokenSuccess'
 import { BrowserRouter, Route, Routes} from 'react-router-dom'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -23,6 +24,7 @@ root.render(
 			<Route exact path="/pong" element={<PlayButton />}/>
 			<Route exact path="/pong/play" element={<Field />}/>
 			<Route exact path="/login42" element={<Login42 />}/>
+			<Route exact path="/token" element={<SuccessToken />}/>
     	</Routes>
   	</BrowserRouter>
   </>

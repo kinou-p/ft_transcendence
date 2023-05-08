@@ -17,8 +17,7 @@ function Header()
         	<a href="http://localhost" className="box menu"> <p className="userTxt">Menu</p> </a>
         	<div className="box headerName">
         	    {/* <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d29dfa49ba7146577ffd8bf595ae8d9e5aaa3e0a9615df18777171ebf836a41&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Flogin42&response_type=code" */}
-        	    <a href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d29dfa49ba7146577ffd8bf595ae8d9e5aaa3e0a9615df18777171ebf836a41&redirect_uri=http%3A%2F%2Flocalhost%3A80%2Fapi%2Fauth%2Flogin&response_type=code"
-					className="center pong">PONG</a>
+        	     <a className="center pong">PONG</a>
         	</div>
         	<a href="http://localhost/pong" className="box username"> 
         	    <p className="userTxt">Play</p> 
