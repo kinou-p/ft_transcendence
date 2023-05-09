@@ -64,6 +64,9 @@ export abstract class BaseEntity {
 	nickname: string;
 
 	@Column({ nullable: true })
+	username: string;
+
+	@Column({ nullable: true })
 	password: string;
 
 	// @Column({ nullable: true })
@@ -80,4 +83,7 @@ export abstract class BaseEntity {
 
 	@Column({ default: 0 })
 	rank: number;
+
+	@Column({ default: 0 })
+	userId: number;
 }

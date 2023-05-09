@@ -14,7 +14,14 @@ function Home()
 	const login2 = () => {
 		console.log('Hello from myFunction');
 		api.get('/profile').then((response) => {
-			console.log(`response= ${response}`)
+			const data = response;
+			// const parsedData = JSON.parse(response.data);
+			// console.log(`response= ${parsedData}`)
+			
+			const myJSON = JSON.stringify(data);
+			console.log(`response2= ${myJSON}`)
+			console.log(`response= ${data}`)
+
 		});
 		// alert("Le bouton a été cliqué !");
 		// var formulaire = document.getElementById("loginForm");

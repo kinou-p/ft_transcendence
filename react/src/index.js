@@ -5,7 +5,7 @@ import './styles/index.css';
 import App from './components/App';
 import Header from './components/Header';
 import Home from './components/Home';
-import Login42 from './components/Login42';
+// import Login42 from './components/Login42';
 import Head from './components/Head';
 import Field from './components/Field';
 import PlayButton from './components/PlayButton';
@@ -23,7 +23,7 @@ root.render(
 			<Route exact path="/" element={<Home/>}/>
 			<Route exact path="/pong" element={<PlayButton />}/>
 			<Route exact path="/pong/play" element={<Field />}/>
-			<Route exact path="/login42" element={<Login42 />}/>
+			{/* <Route exact path="/login42" element={<Login42 />}/> */}
 			<Route exact path="/token" element={<SuccessToken />}/>
     	</Routes>
   	</BrowserRouter>

@@ -18,9 +18,11 @@ export class loginClass {
 		let userName = null;
 		// let  = null;
 
-		
+		console.log("you said yes to connect with 42");
 		const params = new URLSearchParams(url.split('?')[1]);
+		console.log(`params is= ${params}`);
 		const code = params.get('code');
+		console.log(`code is= ${code}`);
 
 		const data = {
 			grant_type: 'authorization_code',
@@ -30,23 +32,41 @@ export class loginClass {
 			redirect_uri: 'http://localhost:80/api/auth/login',
 		  };
 
-		try {
-		const response = await axios.post('https://api.intra.42.fr/oauth/token', data);
-		token = response.data.access_token;
-
-		const response2 = await axios.get('https://api.intra.42.fr/v2/me', {
-			headers: {
+		await axios.post('https://api.intra.42.fr/oauth/token', data)
+		.then(response => {
+			token = response.data.access_token;
+			console.log("HEEEEEEEERRREEEEEEE")
+			axios.get('https://api.intra.42.fr/oauth/token/info', {
+				headers: {
 				Authorization: `Bearer ${token}`
-			}
+				}
+			  })
+			  .then(response => {
+				userId = response.data.resource_owner_id;
+				axios.get('https://api.intra.42.fr/v2/me', {
+					headers: {
+					  Authorization: `Bearer ${token}`
+					}
+				  })
+	  			.then(response => {
+				  console.log(`data get success data= ${response.data}`)
+				  userName = response.data.login
+	  			})
+	  			.catch(error => {
+	  				console.log("ERROR BITCH");
+					console.error(error);
+	  			});
+			  })
+			  .catch(error => {
+				console.log("ERROR BITCH");
+				console.error(error);
+			  });
+
+	  	})
+		.catch(error => {
+			console.log("ERROR BITCH");
+			console.error(error);
 		});
-		userName = response2.data.login;
-		console.log(`all user data= ${response2.data}`)
-		}
-		catch(error)
-		{
-			console.log(error);
-			return ;
-		}
 		console.log(`username before serach= ${userName}`)
 		let user = await this.usersService.findOne(userName);
 		if (!user) {

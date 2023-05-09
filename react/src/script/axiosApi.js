@@ -7,15 +7,20 @@ import axios from 'axios';
 function getToken() {
 	// your code to retrieve the token from localStorage or any other source
 	const token = localStorage.getItem('token');
+	if (typeof token === 'string') {
+		console.log("is a string !!!")
+	  }
 	return token;
 }
 
 console.log(`getToken = ${getToken()}`)
+console.log(`Bearer ${localStorage.getItem("token")}`)
 
-const api = axios.create({
+let api = axios.create({
   baseURL: 'http://localhost/api',
   headers: {
-	  Authorization: `Bearer ${getToken()}`,
+	//   Authorization: `Bearer ${getToken()}`,
+		Authorization : `Bearer ${localStorage.getItem("token")}`
 	},
   withCredentials: true,
 });

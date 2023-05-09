@@ -5,10 +5,11 @@ function SuccessToken() {
   const location = useLocation();
   const { data } = queryString.parse(location.search);
 //   localStorage data.token;
-  console.log(`prout token= ${data}`)
-  localStorage.setItem('token', `${data}`);
+  const cleanData = data.slice(1, -1);
+//   console.log(`prout token= ${cleanData}`)
+  localStorage.setItem('token', `${cleanData}`);
   console.log(`prout token2= ${localStorage.getItem('token')}`)
-//   window.location.replace("http://localhost/pong");
+  window.location.replace("http://localhost/pong");
   
 //   return (
 //     <div>
