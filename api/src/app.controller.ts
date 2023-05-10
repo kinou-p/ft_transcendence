@@ -1,18 +1,22 @@
-import { Controller, Request, Req, Get, Post, UseGuards, Redirect } from '@nestjs/common';
+import { Controller, Request, Req, Get, Post, UseGuards, Redirect, Res } from '@nestjs/common';
 
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
-
-// import { Login42 } from './auth/login42'
 import { loginClass } from './auth/login42'
+import { ChatService } from './chat/chat.service';
+import { UsersService } from './users/users.service';
+
+// import { AuthGuard } from '@nestjs/passport';
+// import { Login42 } from './auth/login42'
 // import { loginClass } from './auth/test'
 
 
 @Controller('/api')
 export class AppController {
   constructor(private authService: AuthService, 
-			  private loginClass: loginClass ) {}
+			  private loginClass: loginClass,
+			  private chatService: ChatService,
+			  private userService: UsersService, ) {}
 
 //   @Post('auth/login')
 //   async login() {
@@ -30,7 +34,7 @@ export class AppController {
 		console.log(`all data in api = ${data}`)
 		
 		const myJSON = JSON.stringify(data);
-		console.log(`response2= ${myJSON}`)
+		console.log(`all data json version= ${myJSON}`)
 		
 		console.log(`data in api = ${(await data).access_token}`)
 		const token = (await data).access_token;
@@ -48,9 +52,9 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
-	//   const myJSON = JSON.stringify(req.user);
-	//   console.log(`req user api= ${req.user}`)
-	//   console.log(`json user api= ${myJSON}`)
+	  const myJSON = JSON.stringify(req.user);
+	  console.log(`req user api= ${req.user}`)
+	  console.log(`json user api= ${myJSON}`)
 	  return req.user;
 	// const user = req.user;
     // const returned = {
@@ -61,8 +65,31 @@ export class AppController {
 	// return returned;
   }
 
-  @Get(`conversation/:id`)
-  getConv(){
-	
+  @UseGuards(JwtAuthGuard)
+  @Post('/win')
+  async addWin(@Request() req) {
+	const user = await this.userService.findOne(req.user.username);
+	user.win++;
+	this.userService.save(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/loss')
+  async addLoss(@Request() req) {
+	const user = await this.userService.findOne(req.user.username);
+	user.loss++;
+	this.userService.save(user);
+  }
+
+//   @UseGuards(JwtAuthGuard)
+//   @Post('/api/victory')
+//   addVictory() {
+// 	this.userService.findOneBy()
+//   }
+  
+  @Get('/api/chat')
+  async Chat(@Res() res) {
+	const messages = await this.chatService.getMessages();
+	res.json(messages);
   }
 }

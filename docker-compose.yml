@@ -113,23 +113,23 @@ networks:
     driver: bridge
 
 volumes:
-    front_files:
-      driver: local
-      driver_opts:
-        type: none
-        o: 'bind'
-        device: '/frontend'
-    dbdata:
-      driver: local
-      driver_opts:
-        type: none
-        o: 'bind'
-        device: '/home/apommier/data/mariadb'
-    back:
-      driver: local
-      driver_opts:
-        type: none
-        o: 'bind'
-        device: '/backend'
+    # front_files:
+    #   driver: local
+    #   driver_opts:
+    #     type: none
+    #     o: 'bind'
+    #     device: '/frontend'
+    # dbdata:
+    #   driver: local
+    #   driver_opts:
+    #     type: none
+    #     o: 'bind'
+    #     device: '/home/apommier/data/mariadb'
+    # back:
+    #   driver: local
+    #   driver_opts:
+    #     type: none
+    #     o: 'bind'
+    #     device: '/backend'
     db:
       driver: local

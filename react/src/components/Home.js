@@ -18,9 +18,9 @@ function Home()
 			// const parsedData = JSON.parse(response.data);
 			// console.log(`response= ${parsedData}`)
 			
-			const myJSON = JSON.stringify(data);
-			console.log(`response2= ${myJSON}`)
-			console.log(`response= ${data}`)
+			const myJSON = JSON.stringify(response.data);
+			console.log(`data response= ${myJSON}`)
+			// console.log(`response= ${data}`)
 
 		});
 		// alert("Le bouton a été cliqué !");
@@ -41,6 +41,12 @@ function Home()
 	 		{/* <div id="loginForm" method="get" name="login2" action="http://localhost/api/profile" className ="loginForm"> */}
 			<div className ="loginForm">
 	 			<button className="submit" onClick={login2}>test button</button>
+			</div>
+			<div className ="loginForm">
+	 			<button className="submit" onClick={() => api.post('/win')}>add win</button>
+			</div>
+			<div className ="loginForm">
+	 			<button className="submit" onClick={() => api.post('/loss')}>add loss</button>
 			</div>
     	</div>
 	// href="https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-6d29dfa49ba7146577ffd8bf595ae8d9e5aaa3e0a9615df18777171ebf836a41&redirect_uri=http%3A%2F%2Flocalhost%3A80%2Fapi%2Fauth%2Flogin&response_type=code">

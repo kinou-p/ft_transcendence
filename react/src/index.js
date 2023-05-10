@@ -23,8 +23,15 @@ root.render(
 			<Route exact path="/" element={<Home/>}/>
 			<Route exact path="/pong" element={<PlayButton />}/>
 			<Route exact path="/pong/play" element={<Field />}/>
-			{/* <Route exact path="/login42" element={<Login42 />}/> */}
 			<Route exact path="/token" element={<SuccessToken />}/>
+
+
+
+			{/* -------  ROUTE FOR CHAT APP HERE ---------  */}
+			{/* <Route exact path="/chat" element={<NOM DU COMPONENT == index dans le tuto/>}/> */}
+
+
+
     	</Routes>
   	</BrowserRouter>
   </>
@@ -34,3 +41,5 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+{/* <Route exact path="/login42" element={<Login42 />}/> */}

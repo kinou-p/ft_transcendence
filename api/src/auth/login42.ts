@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Repository } from 'typeorm';
 
-import { User } from '../model/item.entity';
+import { User } from '../model/user.entity';
 
 @Injectable()
 export class loginClass {
@@ -14,7 +14,7 @@ export class loginClass {
 	async Login42(url: string)
 	{
 		let token = null;
-		let userId = 0;
+		let userId = null;
 		let userName = null;
 		// let  = null;
 
@@ -40,7 +40,10 @@ export class loginClass {
 			}
 		});
 		userName = response2.data.login;
-		console.log(`all user data= ${response2.data}`)
+		userId = parseInt(response2.data.id, 10);
+		// console.log(`all user data= ${response2.data}`)
+		// const myJSON = JSON.stringify(response2.data);
+		// console.log(`json version= ${myJSON}`)
 		}
 		catch(error)
 		{
@@ -48,28 +51,30 @@ export class loginClass {
 			return ;
 		}
 		console.log(`username before serach= ${userName}`)
+		console.log(`ID before serach= ${userId}`)
 		let user = await this.usersService.findOne(userName);
 		if (!user) {
-			console.log(`no user, creating one`)
+			console.log(`no user, creating one`);
 			user = {
-				name: null,
-				description: null,
+				// name: null,
+				// description: null,
 				id: null,
 				password: null,
 				username: userName,
 				nickname: userName,
 				win: 0, 
-				loose: 0,
-				rank: 0,
+				loss: 0,
+				rank: 1200,
 				userId: userId,
 			  };
 			await this.usersService.create(user);
 		}
-		console.log(`in login42 user= ${user}`)
+		// console.log(`in login42 user= ${user}`)
 		const myJSON = JSON.stringify(user);
-		console.log(`in login42 user2= ${myJSON}`)
+		console.log(`in login42 user= ${myJSON}`)
 		
 		console.log("end of login");
-		return (await this.usersService.findOne(userName));
+		return (user);
+		// return (await this.usersService.findOne(userName));
 	}
 }
