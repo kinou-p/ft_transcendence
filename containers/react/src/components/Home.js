@@ -20,7 +20,7 @@ function Home()
 	const handleButtonClick = () => {
 		const token = localStorage.getItem('token')
 		console.log(`token type= ${typeof token}`);
-		if (token !== null)
+		if (token !== null && typeof token === 'string')
 		{
 			console.log(`already token= ${localStorage.getItem('token')}`)
 			return ;

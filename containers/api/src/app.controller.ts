@@ -108,6 +108,7 @@ export class AppController {
 
 	user.status = 0;
 	await this.userService.save(user);
+	console.log("User quit");
   }
 
 //   @Get('/chat')
