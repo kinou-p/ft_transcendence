@@ -58,6 +58,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				console.log(`Player ${player.id} joined game ${gameId}`);
 			});
 			players.forEach((player) => {
+				// const playersIds = game.map(socket => socket.id);
 				player.emit('pong:gameId', gameId);
 			});
 		}
@@ -227,6 +228,22 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 	}
 
+	@SubscribeMessage('pong:name')
+	getName(client: Socket, payload: any): void
+	{
+		const game = this.games.get(payload.gameId);
+		const playersIds = game.map(socket => socket.id);
+		
+		console.log(`name of client= ${payload.name}`);
 
+		if (playersIds[0] === payload.id)
+		{
+			this.clients[playersIds[1]].emit('pong:name', payload.name);
+		}
+		if (playersIds[1] === payload.id)
+		{
+			this.clients[playersIds[0]].emit('pong:name', payload.name);
+		}
+	}
 
 }//end of Web Socket Gateway

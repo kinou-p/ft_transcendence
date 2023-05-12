@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Repository } from 'typeorm';
 
-import { User } from '../model/user.entity';
+import { MatchLog } from '../model/user.entity';
 
 @Injectable()
 export class loginClass {
@@ -56,8 +56,6 @@ export class loginClass {
 		if (!user) {
 			console.log(`no user, creating one`);
 			user = {
-				// name: null,
-				// description: null,
 				id: null,
 				password: null,
 				username: userName,
@@ -66,6 +64,8 @@ export class loginClass {
 				loss: 0,
 				rank: 1200,
 				userId: userId,
+				children: null,
+				status: 1,
 			  };
 			await this.usersService.create(user);
 		}

@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { User } from '../model/user.entity';
+import { MatchLog } from '../model/user.entity';
 
 
 @Injectable()
 export class UsersService {
 	constructor(
 		@InjectRepository(User) private userRepository: Repository<User>,
+		@InjectRepository(MatchLog) private readonly matchRepository: Repository<MatchLog>,
 		) {}
 		
 	getHello(): string {
@@ -30,6 +32,12 @@ export class UsersService {
 	async save(user: User): Promise<User> {
 		return await this.userRepository.save(user);
 	}
+
+	async saveChild(user: User, match: MatchLog): Promise<User> {
+		// user.match = savedChild;
+		await this.matchRepository.save(match);
+		return await this.userRepository.save(user);
+	  }
 }
 
 

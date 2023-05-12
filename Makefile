@@ -6,13 +6,13 @@
 #    By: apommier <apommier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/19 09:29:27 by apommier          #+#    #+#              #
-#    Updated: 2023/04/04 18:14:43 by apommier         ###   ########.fr        #
+#    Updated: 2023/05/10 13:37:27 by apommier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 all:
 # -mkdir -p /home/apommier/data/wordpress
-	-mkdir -p /home/apommier/data/pgsql
+# -mkdir -p /home/apommier/data/pgsql
 	docker-compose -f docker-compose.yml up --build
 
 fclean: down

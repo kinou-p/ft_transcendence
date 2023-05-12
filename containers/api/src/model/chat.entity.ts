@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } from 'typeorm';
 	
    @Entity()
-//    export class Chat extends BaseEntity {
 	export class Chat{
 	@PrimaryGeneratedColumn('uuid')
 	id: number;
@@ -15,5 +14,10 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } 
 	@CreateDateColumn()
 	createdAt: Date;
 
+	//ban user
+	//user list
+	//blocked user (in user model ?)
+	//op list
+	//a way to stock conv ?
 	
    }

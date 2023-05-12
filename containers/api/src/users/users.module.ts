@@ -3,13 +3,14 @@ import { UsersService} from './users.service';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getTypeOrmConfig } from '../config/config.service';
-import { User } from '../model/user.entity';
+import { MatchLog, User } from '../model/user.entity';
 
 @Module({
   imports:
   [
 	TypeOrmModule.forRoot(getTypeOrmConfig()),
 	TypeOrmModule.forFeature([User]),
+	TypeOrmModule.forFeature([MatchLog]),
 	// TypeOrmModule.forFeature([UserRepository]),
   ],
   providers:[UsersService],

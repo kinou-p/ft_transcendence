@@ -1,6 +1,8 @@
 // import io from 'socket.io-client';
 
-import { useEffect } from 'react';
+import api from '../script/axiosApi';
+
+// import { useEffect } from 'react';
 import io from 'socket.io-client';
 // const socket = io('http://192.168.1.14:4000');
 // const socket = io('http://86.209.110.20:4000');
@@ -22,6 +24,8 @@ export function drawCanvas() {
 	//socket
 	let myId = 0;
 	let gameId = 0;
+	let opName;
+	let opRank;
 
 	//general canvas
 	const scale = window.devicePixelRatio; 
@@ -58,6 +62,7 @@ export function drawCanvas() {
 	//score
 	let myScore = 0;
 	let hisScore = 0;
+	const maxScore = 5;
 	
 	let lastUpdateTime = performance.now();
 
@@ -79,8 +84,64 @@ export function drawCanvas() {
 		socket.emit('pong:matchmaking', info);
 	}
 
-	socket.on('pong:gameId', (data) => {
+	// socket.on('pong:gameId', (data) => {
+	// 	console.log("gameId received")
+	// 	gameId = data;
+	// 	// api.get('/profile');
+
+	// 	let myName;
+
+	// 	api.get('/profile').then((data) => {
+	// 		// Faire quelque chose avec les données
+	// 		console.log(data);
+	// 		myName = data.data.username;
+	// 		console.log(`myname= ${myName}`);
+	// 	  }).catch((error) => {
+	// 		console.log(error);
+	// 		// exit() ;
+	// 		return;
+	// 	  });
+
+	// 	const info = {
+	// 		id: myId,
+	// 		name: myName,
+	// 		gameId: gameId,
+	// 	};
+	// 	console.log("emit to name")
+	// 	socket.emit('pong:name', info);
+	// });
+
+	socket.on('pong:gameId', async (data) => {
+		console.log("gameId received");
 		gameId = data;
+	  
+		try {
+		  let response = await api.get('/profile');
+		  const myName = response.data.username;
+		  response = await api.get('/rank');
+		  opRank = response.data
+		  console.log(`rank= ${opRank}`);
+		  console.log(`myname= ${myName}`);
+	  
+		  const info = {
+			id: myId,
+			name: myName,
+			gameId: gameId,
+			rank: opRank,
+		  };
+	  
+		  console.log("emit to name");
+		  socket.emit('pong:name', info);
+		} catch (error) {
+		  console.log(error);
+		  // Handle error here
+		  return;
+		}
+	  });
+
+	socket.on('pong:name', (data) => {
+		opName = data;
+		console.log(`opponent Name= ${opName}`)
 	});
 
 	socket.on('connect', () => {
@@ -240,23 +301,43 @@ function draw(timestamp)
 {
 	if (gameId === 0 )
 	{
-		requestAnimationFrame(draw)
-		return;
+		requestAnimationFrame(draw);
+		return ;
+	}
+	if (myScore === maxScore || hisScore === maxScore)
+	{
+		const data = {
+			myScore: myScore,
+			opScore: hisScore,
+			opName: opName,
+			opRank: opRank,
+		};
+		if (myScore === maxScore)
+		{
+			api.post('/win', data);
+			console.log("send win");
+		}
+		else
+		{
+			api.post('/loss', data);
+			console.log("send loose");
+		}
+		window.location.replace("http://localhost/pong");
+		return ;
 	}
 
-		const deltaTime = timestamp - lastUpdateTime;
-		lastUpdateTime = timestamp;
+	const deltaTime = timestamp - lastUpdateTime;
+	lastUpdateTime = timestamp;
+	ballX += vX * deltaTime * canvas.width;
+	ballY += vY * deltaTime * canvas.width;
 
-		ballX += vX * deltaTime * canvas.width;
-		ballY += vY * deltaTime * canvas.width;
-
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		drawPaddle();
-		drawcenter();
-		drawball();
-		is_collision();
-		is_out();
-		requestAnimationFrame(draw);
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawPaddle();
+	drawcenter();
+	drawball();
+	is_collision();
+	is_out();
+	requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
 
