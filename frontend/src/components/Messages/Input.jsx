@@ -1,5 +1,5 @@
 import { TbSend } from 'react-icons/tb';
-import '../../styles/Messages.css'
+
 
 function Input(){
 	return (

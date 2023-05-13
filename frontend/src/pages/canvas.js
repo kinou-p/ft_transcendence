@@ -1,6 +1,6 @@
 // import io from 'socket.io-client';
 
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import io from 'socket.io-client';
 // const socket = io('http://192.168.1.14:4000');
 // const socket = io('http://86.209.110.20:4000');
@@ -24,7 +24,7 @@ export function drawCanvas() {
 	let gameId = 0;
 
 	//general canvas
-	const scale = window.devicePixelRatio; 
+	// const scale = window.devicePixelRatio; 
 	canvas.width = canvas.offsetWidth;
 	canvas.height = canvas.offsetHeight;
 	

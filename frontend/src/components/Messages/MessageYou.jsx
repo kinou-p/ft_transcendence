@@ -5,7 +5,7 @@ import { useRef } from "react"
 import { useEffect } from "react"
 import '../../styles/Messages.css'
 
-const StylesP = styled.p`
+const StyleP = styled.p`
 	background-color: white;
 	padding 10px 20px;
 	border-radius 0px 10px 10px 10px;
@@ -25,7 +25,7 @@ function MessageYou(){
 				<img className="messageInfo" src={DefaultPic} alt="profile" />
 			</div>
 			<div className="messageContent">
-				<StylesP>bonjours ca va</StylesP>
+				<StyleP>bonjours ca va</StyleP>
 			</div>
 		</div>
 	)
