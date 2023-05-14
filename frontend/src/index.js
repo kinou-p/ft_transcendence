@@ -13,7 +13,7 @@ import Head from './pages/Head';
 import reportWebVitals from './reportWebVitals';
 // import Messages from './pages/Messages';
 import { BrowserRouter } from 'react-router-dom';
-import AnimatedRoute from './components/AnimatedRoute';
+import AnimatedRoute from './components/App';
 import './styles/App.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

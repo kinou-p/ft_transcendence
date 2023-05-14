@@ -10,14 +10,14 @@ const CardWrapper = styled.div`
         display: flex;
         flex-direction: column;
         padding: 15px;
-        background-color: black;
+        // background-color: black;
         // border-radius: 30px;
         // width: 350px;
         // transition: 200ms;
-		margin-top: 50px;
-        &:hover {
-            cursor: pointer;
-            box-shadow: 2px 2px 10px #b6b6b6;
+		// margin-top: 50px;
+        // &:hover {
+        //     cursor: pointer;
+        //     box-shadow: 2px 2px 10px #b6b6b6;
         }
 `
 

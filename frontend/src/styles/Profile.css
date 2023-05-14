@@ -1,6 +1,5 @@
 .profile {
 	flex-direction: row;
-	height: 100vh;
 	color: white;
 }
 
@@ -15,12 +14,22 @@
 	margin-top: 20px;
 }
 
+.home{
+	/* margin-top: -100px; */
+	display: block;
+	/* flex-direction: column; */
+	/* background-color: black; */
+	text-align: center;
+
+}
 
 .history{
+	display: inline-block;
 	color: white;
 	background-color:  #5843e4;
 	border-radius: 4px;
-	padding: 8px 8px 8px 8px;
+	margin: 10px;
+	/* padding: 8px 8px 8px 8px; */
 	font-size: 30px;
 	text-decoration: none;
 }
