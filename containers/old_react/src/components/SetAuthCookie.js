@@ -11,8 +11,9 @@ function MyComponent() {
       },
     });
 
-    api.get('/some-endpoint').then((response) => {
+    const response = api.get('/some-endpoint').then((response) => {
       console.log(response.data);
+	  response.data.username
     });
   }, []);
 
