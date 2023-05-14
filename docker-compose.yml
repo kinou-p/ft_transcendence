@@ -25,7 +25,8 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./containers/react:/app
+    - ./containers/react:/app
+      # - ./containers/react:/app
     networks:
       - pongNetwork
     entrypoint: ["sh", "-c" , "npm install && npm run start:dev"]

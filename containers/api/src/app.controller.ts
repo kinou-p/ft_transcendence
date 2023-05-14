@@ -41,7 +41,7 @@ export class AppController {
 	}
 
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Get('/profile')
   getProfile(@Request() req) {
 	  const myJSON = JSON.stringify(req.user);
 	  console.log(`req user api= ${req.user}`)
