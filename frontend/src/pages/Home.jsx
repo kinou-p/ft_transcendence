@@ -3,7 +3,10 @@ import '../styles/Profile.css'
 import '../styles/App.css'
 import DefaultPicture from "../assets/profile.jpg";
 import WinLoss from "../components/Win_Loss";
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
+import { AiFillEdit } from 'react-icons/ai'
+import { Link } from "react-router-dom";
+import Modal from "../components/Sidebar/Modal";
 // import {AiOutlineHistory} from 'react-icons/ai'
 // import { Link } from "react-router-dom";
 // import UserProfile from "../DataBase/DataProfileUser";
@@ -11,10 +14,24 @@ import { motion } from 'framer-motion'
 
 
 function Profile () {
+	const [modalOpen, setModalOpen] = useState(false);
+	const close = () => setModalOpen(false);
+	const open = () => setModalOpen(true);
 	return (
 		<div className="profile">
-		<img className="profile-pic" src={DefaultPicture} alt="Profile pic" />
-		<h1>Dipper Ratman</h1>
+			<img className="profile-pic" src={DefaultPicture} alt="Profile pic" />
+			<h1>Dipper Ratman</h1>
+			{/* <motion.div
+				> */}
+				<motion.button to="#" className="edit_name" onClick={() => (modalOpen ? close() : open())}>
+					<AiFillEdit/>
+				</motion.button>
+			{/* </motion.div> */}
+			<AnimatePresence
+			initial={false}
+			onExitComplete={() => null}>
+				{modalOpen && <Modal modalOpen={modalOpen} handleClose={close}/>}
+			</AnimatePresence>
 		</div>
 	)
 }
@@ -27,7 +44,7 @@ function Home () {
 		animate={{opacity: 1}}
 		exit={{opacity: 0}}>
 		<div className="home">
-			<motion.div animate={{x: move ? -200: 150}}
+			<motion.div animate={{x: move ? -200: 170}}
 				transition={{type: "tween", duration: 0.5}}>
 					<Profile/>
 			</motion.div>
