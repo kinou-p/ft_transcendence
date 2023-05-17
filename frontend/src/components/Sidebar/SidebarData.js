@@ -4,11 +4,12 @@ import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 import {BiLogOutCircle} from 'react-icons/bi';
 import {IoSettingsSharp} from 'react-icons/io5'
+import {UserProfile} from '../../DataBase/DataUserProfile'
 
 
 export const SidebarData = [
 	{
-		title: 'Dipper Ratman',
+		title: UserProfile.UserName,
 		path: '/',
 		icon: <AiIcons.AiFillHome />,
 		cName: 'nav-text'

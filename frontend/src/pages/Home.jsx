@@ -6,10 +6,10 @@ import WinLoss from "../components/Win_Loss";
 import { motion, AnimatePresence } from 'framer-motion'
 import { AiFillEdit } from 'react-icons/ai'
 import { Link } from "react-router-dom";
-import Modal from "../components/Sidebar/Modal";
+import ModalEdit from "../components/EditName";
 // import {AiOutlineHistory} from 'react-icons/ai'
 // import { Link } from "react-router-dom";
-// import UserProfile from "../DataBase/DataProfileUser";
+import {UserProfile} from "../DataBase/DataUserProfile";
 
 
 
@@ -20,17 +20,16 @@ function Profile () {
 	return (
 		<div className="profile">
 			<img className="profile-pic" src={DefaultPicture} alt="Profile pic" />
-			<h1>Dipper Ratman</h1>
-			{/* <motion.div
-				> */}
-				<motion.button to="#" className="edit_name" onClick={() => (modalOpen ? close() : open())}>
-					<AiFillEdit/>
-				</motion.button>
-			{/* </motion.div> */}
+			<h1>{UserProfile.UserName}</h1>
+				<motion.div  onClick={() => (modalOpen ? close() : open())}>
+					<Link to="#" className="edit_name">
+						<AiFillEdit/>
+					</Link>
+				</motion.div>
 			<AnimatePresence
 			initial={false}
 			onExitComplete={() => null}>
-				{modalOpen && <Modal modalOpen={modalOpen} handleClose={close}/>}
+				{modalOpen && <ModalEdit modalOpen={modalOpen} handleClose={close}/>}
 			</AnimatePresence>
 		</div>
 	)
@@ -52,10 +51,12 @@ function Home () {
 				<WinLoss/>
 			</motion.div>
 			</div>
-			<div>
-				<button className="history"
-				onClick={ () => setmove(!move)}>Match History</button>
-			</div>
+			<motion.div
+			//	{/* <button className="history" */}
+			// className="history"
+				onClick={ () => setmove(!move)}>
+					<Link to="#" className="history">Match History</Link>
+			</motion.div>
 		</motion.div>
     )
 }
