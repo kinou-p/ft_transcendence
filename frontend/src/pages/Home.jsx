@@ -1,13 +1,13 @@
 import { React, useState } from "react";
 import '../styles/Profile.css'
-import '../styles/App.css'
+// import '../styles/App.css'
 import DefaultPicture from "../assets/profile.jpg";
 import WinLoss from "../components/Win_Loss";
 import { motion, AnimatePresence } from 'framer-motion'
 import { AiFillEdit } from 'react-icons/ai'
 import { Link } from "react-router-dom";
 import ModalEdit from "../components/EditName";
-// import {AiOutlineHistory} from 'react-icons/ai'
+import {AiOutlineHistory} from 'react-icons/ai'
 // import { Link } from "react-router-dom";
 import {UserProfile} from "../DataBase/DataUserProfile";
 
@@ -38,7 +38,7 @@ function Profile () {
 function Home () {
 	const [move, setmove ] = useState(false);
     return (
-		<motion.div className="App"
+		<motion.div className="page"
 		initial={{opacity: 0}}
 		animate={{opacity: 1}}
 		exit={{opacity: 0}}>
@@ -52,10 +52,10 @@ function Home () {
 			</motion.div>
 			</div>
 			<motion.div
-			//	{/* <button className="history" */}
+				className="div_history"
 			// className="history"
 				onClick={ () => setmove(!move)}>
-					<Link to="#" className="history">Match History</Link>
+					<Link to="#" className="history"><AiOutlineHistory/>  Match History</Link>
 			</motion.div>
 		</motion.div>
     )

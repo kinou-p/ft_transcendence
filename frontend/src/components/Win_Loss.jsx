@@ -4,7 +4,7 @@
 // import '../DataBase/DataProfileUser.js'
 import { DBWinLoss } from '../DataBase/DummyDBWinLoss.js';
 import '../styles/Win_Loss.css'
-// import { UserProfile } from '../DataBase/DataProfileUser.js';
+import { UserProfile } from '../DataBase/DataUserProfile';
 // import color from '../../utils/style/color.js';
 
 
@@ -55,7 +55,9 @@ function WinLoss() {
                         <div className='elements'>
                         <li key={index}>
                                 <h4 className='content'>{item.title}</h4>
-                                <h4 className='content'>you  {item.score}  {item.openent}</h4>
+                                <div className='content2nd'>
+                                    <h4 className='me'>{UserProfile.UserName}</h4>  <h4 className='score'>{item.score}  {item.openent}</h4>
+                                </div>
                                 {/* <h4 className='content'>{item.openent}</h4> */}
                             </li>
                         </div>

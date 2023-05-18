@@ -1,3 +1,10 @@
+.page {
+	text-align: center;
+	/* height: 50vh; */
+	/* width: 50vh; */
+	/* background-color: black; */
+}
+
 .profile {
 	flex-direction: row;
 	color: white;
@@ -29,11 +36,16 @@
 	color: white;
 	background-color:  #5843e4;
 	border-radius: 20px;
-	padding: 16px;
-	font-size: 30px;
+	padding: 14px;
+	font-size: 1.7rem;
 	text-decoration: none;
-	margin-top: -400px;
 	font-weight: bold;
+}
+
+.div_history {
+	flex-direction: row;
+	align-items: center;
+	margin-top: -80px;
 }
 
 .edit_name {

@@ -39,6 +39,28 @@
 	margin-bottom: 5px;
 }
 
+.content2nd {
+	color: white;
+    /* font-size: 22px; */
+    font-weight: bold;
+	display: flex;
+	flex-direction: row;
+	text-align: justify;
+	/* margin-bottom: 5px; */
+}
+
+.me {
+	text-align: start;
+}
+
+.score {
+	text-align: center;
+}
+
+.oponent {
+	align-items: flex-end;
+}
+
 div::-webkit-scrollbar {
 	width: 1;
 }
@@ -48,6 +70,6 @@ div::-webkit-scrollbar-track {
 }
    
 div::-webkit-scrollbar-thumb {
-	background-color: black;
-	outline: 1px solid black;
+	background-color: red;
+	outline: 3px solid black;
 }

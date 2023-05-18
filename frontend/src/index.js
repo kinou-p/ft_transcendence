@@ -7,7 +7,7 @@ import './styles/index.css';
 import Header from './components/Header';
 // import Home from './pages/Home.jsx';
 // import Login42 from './pages/Login42';
-import Head from './pages/Head';
+// import Head from './pages/Head';
 // import Field from './pages/Field';
 // import PlayButton from './pages/PlayButton';
 import reportWebVitals from './reportWebVitals';
@@ -19,7 +19,7 @@ import './styles/App.css'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <div className='App'>
-	<Head />
+	{/* <Head /> */}
 	<BrowserRouter>
 	<Header />
     	<AnimatedRoute/>
