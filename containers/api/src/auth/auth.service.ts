@@ -19,7 +19,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
+  async login(user) {
 	const myJSON = JSON.stringify(user);
 	// console.log(`in login all user= ${myJSON}`)
 	// console.log(`in login user= ${user.username}`)

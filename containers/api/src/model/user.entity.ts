@@ -43,6 +43,9 @@ export class User {
 	
 	@Column({ default: 0 })
 	userId: number;
+
+	@Column({ default: 0 })
+	doubleAuth: number;
 	
 	@OneToMany(() => MatchLog, child => child.parent)
 	children: MatchLog[];

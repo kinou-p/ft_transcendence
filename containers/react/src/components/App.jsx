@@ -14,6 +14,8 @@ import {AnimatePresence} from "framer-motion";
 import SuccessToken from '../script/tokenSuccess'
 
 
+import DoubleAuth from "../pages/2fa.js";
+
 function AnimatedRoute () {
 	const location = useLocation();
 	return (
@@ -22,6 +24,9 @@ function AnimatedRoute () {
 
 				<Route exact path="/" element={<HomeLogin/>}/>
 				<Route exact path="/profile" element={<Home/>}/>
+				
+				<Route exact path="/2fa" element={<DoubleAuth/>}/>
+
 				<Route exact path="/token" element={<SuccessToken />}/>
 				<Route path="/game" element={<PlayButton />}/>
 				<Route exact path="/pong" element={<PlayButton />}/>

@@ -25,7 +25,7 @@ export class loginClass {
 		const data = {
 			grant_type: 'authorization_code',
 			client_id: 'u-s4t2ud-6d29dfa49ba7146577ffd8bf595ae8d9e5aaa3e0a9615df18777171ebf836a41',
-			client_secret: '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',
+			client_secret: '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',
 			code: code,
 			redirect_uri: 'http://localhost:80/api/auth/login',
 		  };
@@ -66,6 +66,7 @@ export class loginClass {
 				userId: userId,
 				children: null,
 				status: 1,
+				doubleAuth: 0
 			  };
 			await this.usersService.create(user);
 		}

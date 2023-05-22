@@ -7,6 +7,10 @@ import { ChatService } from './chat/chat.service';
 import { UsersService } from './users/users.service';
 
 import { MatchLog } from './model/user.entity'
+import { generate } from 'rxjs';
+import { generateQRcode } from './users/2fa';
+
+// import { initStorage, getUser, setUser } from './storage';
 
 // import { AuthGuard } from '@nestjs/passport';
 // import { Login42 } from './auth/login42'
@@ -98,6 +102,22 @@ export class AppController {
   {
 	const user = await this.userService.findOne(req.user.username);
 	return user.rank;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/2fa')
+  async get2fa(@Request() req)
+  {
+	const user = await this.userService.findOne(req.user.username);
+	return user.doubleAuth;
+  }
+
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/QRcode')
+  async createQrCode(@Request() req)
+  {
+	return (await generateQRcode(req));
   }
 
   @UseGuards(JwtAuthGuard)
