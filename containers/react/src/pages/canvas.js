@@ -386,11 +386,11 @@ requestAnimationFrame(draw);
 			vY = -vY;
 			// send_info();
 		}
-		else if (ballX + ballRadius + 2 >= canvas.width) //touch right wall
-		{
-			vX = -vX;
-			// send_info();
-		}
+		// else if (ballX + ballRadius + 2 >= canvas.width) //touch right wall
+		// {
+		// 	vX = -vX;
+		// 	// send_info();
+		// }
 	}
 
 	function is_out()

@@ -1,6 +1,9 @@
 import crypto from 'crypto';
 import base32Decode from 'base32-decode';
 
+// import { randomBytes} from 'crypto';
+// import { promisify } from 'util';
+
 // export function generateHOTP(secret, counter) {
 //   const decodedSecret = base32Decode(secret, 'RFC4648');
 
@@ -28,7 +31,7 @@ import base32Decode from 'base32-decode';
 //   return `${code % 10 ** 6}`.padStart(6, '0');
 // }
 
-type QRcode = any
+// type QRcode = any;
 
 export function generateHOTP(secret, counter) {
 	const decodedSecret = base32Decode(secret, 'RFC4648');
@@ -89,24 +92,40 @@ export function verifyTOTP(token, secret, window = 1)
 // import { Response } from 'express';
 // import { Readable } from 'stream';
 // import * as base32Encode from 'base32-encode';
+// import { base32Encode } from 'base32-encode';
+// import base32Encode from 'base32-encode';
+import { encode } from 'thirty-two';
+
+// ...
+
+import * as qrcode from 'qrcode';
+import * as fs from 'fs';
+
+
+import { nanoid } from "nanoid";
+// import * as nanoid from 'nanoid'
 
 export async function generateQRcode(req)
 {
-	// const base32Encode = await import('base32-encode');
-	const base32Encode = (await import('base32-encode'));
-	const util = (await import('util'));
-	const qrcode = (await import('qrcode'));
+	// const base32Encode = (await import('base32-encode'));
+	// const nanoid = (await import('nanoid'));
+	
+	// const util = (await import('util'));
+	// const qrcode = (await import('qrcode'));
+
 	const user = req.user;
-	let res: QRcode;
+	let res;
 	// For security, we no longer show the QR code after is verified
 	// if (user.mfaEnabled) return res.status(404).end();
-  
+	
 	// if (!user.mfaSecret) { //to do
-
-	  // generate unique secret for user
-	  // this secret will be used to check the verification code sent by user
-	  const buffer = await util.promisify(crypto.randomBytes)(14);
-	  user.mfaSecret = base32Encode(buffer, 'RFC4648', { padding: false });
+	const buffer = nanoid(14);
+	// generate unique secret for user
+	// this secret will be used to check the verification code sent by user
+	// const buffer = await util.promisify(crypto.randomBytes)(14);
+	// const buffer = crypto.lib.WordArray.random(32)
+	user.mfaSecret = encode(buffer).toString('utf8');
+	//   user.mfaSecret = base32Encoded(buffer, 'RFC4648', { padding: false });
 	
 	  //   setUser(user); // to do !!
 
@@ -121,8 +140,40 @@ export async function generateQRcode(req)
 	const configUri = `otpauth://${otpType}/${issuer}:${user.username}?algorithm=${algorithm}&digits=${digits}&period=${period}&issuer=${issuer}&secret=${user.mfaSecret}`;
   
 	// res.setHeader('Content-Type', 'image/png');
+	const QRCode = require('qrcode');
+	console.log(`before done`);
+	// QRCode.toFileStream(res, configUri);
+	// const filePath = 'qrcode.png'; // Specify the file path where the QR code should be saved
+
+
+	const qrCodeData = buffer; // Replace with your actual QR code data
+	const filePath = 'qrcode.png'; // Specify the file path where the QR code should be saved
 	
-	qrcode.toFileStream(res, configUri);
+	qrcode.toFile(filePath, qrCodeData, (error) => {
+	  if (error) {
+		console.error(error);
+		// Handle the error appropriately
+		return;
+	  }
+	  // QR code image has been generated and saved to the file
+	  // Or, you can create a buffer of the image data directly
+	})
+
+// qrcode.toFile(filePath, configUri, (error) => {
+//   if (error) {
+//     console.error(error);
+//     // Handle the error appropriately
+//     return;
+//   }
+//   const readableStream = fs.createReadStream(filePath);
+//   res.data = readableStream;
+  // Use the readable stream as needed
+// });
+
+
+	
+	// qrcode.toFileStream(res, configUri);
 	console.log(`QRcode done`);
 	return res;
+	// return
   }
