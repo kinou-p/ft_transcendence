@@ -1,2 +1,15 @@
 #.env
 backend/node_modules/
+containers/backend/dist/
+
+api/node_modules/
+containers/api/dist/
+
+pong/node_modules/
+containers/pong/dist/
+
+*/node_modules/
+*/*/node_modules/
+
+*/dist/ 
+*/*/dist/ 
