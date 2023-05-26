@@ -41,6 +41,7 @@
 	/* justify-content: start; */
 	align-items:  center;
 	padding: 8px 0px 8px 16px;
+
 	list-style: none;
 	height: 60px;
 }
@@ -53,8 +54,10 @@
 	height: 100%;
 	display: flex;
 	align-items: center;
-	padding: 0 16px;
-	border-radius: 4px;
+	/* padding: 0 16px; */
+	padding: 8px 8px 8px 8px;
+
+	border-radius: 20px;
 }
 
 .nav-text a:hover {

@@ -4,7 +4,7 @@ import HomeLogin from "../pages/Home.js";
 
 import Home from "../pages/Home.jsx";
 
-import PlayButton from "../pages/PlayButton.js";
+import PlayButton from "./Game/PlayButton.js";
 import Field from "../pages/Field";
 import Login42 from "../pages/Login42.js";
 import Messages from "../pages/Messages.jsx";
@@ -15,6 +15,7 @@ import SuccessToken from '../script/tokenSuccess'
 
 
 import DoubleAuth from "../pages/2fa.js";
+import Game from "../pages/Game.jsx";
 
 function AnimatedRoute () {
 	const location = useLocation();
@@ -29,7 +30,7 @@ function AnimatedRoute () {
 
 				<Route exact path="/token" element={<SuccessToken />}/>
 				<Route path="/game" element={<PlayButton />}/>
-				<Route exact path="/pong" element={<PlayButton />}/>
+				<Route exact path="/pong" element={<Game />}/>
 				<Route exact path="/pong/play" element={<Field />}/>
 				{/* <Route path="/profile" element={<PlayButton />}/> */}
 

@@ -1,4 +1,4 @@
-import '../styles/field.css';
+import '../../styles/field.css';
 // import { useHistory } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +15,11 @@ function PlayButton() {
 		<div className="notClicked" id="canvas_container">
 			<button onClick={handleButtonClick} className="playButton">Play</button>
 			{/* !buttonClicked && <button onClick={handleButtonClick}>Draw on Canvas</button> */}
-
+			<div className='checkbox'>
+				<p><input type="checkbox" value="superpower"/> Super Power </p>
+				<p><input type="checkbox" value="obstacle"/> Obstacle </p>
+				<p><input type="checkbox" value="speed"/> Faster and Faster </p>
+			</div>
 		</div>
 		);
 }
