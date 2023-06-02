@@ -45,7 +45,7 @@ function Chats(){
 	const [socket, setSocket] = useState(null);
 
 	useEffect(()=> {
-		// setSocket(io("http://localhost:4001"));
+		setSocket(io("http://localhost:4001"));
 	}, [])
 
 	useEffect(()=> {
