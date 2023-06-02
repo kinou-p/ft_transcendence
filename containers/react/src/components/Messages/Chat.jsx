@@ -36,8 +36,8 @@ function Chat(){
 					</TouchDiv>
 				</div>
 			</div>
-			<Conversation/>
-			<Input/>
+			{/* <Conversation/> */}
+			{/* <Input/> */}
 		</div>
 	)
 }

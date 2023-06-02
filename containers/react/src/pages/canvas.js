@@ -30,6 +30,7 @@ export function drawCanvas() {
 	//general canvas
 	const scale = window.devicePixelRatio; 
 	canvas.width = canvas.offsetWidth;
+	// canvas.height = canvas.width * 0.7
 	canvas.height = canvas.offsetHeight;
 
 	//paddle var
@@ -423,6 +424,12 @@ requestAnimationFrame(draw);
 //========================================================================================================
 //========================================================================================================
 
+	document.addEventListener('resize', event => {
+		// event.height
+		// event.width
+		const { clientWidth, clientHeight } = canvas.parentElement;
+		console.log(`resize detected widht= ${clientWidth} height= ${clientHeight}`)
+	});
 
     document.addEventListener('mousemove', event => {
         const mouseY = event.clientY;

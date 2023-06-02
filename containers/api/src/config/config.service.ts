@@ -6,12 +6,13 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 14:53:49 by apommier          #+#    #+#             */
-/*   Updated: 2023/05/05 23:11:44 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/01 13:07:12 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-	export const getTypeOrmConfig = (): TypeOrmModuleOptions => ({
+
+export const getTypeOrmConfig = (): TypeOrmModuleOptions => ({
 	type: 'postgres',
 	host: 'postgresql',
 	port: 5432,
@@ -25,4 +26,4 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 	migrations: ['src/migration/*.ts'],
 	ssl: process.env.MODE !== 'DEV',
 	synchronize: true,
-	});
+});
