@@ -52,11 +52,11 @@ function WinLoss() {
             <div className='scroll'>
                 {DBWinLoss.map((item, index) => {
                     return (
-                        <div className='elements'>
+                        <div key={index} className='elements'>
                         <li key={index}>
                                 <h4 className='content'>{item.title}</h4>
                                 <div className='content2nd'>
-                                    <h4 className='me'>{UserProfile.UserName}</h4>  <h4 className='score'>{item.score}  {item.openent}</h4>
+                                    <h4 className='me'>{UserProfile.UserName}</h4>  <h4 className='score'>{item.score}</h4>  <h4 className="opponent">{item.opponent}</h4>
                                 </div>
                                 {/* <h4 className='content'>{item.openent}</h4> */}
                             </li>

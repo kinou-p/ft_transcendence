@@ -16,6 +16,7 @@ import SuccessToken from '../script/tokenSuccess'
 
 import DoubleAuth from "../pages/2fa.js";
 import Game from "../pages/Game.jsx";
+import Social from "../pages/Social.jsx";
 
 function AnimatedRoute () {
 	const location = useLocation();
@@ -27,6 +28,7 @@ function AnimatedRoute () {
 				<Route exact path="/profile" element={<Home/>}/>
 				
 				<Route exact path="/2fa" element={<DoubleAuth/>}/>
+				<Route exact path="/Social" element={<Social/>}/>
 
 				<Route exact path="/token" element={<SuccessToken />}/>
 				<Route path="/game" element={<PlayButton />}/>

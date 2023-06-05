@@ -1,6 +1,6 @@
 .tab{
-	display: flex;
-	flex-direction: column;
+	/* display: flex; */
+	/* flex-direction: column; */
 	/* background-color: red; */
 	height: 70vh;
 	/* padding: 15px; */
@@ -16,6 +16,7 @@
 }
 
 .elements {
+	/* display: flex; */
 	border-width:1px;
 	border-style:solid;
 	/* background-color: #5843e4; */
@@ -34,31 +35,34 @@
 	color: white;
     /* font-size: 22px; */
     font-weight: bold;
-	display: flex;
+	/* display: flex; */
 	flex-direction: column;
 	margin-bottom: 5px;
 }
 
 .content2nd {
+	display:inline;
+	flex-direction: row;
 	color: white;
     /* font-size: 22px; */
     font-weight: bold;
-	display: flex;
 	flex-direction: row;
-	text-align: justify;
+	/* text-align: justify; */
 	/* margin-bottom: 5px; */
 }
 
 .me {
 	text-align: start;
+	margin-left: 10px;
 }
 
 .score {
 	text-align: center;
 }
 
-.oponent {
-	align-items: flex-end;
+.opponent {
+	text-align: end;
+	margin-right:10px; 
 }
 
 div::-webkit-scrollbar {

@@ -1,5 +1,5 @@
 import {motion} from "framer-motion"
-// import Backdrop from "./Sidebar/Backdrop"
+// import Backdrop from "../Sidebar/Backdrop"
 import {Link} from 'react-router-dom';
 import { UserProfile } from "../../DataBase/DataUserProfile";
 import {useState} from 'react';
@@ -30,6 +30,7 @@ const ModalEdit = ({ handleClose }) => {
 	{
 		setUserName (e.target.value);
 	}
+	void(handleClose);
 	return (
 		// <Backdrop onClick={handleClose}>
 			<motion.div 
@@ -40,8 +41,10 @@ const ModalEdit = ({ handleClose }) => {
 						exit="exit">
 				<h2>Type your new name</h2>
 				<input className="text" type="text" value={username} onChange={handler} handleClose/>
-				<div onClick={() => {UserProfile.UserName = username;}}>
-					<Link className="button">change</Link>
+				<div onClick={handleClose}>
+					<div onClick={() => {UserProfile.UserName = username;}}>
+						<Link className="button">change</Link>
+					</div>
 				</div>
 			</motion.div>
 		// </Backdrop>
