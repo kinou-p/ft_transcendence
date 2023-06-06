@@ -43,8 +43,8 @@ function Profile () {
 		catch(err){
 			console.log(err);
 		}
-		getConv();
 	};
+	getConv();
 	return (
 		<div className="profile">
 			<img className="profile-pic" src={DefaultPicture} alt="Profile pic" />
