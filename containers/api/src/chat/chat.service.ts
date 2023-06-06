@@ -37,6 +37,13 @@ export class ChatService {
 	return convs;
 }
 
+async findConv(number: number){
+	// username = "apommier"
+	console.log(`fincConv; ${number}`)
+	const conv = await this.chatRepository.findOneBy({id: number})
+	return conv;
+}
+
 // Usage
 // const user = 'user1';
 // findConvsContainingUser(user)

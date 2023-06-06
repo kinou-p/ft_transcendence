@@ -178,10 +178,17 @@ export class AppController {
 	return await this.chatService.createMessage(message);
   }
 
-  @Post('/getMessage')
-  async getMessage(@Request() req, @Body() data: any) {
+  @Post('/member')
+  async getMember(@Body() data: any) {
 	console.log(data);
-	console.log(req.query	)
+	console.log(`get member= ${data.convId}`);
+	return await this.chatService.findConv(data.convId);
+  }
+
+  @Post('/getMessage')
+  async getMessage(@Body() data: any) {
+	console.log(data);
+	// console.log(req.query)
 	console.log(`data get /conv= ${data.convId}`);
 	// let test = {id: 2, members: "cc"};
 

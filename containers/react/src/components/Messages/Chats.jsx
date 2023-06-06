@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import '../../styles/Messages.css'
 import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
@@ -24,10 +24,10 @@ const UserChat = styled.div `
 	}
 `
 
-const SideSpan = styled.span`
-	font-size: 18px;
-	font-weight: 500;
-`
+// const SideSpan = styled.span`
+// 	font-size: 18px;
+// 	font-weight: 500;
+// `
 
 const SideP = styled.p`
 	font-size: 14px;
@@ -35,18 +35,40 @@ const SideP = styled.p`
 	margin-left: 15px;
 `
 
-function Chats(){
+//========================================================================================================
+//========================================================================================================
+//                                              Socket handler			                                  
+//========================================================================================================
+//========================================================================================================
 
+
+
+
+//========================================================================================================
+//========================================================================================================
+//                                              Logical part			                                  
+//========================================================================================================
+//========================================================================================================
+
+
+function Chats(){
+	
 	const [conversations, setConversation] = useState([]);
-	const [user, setUser] = useState([]);
+	const [user, setUser] = useState(null);
 	const [currentChat, setCurrentChat] = useState(null);
 	const [messages, setMessage] = useState([]);
 	const [newMessages, setNewMessage] = useState("");
-	const [socket, setSocket] = useState(null);
+	const [incomingMessage, setIncomingMessage] = useState("");
+	const socket = useRef();
+	
+	// Socket handler
 
-	useEffect(()=> {
-		setSocket(io("http://localhost:4001"));
-	}, [])
+	// socket.on('message', (data) => { //data should be a message ?
+	// 	console.log(`message received data= ${data}`)
+	// 	setMessage([...messages, data]);
+	// });
+
+	//End of socket handler
 
 	useEffect(()=> {
 
@@ -57,13 +79,58 @@ function Chats(){
 				console.log(convs);
 				setUser(tmpUser);
 				setConversation(convs.data);
+				// return tmpUser;
+
+
+				console.log(`tmpUser= ${tmpUser.data}`);
+				socket.current = io("http://localhost:4001");
+				console.log(`connection....`);
+				socket.current.emit('connection', {username: tmpUser.data.username})
+				// const socket = io("http://localhost:4001", {
+				 // 	query: {
+				   // 	username: user.data.username,
+				  // },});
+				socket.current.on('message', (data) => { //data should be a message ?
+					console.log(`message received data= ${data.sender}`)
+					console.log(`message received data= ${data.convId}`)
+					console.log(`message received data= ${data.sender}`)
+					console.log(`curretn chat = ${currentChat}`)
+					setIncomingMessage(data);
+				});
+
 			}
 			catch(err){
 				console.log(err);
 			}
 		};
 		getConv();
+
 	}, [])
+
+	useEffect(()=> {
+		if (currentChat)
+		console.log(currentChat.id)
+		// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
+		if (currentChat !== null && currentChat.id === incomingMessage.convId)
+			setMessage((prev) => [...prev, incomingMessage]);
+	}, [incomingMessage, currentChat])
+
+	// useEffect(()=> {
+
+	// 	const getConv = async ()=>{
+	// 		try{
+	// 			const convs = await api.get("/conv")
+	// 			const tmpUser = await api.get("/profile")
+	// 			console.log(convs);
+	// 			setUser(tmpUser);
+	// 			setConversation(convs.data);
+	// 		}
+	// 		catch(err){
+	// 			console.log(err);
+	// 		}
+	// 	};
+	// 	getConv();
+	// }, [])
 
 	useEffect(()=> { 
 		const getMessage = async ()=>
@@ -81,18 +148,30 @@ function Chats(){
 	getMessage()
 	}, [currentChat])
 
+
+
 	const handleSubmit = async (e)=>{
 		e.preventDefault();
 		const message = {
 			sender: user.data.username,
 			text: newMessages,
-			convId: currentChat.id
+			convId: currentChat.id,
+			members: null
 		};
 		try{
+			console.log(`id= ${currentChat.id}`)
 			const res = await api.post('/message', message);
+			const convMember = await api.post('/member', message);
+			message.members = convMember.data.members;
+			console.log(convMember);
+			// console.log(`currentChat= ${currentChat.id}`)
+			
 			setMessage([...messages, res.data]);
-		} catch(err){
-			 
+			setNewMessage("");
+			socket.current.emit('sendMessage', message);
+		} 
+		catch(err){
+			 console.log(err)
 		}
 	}
 
