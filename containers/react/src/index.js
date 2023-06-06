@@ -12,7 +12,7 @@ import './styles/App.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <div className='App'>
+  <div className="App">
 	<Head />
 	<BrowserRouter>
 	<Header />

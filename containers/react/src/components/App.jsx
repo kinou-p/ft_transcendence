@@ -4,7 +4,7 @@ import HomeLogin from "../pages/Home.js";
 
 import Home from "../pages/Home.jsx";
 
-import PlayButton from "../pages/PlayButton.js";
+import PlayButton from "./Game/PlayButton.js";
 import Field from "../pages/Field";
 import Login42 from "../pages/Login42.js";
 import Messages from "../pages/Messages.jsx";
@@ -14,6 +14,10 @@ import {AnimatePresence} from "framer-motion";
 import SuccessToken from '../script/tokenSuccess'
 
 
+import DoubleAuth from "../pages/2fa.js";
+import Game from "../pages/Game.jsx";
+import Social from "../pages/Social.jsx";
+
 function AnimatedRoute () {
 	const location = useLocation();
 	return (
@@ -22,9 +26,13 @@ function AnimatedRoute () {
 
 				<Route exact path="/" element={<HomeLogin/>}/>
 				<Route exact path="/profile" element={<Home/>}/>
+				
+				<Route exact path="/2fa" element={<DoubleAuth/>}/>
+				<Route exact path="/Social" element={<Social/>}/>
+
 				<Route exact path="/token" element={<SuccessToken />}/>
 				<Route path="/game" element={<PlayButton />}/>
-				<Route exact path="/pong" element={<PlayButton />}/>
+				<Route exact path="/pong" element={<Game />}/>
 				<Route exact path="/pong/play" element={<Field />}/>
 				{/* <Route path="/profile" element={<PlayButton />}/> */}
 

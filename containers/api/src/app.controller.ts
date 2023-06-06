@@ -7,6 +7,10 @@ import { ChatService } from './chat/chat.service';
 import { UsersService } from './users/users.service';
 
 import { MatchLog } from './model/user.entity'
+import { generate } from 'rxjs';
+import { generateQRcode } from './users/2fa';
+
+// import { initStorage, getUser, setUser } from './storage';
 
 // import { AuthGuard } from '@nestjs/passport';
 // import { Login42 } from './auth/login42'
@@ -47,6 +51,12 @@ export class AppController {
 	  console.log(`req user api= ${req.user}`)
 	  console.log(`json user api= ${myJSON}`)
 	  return req.user;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/user')
+  async getUser( @Body() data: any) {
+	return await this.userService.findOne(data.username);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -101,6 +111,22 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/2fa')
+  async get2fa(@Request() req)
+  {
+	const user = await this.userService.findOne(req.user.username);
+	return user.doubleAuth;
+  }
+
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/QRcode')
+  async createQrCode(@Request() req)
+  {
+	return (await generateQRcode(req));
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('/quit')
   async setOffline(@Request() req) {
 	
@@ -111,9 +137,67 @@ export class AppController {
 	console.log("User quit");
   }
 
-//   @Get('/chat')
-//   async Chat(@Res() res) {
-// 	const messages = await this.chatService.getMessages();
-// 	res.json(messages);
-//   }
-}
+  @Post('/conv')
+  async createConv(@Request() req, @Body() data: any) {
+	///create conv and return it ? id?
+	console.log(`data post /conv= ${data}`);
+	// let test = {id: 2, members: "cc"};
+	return await this.chatService.createConv(data);
+	// res.json(messages);
+  }
+
+//   @UseGuards(JwtAuthGuard)
+  @Get('/conv')
+  async getConv(@Request() req, @Body() data: any) {
+	///create conv and return it ? id?
+	// console.log(`data get /conv= ${data}`);
+	// let test = {id: 2, members: "cc"};
+
+	// let tab = [data.member, "test"];
+	// console.log(`tab= ${tab}`);
+	return await this.chatService.getConv(data.member);
+	// return await this.chatService.getConv(req.user.username);
+	
+	
+	// res.json(messages);
+  }
+
+//   @UseGuards(JwtAuthGuard)
+  @Post('/message')
+  async postMessage(@Request() req, @Body() data: any) {
+	//if i can post post ?
+	let message = 
+	{
+		convid: data.convId,
+		sender: data.sender,
+		text: data.text,
+		// createdAt: null,
+		id: null,
+	}
+	console.log(data);
+	return await this.chatService.createMessage(message);
+  }
+
+  @Post('/member')
+  async getMember(@Body() data: any) {
+	console.log(data);
+	console.log(`get member= ${data.convId}`);
+	return await this.chatService.findConv(data.convId);
+  }
+
+  @Post('/getMessage')
+  async getMessage(@Body() data: any) {
+	console.log(data);
+	// console.log(req.query)
+	console.log(`data get /conv= ${data.convId}`);
+	// let test = {id: 2, members: "cc"};
+
+
+	return await this.chatService.getMessages(data.convId);
+	// return await this.chatService.getConv(req.user.username);
+	
+	
+	// res.json(messages);
+  }
+
+} 

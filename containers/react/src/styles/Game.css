@@ -1,0 +1,28 @@
+.game{
+	display:inline-flex;
+	margin: 50px;
+}
+
+.rank_elements {
+	border-width:1px;
+	border-style:solid;
+	/* background-color: #5843e4; */
+	border-color: grey;
+	/* overflow: scroll; */
+	padding: 5px 100px;
+	font-size: 25px;
+}
+
+.scroll {
+	/* border:3px; */
+	/* background-color: #5843e4; */
+	/* border-color: white; */
+	overflow: scroll;
+	height: 70vh;
+}
+
+.profilePic{
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+}

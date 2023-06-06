@@ -66,6 +66,7 @@ export class loginClass {
 				userId: userId,
 				children: null,
 				status: 1,
+				doubleAuth: 0
 			  };
 			await this.usersService.create(user);
 		}

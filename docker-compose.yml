@@ -75,18 +75,18 @@ services:
       - ./containers/pong:/app
     entrypoint: ["sh", "-c" , "npm install && npm run start:dev"]
 
-  # chat:
-  #   image: node:latest
-  #   container_name: chat
-  #   working_dir: /app
-  #   ports:
-  #     - 4001:4001
-  #   env_file: .env
-  #   networks:
-  #     - pongNetwork
-  #   volumes:
-  #     - ./chat:/app
-  #   entrypoint: ["sh", "-c" , "npm install && npm run start:dev"]
+  chat:
+    image: node:latest
+    container_name: chat
+    working_dir: /app
+    ports:
+      - 4001:4001
+    env_file: .env
+    networks:
+      - pongNetwork
+    volumes:
+      - ./containers/chat:/app
+    entrypoint: ["sh", "-c" , "npm install && npm run start:dev"]
 
 
 networks:

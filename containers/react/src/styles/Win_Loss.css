@@ -1,0 +1,79 @@
+.tab{
+	/* display: flex; */
+	/* flex-direction: column; */
+	/* background-color: red; */
+	height: 70vh;
+	/* padding: 15px; */
+	/* overflow: scroll; */
+
+}
+
+.scroll {
+	/* border:3px; */
+	/* background-color: #5843e4; */
+	/* border-color: white; */
+	overflow: scroll;
+}
+
+.elements {
+	/* display: flex; */
+	border-width:1px;
+	border-style:solid;
+	/* background-color: #5843e4; */
+	border-color: grey;
+	/* overflow: scroll; */
+}
+
+.title {
+	color: #5843e4;
+	/* font-size: 22px; */
+	font-weight: bold;
+	margin-bottom: 25px;
+}
+
+.content {
+	color: white;
+    /* font-size: 22px; */
+    font-weight: bold;
+	/* display: flex; */
+	flex-direction: column;
+	margin-bottom: 5px;
+}
+
+.content2nd {
+	display:inline;
+	flex-direction: row;
+	color: white;
+    /* font-size: 22px; */
+    font-weight: bold;
+	flex-direction: row;
+	/* text-align: justify; */
+	/* margin-bottom: 5px; */
+}
+
+.me {
+	text-align: start;
+	margin-left: 10px;
+}
+
+.score {
+	text-align: center;
+}
+
+.opponent {
+	text-align: end;
+	margin-right:10px; 
+}
+
+div::-webkit-scrollbar {
+	width: 1;
+}
+   
+div::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+   
+div::-webkit-scrollbar-thumb {
+	background-color: red;
+	outline: 3px solid black;
+}

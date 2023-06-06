@@ -55,9 +55,10 @@ const Modal = ({ handleClose }) => {
 				</li>
 				<div
 					className="nav-menu">
+			<ul  className='nav-menu-items'>
 			{SidebarData.map((item, index) => {
 					return (
-					<motion.div   whileHover={{scale: 1.1}}>
+					<motion.div key={index}  whileHover={{scale: 1.1}}>
 						<li key={index} className={item.cName}>
 							<Link to={item.path}>
 								{item.icon}
@@ -67,6 +68,8 @@ const Modal = ({ handleClose }) => {
 						</motion.div>
 					)
 				})}
+			</ul>
+
 					</div>
 			</motion.div>
 		</Backdrop>
