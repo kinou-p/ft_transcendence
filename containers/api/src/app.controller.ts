@@ -27,37 +27,52 @@ export class AppController {
 	kFactor = 36;
 	scaleFactor = 400;
 
-  @Redirect('http://localhost/token', 302)
-  @Get('auth/login')
-	async login2(@Req() request: Request) {
-		const url = request.url;
-		const user = await this.loginClass.Login42(url);
-		console.log(`user in auth/login= ${user}`);
-		const data = this.authService.login(user);
-		console.log(`all data in api = ${data}`)
-		
-		const myJSON = JSON.stringify(data);
-		console.log(`all data json version= ${myJSON}`)
-		
-		console.log(`data in api = ${(await data).access_token}`)
-		const token = (await data).access_token;
-		return { url: `http://localhost/token?data=${encodeURIComponent(JSON.stringify(token))}` };
-	}
+
+//========================================================================================================
+//========================================================================================================
+//                                              User			                                  
+//========================================================================================================
+//========================================================================================================
 
   @UseGuards(JwtAuthGuard)
   @Get('/profile')
-  getProfile(@Request() req) {
-	  const myJSON = JSON.stringify(req.user);
-	  console.log(`req user api= ${req.user}`)
-	  console.log(`json user api= ${myJSON}`)
-	  return req.user;
+  async getProfile(@Request() req) {
+	//   const myJSON = JSON.stringify(req.user);
+	//   console.log(`req user api= ${req.user}`)
+	//   console.log(`json user api= ${myJSON}`)
+	//   return req.user;
+	return await this.userService.findOne(req.user.username);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/user')
+  @Post('/user')
   async getUser( @Body() data: any) {
+	console.log(`usernamewwww= ${data.username}`)
 	return await this.userService.findOne(data.username);
   }
+
+  @Get('/friends')
+  async getFriends(@Request() req) {
+	// return await this.userService.getFriends(req.user.username);
+	return await this.userService.getFriends("apommier");
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/nickname')
+  async setNickname(@Request() req, @Body() data: any) {
+	// let user = req.user
+	// user.nickname = data.nickname
+	let user = await this.userService.findOne(req.user.username)
+	user.nickname = data.nickname;
+	// return await this.userService.getFriends(req.user.username);
+	return await this.userService.save(user);
+  }
+
+//========================================================================================================
+//========================================================================================================
+//                                              Pong			                                  
+//========================================================================================================
+//========================================================================================================
 
   @UseGuards(JwtAuthGuard)
   @Post('/win')
@@ -111,6 +126,52 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('/history')
+  async getHistory(@Body() data: any)
+  {
+	// const user = await this.userService.findOne(req.user.username);
+	// return user.rank;
+	return await this.userService.getHistory(data.username);
+	
+	//   if (user) {
+	// 	const children = user.children;
+	// 	console.log(user); 
+	// 	console.log(user.children); // or perform any operations with the children
+	// 	return children;
+	// 	// You can also access specific properties of each child
+	// 	// children.forEach((child) => {
+	// 	//   console.log(child.id);
+	// 	//   console.log(child.opponent);
+	// 	//   // Access other child properties as needed
+	// 	// });
+	//   }
+  }
+
+
+//========================================================================================================
+//========================================================================================================
+//                                              Auth			                                  
+//========================================================================================================
+//========================================================================================================
+
+@Redirect('http://localhost/token', 302)
+@Get('auth/login')
+  async login2(@Req() request: Request) {
+	  const url = request.url;
+	  const user = await this.loginClass.Login42(url);
+	  console.log(`user in auth/login= ${user}`);
+	  const data = this.authService.login(user);
+	  console.log(`all data in api = ${data}`)
+	  
+	  const myJSON = JSON.stringify(data);
+	  console.log(`all data json version= ${myJSON}`)
+	  
+	  console.log(`data in api = ${(await data).access_token}`)
+	  const token = (await data).access_token;
+	  return { url: `http://localhost/token?data=${encodeURIComponent(JSON.stringify(token))}` };
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('/2fa')
   async get2fa(@Request() req)
   {
@@ -137,6 +198,13 @@ export class AppController {
 	console.log("User quit");
   }
 
+
+//========================================================================================================
+//========================================================================================================
+//                                              Chat			                                  
+//========================================================================================================
+//========================================================================================================
+
   @Post('/conv')
   async createConv(@Request() req, @Body() data: any) {
 	///create conv and return it ? id?
@@ -145,6 +213,8 @@ export class AppController {
 	return await this.chatService.createConv(data);
 	// res.json(messages);
   }
+
+
 
 //   @UseGuards(JwtAuthGuard)
   @Get('/conv')

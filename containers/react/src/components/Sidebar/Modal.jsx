@@ -39,9 +39,9 @@ const dropIn = {
 // 		 })}	
 // 	)
 // }
-const Modal = ({ handleClose }) => {
+const Modal = ({ handleclose }) => {
 	return (
-		<Backdrop onClick={handleClose}>
+		<Backdrop onClick={handleclose}>
 			<motion.div 
 						className="nav-menu"
 						variants={dropIn}

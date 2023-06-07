@@ -83,6 +83,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage('connection')
 	connectClient(client: any, payload: any): void {
 		console.log("connect client")
+		console.log(`connect name: ${payload.username}`);
 		if (this.clientsNames.has(payload.username)) {
 			console.log("get it")
 			const clientArray = this.clientsNames.get(payload.username); // Retrieve the array

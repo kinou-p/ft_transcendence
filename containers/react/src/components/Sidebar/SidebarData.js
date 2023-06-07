@@ -8,7 +8,7 @@ import {IoSettingsSharp} from 'react-icons/io5'
 
 export const SidebarData = [
 	{
-		title: 'Dipper Ratman',
+		title: 'Home/Login',
 		path: '/',
 		icon: <AiIcons.AiFillHome />,
 		cName: 'nav-text'
