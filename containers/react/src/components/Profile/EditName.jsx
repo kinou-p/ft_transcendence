@@ -5,6 +5,8 @@ import { UserProfile } from "../../DataBase/DataUserProfile";
 import {useState} from 'react';
 import "../../styles/Profile.css"
 
+import api from '../../script/axiosApi';
+
 const dropIn = {
 	hidden: {
 		opacity: '0',
@@ -17,22 +19,35 @@ const dropIn = {
 	},
 }
 
-// const changeName = ({handleClose, name}) => {
+// const changeName = ({handleclose, name}) => {
 // 	return (
 // 		UserProfile.UserName = name
 // 	)
 // }
 
-const ModalEdit = ({ handleClose }) => {
+const ModalEdit = ( handleClose ) => {
 	// let new_name = "";
-	const [username, setUserName] = useState("");
+	const [nickname, setNickname] = useState("");
+	
 	const handler = e =>
 	{
-		setUserName (e.target.value);
+		setNickname(e.target.value);
+		const postNickname = async ()=>{
+			try{
+				await api.post("/nickname", {nickname: nickname})
+				// setUser(tmpUser.data);
+				// setIsLoading(false)
+			}
+			catch(err){
+				console.log(err);
+			}
+		};
+		postNickname();
 	}
-	void(handleClose);
+	// function handleClose(){
+	// 	//do nothing
+	// }
 	return (
-		// <Backdrop onClick={handleClose}>
 			<motion.div 
 						className="modal"
 						variants={dropIn}
@@ -40,14 +55,13 @@ const ModalEdit = ({ handleClose }) => {
 						animate="visible"
 						exit="exit">
 				<h2>Type your new name</h2>
-				<input className="text" type="text" value={username} onChange={handler} handleClose/>
+				<input className="text" type="text" value={nickname} onChange={handler} handleClose/>
 				<div onClick={handleClose}>
-					<div onClick={() => {UserProfile.UserName = username;}}>
+					<div onClick={() => {UserProfile.UserName = nickname;}}>
 						<Link className="button">change</Link>
 					</div>
 				</div>
 			</motion.div>
-		// </Backdrop>
 		
 	)
 }

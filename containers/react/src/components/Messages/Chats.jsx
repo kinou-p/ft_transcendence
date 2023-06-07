@@ -1,15 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
+import io from 'socket.io-client';
 import '../../styles/Messages.css'
 import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi';
 
-import io from 'socket.io-client';
-import { TbSend } from 'react-icons/tb';
-import MessageYou from "./MessageYou"
 import Message from "./Message"
-import Input from "./Input";
+// import Input from "./Input";
 
+//react icons
+import { TbSend } from 'react-icons/tb';
+import { ImBlocked } from 'react-icons/im';
+import { MdOutlineGroupAdd } from 'react-icons/md';
+
+
+const TouchDiv = styled.div`
+	margin-left: 10px;
+	margin-right: 4px;
+	margin-bottom: 21px;
+	margin-top: 21px;
+	cursor: pointer;
+	justify-content: space-around;
+	
+	&:hover {
+		color: #F4F3EF;
+	}
+`
 
 const UserChat = styled.div `
 	padding: 5px;
@@ -37,15 +53,6 @@ const SideP = styled.p`
 
 //========================================================================================================
 //========================================================================================================
-//                                              Socket handler			                                  
-//========================================================================================================
-//========================================================================================================
-
-
-
-
-//========================================================================================================
-//========================================================================================================
 //                                              Logical part			                                  
 //========================================================================================================
 //========================================================================================================
@@ -53,9 +60,10 @@ const SideP = styled.p`
 
 function Chats(){
 	
+	const [isLoading, setIsLoading] = useState(true);
 	const [conversations, setConversation] = useState([]);
 	const [user, setUser] = useState(null);
-	const [currentChat, setCurrentChat] = useState(null);
+	const [currentChat, setCurrentChat] = useState(false); // false is good?
 	const [messages, setMessage] = useState([]);
 	const [newMessages, setNewMessage] = useState("");
 	const [incomingMessage, setIncomingMessage] = useState("");
@@ -77,26 +85,29 @@ function Chats(){
 				const convs = await api.get("/conv")
 				const tmpUser = await api.get("/profile")
 				console.log(convs);
-				setUser(tmpUser);
+				setUser(tmpUser.data);
 				setConversation(convs.data);
 				// return tmpUser;
 
 
-				console.log(`tmpUser= ${tmpUser.data}`);
-				socket.current = io("http://localhost:4001");
+				// console.log(`user= ${tmpUser.data.username}`);
+				// console.log(`user= ${tmpUser.data.nickname}`);
+				// console.log(`user= ${tmpUser.data}`);
+				socket.current = io("ws://localhost:4001");
 				console.log(`connection....`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				// const socket = io("http://localhost:4001", {
 				 // 	query: {
-				   // 	username: user.data.username,
+				   // 	username: user.username,
 				  // },});
 				socket.current.on('message', (data) => { //data should be a message ?
 					console.log(`message received data= ${data.sender}`)
 					console.log(`message received data= ${data.convId}`)
 					console.log(`message received data= ${data.sender}`)
-					console.log(`curretn chat = ${currentChat}`)
+					console.log(`current chat = ${currentChat}`)
 					setIncomingMessage(data);
 				});
+				setIsLoading(false)
 
 			}
 			catch(err){
@@ -135,25 +146,24 @@ function Chats(){
 	useEffect(()=> { 
 		const getMessage = async ()=>
 		{
-		const data = {
-			convId: currentChat.id
-		};
-		try{
-			const res = await api.post('/getMessage', data);
-			setMessage(res.data);
-		} catch(err){
+			const data = {convId: currentChat.id};
+			
+			try {
+				const res = await api.post('/getMessage', data);
+				setMessage(res.data);
+			} catch(err) {
 
+			}
 		}
-	}
-	getMessage()
-	}, [currentChat])
-
-
+		getMessage();
+	}, [currentChat]);
 
 	const handleSubmit = async (e)=>{
 		e.preventDefault();
+		// console.log(`e= ${e.key}`)
+		// console.log(`name= ${user.username}`)
 		const message = {
-			sender: user.data.username,
+			sender: user.username,
 			text: newMessages,
 			convId: currentChat.id,
 			members: null
@@ -175,8 +185,82 @@ function Chats(){
 		}
 	}
 
+	const handleKeyPress = async (e)=>{
+		// console.log(`e in press= ${e.key}`)
+		if (e.key !== "Enter")
+			return ;
+		// console.log(`name= ${user.username}`)
+		const message = {
+			sender: user.username,
+			text: newMessages,
+			convId: currentChat.id,
+			members: null
+		};
+		try{
+			console.log(`id= ${currentChat.id}`)
+			const res = await api.post('/message', message);
+			const convMember = await api.post('/member', message);
+			message.members = convMember.data.members;
+			console.log(convMember);
+			// console.log(`currentChat= ${currentChat.id}`)
+			
+			setMessage([...messages, res.data]);
+			setNewMessage("");
+			socket.current.emit('sendMessage', message);
+		} 
+		catch(err){
+			 console.log(err)
+		}
+	}
+
+	// console.log(`data user1= ${user.username}`)
+
+	// while (user === null)
+		// ;
+
+
+//========================================================================================================
+//========================================================================================================
+//                                              HTML			                                  
+//========================================================================================================
+//========================================================================================================
+
+
 	return (
 		<div className="chat">
+			<div className='navbar'>
+				<img src={DefaultPic} alt="profile" className="pic"/>
+				<span>
+					{isLoading ? (
+        				<h4>Loading...</h4>
+      				) : (
+        				<h4>{user.nickname}</h4>
+						// <h4>{user.username}</h4>
+      				)}
+	  			</span>
+			</div>
+
+
+		{/* <div className="chat"> */}
+			<div className='navbar'>
+				<img src={DefaultPic} alt="profile" className="pic"/>
+				<span>
+					{isLoading ? (
+        				<h4>Loading...</h4>
+      				) : (
+        				<h4>{user.nickname}</h4>
+      				)}
+	  			</span>
+				<div className="end">
+					<TouchDiv>
+						<MdOutlineGroupAdd/>
+					</TouchDiv>
+					<TouchDiv>
+						<ImBlocked/>
+					</TouchDiv>
+				</div>
+			</div>
+		{/* </div> */}
 			{conversations.map(c=> (
 				<div onClick={() => setCurrentChat(c)}>
 				<UserChat>
@@ -194,11 +278,12 @@ function Chats(){
 				<>
 				 <div className="messages">
 					{messages.map(m=>(
-						<Message message = {m} own={m.sender === user.data.username}/>
+						<Message message = {m} own={m.sender === user.username}/>
 					))}
 					{/* <Input/> */}
 					<div className="input">
 						<input
+							onKeyDown={handleKeyPress}
 							type="text"
 							placeholder="What do you want to say"
 							onChange={(e) => setNewMessage(e.target.value)}

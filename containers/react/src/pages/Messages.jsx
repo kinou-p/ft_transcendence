@@ -1,6 +1,6 @@
 import React from "react";
-import Sidebar from '../components/Messages/Sidebar'
-import Chat from "../components/Messages/Chat"
+// import Sidebar from '../components/Messages/Sidebar'
+import Chats from "../components/Messages/Chats"
 import '../styles/Messages.css'
 import { motion } from 'framer-motion'
 
@@ -26,16 +26,13 @@ function Messages(params) {
 	// }, [user])
 	return (
 		<>
-		{/* <div>
-			<h1>Welcome to the messages page</h1>
-		</div> */}
 		<motion.div className="home"
 		initial={{opacity: 0}}
 		animate={{opacity: 1}}
 		exit={{opacity: 0}}>
 			<div className="container">
-				<Sidebar/>
-				<Chat/>
+				{/* <Sidebar/> */}
+				<Chats/>
 			</div>
 		</motion.div>
 		</>

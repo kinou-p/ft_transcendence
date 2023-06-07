@@ -19,7 +19,7 @@ export class User {
 
 	@PrimaryGeneratedColumn()
 	id: number;
-	
+
 	@Column({ nullable: true })
 	nickname: string;
 	
@@ -28,7 +28,7 @@ export class User {
 
 	@Column({ nullable: true })
 	password: string;
-	
+
 	@Column({ default: 0 })
 	win: number;
 	
@@ -47,8 +47,15 @@ export class User {
 	@Column({ default: 0 })
 	doubleAuth: number;
 	
-	@OneToMany(() => MatchLog, child => child.parent)
+	@Column('text', { array: true, nullable: true })
+	friendRequest: string[];
+
+	@Column('text', { array: true, nullable: true })
+	friends: string[];
+
+	@OneToMany(() => MatchLog, (child) => child.parent, { eager: true })
 	children: MatchLog[];
+
 }
 
 @Entity()

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+// import { React, useState } from "react";
 import '../styles/Profile.css'
 // import '../styles/App.css'
 import DefaultPicture from "../assets/profile.jpg";
@@ -10,13 +10,16 @@ import { Link } from "react-router-dom";
 import ModalEdit from "../components/Profile/EditName";
 import {AiOutlineHistory} from 'react-icons/ai'
 // import { Link } from "react-router-dom";
-import {UserProfile} from "../DataBase/DataUserProfile";
+// import {UserProfile} from "../DataBase/DataUserProfile";
 // import axios from "axios";
 import api from '../script/axiosApi';
 import { CgEditMarkup } from 'react-icons/cg'
 import { IoCloseCircleOutline } from "react-icons/io5";
 
-
+// import * as React from 'react';
+// import { useState, useEffect, useParams} from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from 'react-router-dom';
 	// axios.get("http://localhost/api")
 	// .then((response) => {
 	// 	response = response.json()
@@ -28,27 +31,38 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 
 
 function Profile () {
+	const [user, setUser] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
 	const [modalOpen, setModalOpen] = useState(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
 
-	const getConv = async ()=>{
-		try{
-			const convs = await api.get("/profile")
-			// const tmpUser = await api.get("/profile")
-			console.log(convs.data);
-			// setUser(tmpUser);
-			// setConversation(convs.data);
-		}
-		catch(err){
-			console.log(err);
-		}
-	};
-	getConv();
+	const { username } = useParams();
+
+	useEffect(()=> {
+		const getUser = async ()=>{
+			try{
+				const tmpUser = await api.get("/user", {username: username})
+				setUser(tmpUser.data);
+				setIsLoading(false)
+			}
+			catch(err){
+				console.log(err);
+			}
+		};
+		getUser();
+	}, [])
+
 	return (
 		<div className="profile">
 			<img className="profile-pic" src={DefaultPicture} alt="Profile pic" />
-			<h1>{UserProfile.UserName}</h1>
+			<span>
+					{isLoading ? (
+        				<h1>Loading...</h1>
+      				) : (
+        				<h1>{user.nickname}</h1>
+      				)}
+	  		</span>
 				<motion.div  onClick={() => (modalOpen ? close() : open())}>
 					<Link to="#" className="edit_name">
 						{modalOpen === true ?  <IoCloseCircleOutline/> : <CgEditMarkup/>}
@@ -57,7 +71,7 @@ function Profile () {
 			<AnimatePresence
 			initial={false}
 			onExitComplete={() => null}>
-				{modalOpen && <ModalEdit modalOpen={modalOpen} handleClose={close}/>}
+				{modalOpen && <ModalEdit modalOpen={modalOpen} handleclose={close}/>}
 			</AnimatePresence>
 		</div>
 	)

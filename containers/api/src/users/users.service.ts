@@ -38,6 +38,33 @@ export class UsersService {
 		await this.matchRepository.save(match);
 		return await this.userRepository.save(user);
 	  }
+
+	async getFriends(username: string) {
+		const user = await this.findOne(username)
+		let friendsTab = user.friends
+		console.log(friendsTab)
+		friendsTab = ['apommier']
+		const friends = await this.userRepository.query("SELECT * FROM \"User\" WHERE username = ANY ($1);", [friendsTab]);
+		console.log(friends)
+		return (friends)
+	}
+
+	async getHistory(username: string) {
+		const user = await this.findOne(username);
+		
+		if (user) {
+		  const children = user.children;
+		  console.log(user); 
+		  console.log(user.children); // or perform any operations with the children
+		  return children;
+		  // You can also access specific properties of each child
+		  // children.forEach((child) => {
+		  //   console.log(child.id);
+		  //   console.log(child.opponent);
+		  //   // Access other child properties as needed
+		  // });
+		}
+	}
 }
 
 
