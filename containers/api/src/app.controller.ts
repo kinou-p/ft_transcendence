@@ -45,8 +45,9 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/user')
+  @Post('/user')
   async getUser( @Body() data: any) {
+	console.log(`usernamewwww= ${data.username}`)
 	return await this.userService.findOne(data.username);
   }
 
@@ -125,12 +126,12 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/history')
-  async getHistory(@Request() req)
+  @Post('/history')
+  async getHistory(@Body() data: any)
   {
 	// const user = await this.userService.findOne(req.user.username);
 	// return user.rank;
-	return await this.userService.getHistory(req.user.username);
+	return await this.userService.getHistory(data.username);
 	
 	//   if (user) {
 	// 	const children = user.children;

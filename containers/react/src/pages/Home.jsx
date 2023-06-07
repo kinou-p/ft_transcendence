@@ -41,9 +41,11 @@ function Profile () {
 
 	useEffect(()=> {
 		const getUser = async ()=>{
+			console.log(`username= ${username}`)
 			try{
-				const tmpUser = await api.get("/user", {username: username})
+				const tmpUser = await api.post("/user", {username: username})
 				setUser(tmpUser.data);
+				console.log(`user= ${tmpUser.data.username}`)
 				setIsLoading(false)
 			}
 			catch(err){

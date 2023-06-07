@@ -45,19 +45,24 @@ import '../../styles/Win_Loss.css'
 // `
   
 import React, { useState, useEffect, useRef } from "react";
+import { useParams } from 'react-router-dom';
 import api from '../../script/axiosApi';
 
-function WinLoss() {
 
+function WinLoss() {
+	
 	const [user, setUser] = useState(null);
 	const [history, setHistory] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	
+	const { username } = useParams();
 
 	useEffect(()=> {
 		const getUser = async ()=>{
 			try{
-				const tmpUser = await api.get("/profile")
-				const tmpHistory = await api.get("/history")
+				// const tmpUser = await api.get("/profile")
+				const tmpUser = await api.post("/user", {username: username})
+				const tmpHistory = await api.post("/history", {username: username})
 				setHistory(tmpHistory.data);
 				setUser(tmpUser.data);
 				setIsLoading(false)
