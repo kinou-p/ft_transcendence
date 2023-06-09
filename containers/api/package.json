@@ -26,6 +26,7 @@
     "@nestjs/passport": "^9.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^9.0.1",
+    "@types/multer": "^1.4.7",
     "axios": "^1.4.0",
     "base32-decode": "^1.0.0",
     "base32-encode": "^2.0.0",

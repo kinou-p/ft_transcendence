@@ -62,6 +62,7 @@ const ModalEdit = ( handleClose ) => {
 					</div>
 				</div>
 			</motion.div>
+			
 		
 	)
 }

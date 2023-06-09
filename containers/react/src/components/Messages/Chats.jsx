@@ -241,7 +241,7 @@ function Chats(){
 			</div>
 
 
-		{/* <div className="chat"> */}
+		
 			<div className='navbar'>
 				<img src={DefaultPic} alt="profile" className="pic"/>
 				<span>
@@ -260,7 +260,6 @@ function Chats(){
 					</TouchDiv>
 				</div>
 			</div>
-		{/* </div> */}
 			{conversations.map(c=> (
 				<div onClick={() => setCurrentChat(c)}>
 				<UserChat>
@@ -276,25 +275,29 @@ function Chats(){
 				{
 					currentChat ? (
 				<>
-				 <div className="messages">
-					{messages.map(m=>(
-						<Message message = {m} own={m.sender === user.username}/>
-					))}
-					{/* <Input/> */}
-					<div className="input">
-						<input
-							onKeyDown={handleKeyPress}
-							type="text"
-							placeholder="What do you want to say"
-							onChange={(e) => setNewMessage(e.target.value)}
-							value={newMessages}
-						/>
-						<div className="send">
-							<TbSend onClick={handleSubmit}></TbSend>
+					<div className="messages">
+						{messages.map(m=>(
+							<Message message = {m} own={m.sender === user.username} user={m}/>
+						))}
+						{/* <Input/> */}
+						<div className="input">
+							<input
+								onKeyDown={handleKeyPress}
+								type="text"
+								placeholder="What do you want to say"
+								onChange={(e) => setNewMessage(e.target.value)}
+								value={newMessages}
+							/>
+							<div className="send">
+								<TbSend onClick={handleSubmit}></TbSend>
+							</div>
 						</div>
 					</div>
-				</div></>) : (<span className="noConv">Open a conversation</span>)}
-			</div>
+				</>
+				) : (
+					<span className="noConv">Open a conversation</span>)}
+		</div>
+		// </div>
 	);
 
 

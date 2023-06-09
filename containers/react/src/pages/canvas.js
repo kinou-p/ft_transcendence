@@ -120,6 +120,7 @@ export function drawCanvas() {
 		  let response = await api.get('/profile');
 		  const myName = response.data.username;
 		  response = await api.get('/rank');
+		  await api.post('/status', {status: 2});
 		  opRank = response.data
 		  console.log(`rank= ${opRank}`);
 		  console.log(`myname= ${myName}`);
@@ -316,11 +317,13 @@ function draw(timestamp)
 		if (myScore === maxScore)
 		{
 			api.post('/win', data);
+			api.post('/status', {status: 1});
 			console.log("send win");
 		}
 		else
 		{
 			api.post('/loss', data);
+			api.post('/status', {status: 1});
 			console.log("send loose");
 		}
 		window.location.replace("http://localhost/pong");

@@ -17,6 +17,7 @@ import SuccessToken from '../script/tokenSuccess'
 import DoubleAuth from "../pages/2fa.js";
 import Game from "../pages/Game.jsx";
 import Social from "../components/Social/Social.jsx";
+import Logout from "../components/Profile/Logout.jsx";
 
 function AnimatedRoute () {
 	const location = useLocation();
@@ -38,6 +39,7 @@ function AnimatedRoute () {
 				{/* <Route path="/profile" element={<PlayButton />}/> */}
 
 				<Route exact path="/login42" element={<Login42 />}/>
+				<Route exact path="/logout" element={<Logout />}/>
 				<Route exact path="/messages" element={<Messages />}/>
 			</Routes>
 		</AnimatePresence>

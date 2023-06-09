@@ -65,6 +65,32 @@ export class UsersService {
 		  // });
 		}
 	}
+
+	async addFriend(user: User, username: string) {
+		user.friends = user.friends || [];
+		user.friends.push(username);
+		this.save(user);
+	}
+
+	async getRanking() {
+		return await this.userRepository.query("SELECT * FROM \"User\" ORDER BY rank DESC;");
+	}
+
+	async getPic( username: string) {
+		// const user = await this.findOne(username);
+		let result =  await this.userRepository.query("select encode(photo, 'base64') FROM public.\"User\" WHERE username = $1;", [username]);
+		// console.log(`result= ${result}`)
+		// console.log(`result= ${result.text}`)
+		// console.log(`encode= ${result.encode}`)
+		// console.log(`encode= ${result.string}`)
+		if (result.length > 0) {
+			const encodedPhoto = result[0].encode;
+			console.log(`pic!!! =`)
+			return encodedPhoto;
+		  }
+		  console.log(`no pic`)
+		return undefined
+	}
 }
 
 

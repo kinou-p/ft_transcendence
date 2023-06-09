@@ -1,4 +1,4 @@
-import React,  {useState} from 'react';
+import React,  {useState, useEffect} from 'react';
 import {AiOutlineMenuUnfold} from 'react-icons/ai';
 // import * as AiIcons from 'react-icons/ai';
 import {Link} from 'react-router-dom';
@@ -10,7 +10,7 @@ import Modal from './Sidebar/Modal';
 // import AnimatePresence from 
 import '../styles/Header.css';
 
-
+import api from '../script/axiosApi';
 
 function Header() {
 	// const [sidebar, setSidebar] = useState(false);
@@ -18,55 +18,30 @@ function Header() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
+	
+	const [profilePicture, setProfilePicture] = useState('');
+
+	useEffect(() => {
+		const fetchProfilePicture = async () => {
+		  try {
+			const user = await api.get("/profile");
+			const pic = await api.post("/getPicture", {username: user.data.username})
+        	setProfilePicture(pic.data);
+			// console.log(`profile pic222= ${pic.data}`)
+		  } catch (error) {
+			console.error('Error fetching profile picture:', error);
+		  }
+		};
+	  
+		fetchProfilePicture();
+	  }, []);
+
+	// console.log(`profile pic= ${profilePicture}`)
+
+	// photo.toString('base64')
 
   return (
 	<div className='Header'>
-		{/* <div className='Header'>
-		<Link to="#" className='menu-bars'>
-		<motion.div>
-
-			onClick={() => (modalOpen ? close() : open())}>
-				<AiOutlineMenuUnfold/>
-		</motion.div>
-		</Link>
-		<div className='end'>
-			<Link to="/" className='menu-bars'>
-				<img className='Header-pic' src={DefaultPicture} alt='profile'/>
-			</Link>
-			</div> */}
-			{/* <Link to="#" className='menu-bars'>
-				<AiOutlineMenuUnfold onClick={showSidebar}/>
-			</Link>
-			<div className='end'>
-			<Link to="/" className='menu-bars'>
-				<img className='Header-pic' src={DefaultPicture} alt='profile'/>
-			</Link>
-			</div> */}
-		{/* </div> */}
-
-		{/* <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-			<ul  className='nav-menu-items' onClick={showSidebar}>
-				<li className='Header-toggle'>
-					<Link to="#" className='menu-bars'>
-						<AiIcons.AiOutlineClose />
-					</Link>
-				</li>
-				{SidebarData.map((item, index) => {
-					return (
-						<motion.div
-							whileHover={{scale: 1.1}}>
-						<li key={index} className={item.cName}>
-							<Link to={item.path}>
-								{item.icon}
-								<span>{item.title}</span>
-							</Link>
-						</li>
-					</motion.div>
-					)
-				})}
-			</ul>
-		</nav> */}
-
 		<motion.div
 				onClick={() => (modalOpen ? close() : open())}>
 				<Link to="#" className='menu-bars'>
@@ -75,7 +50,17 @@ function Header() {
 		</motion.div>
 		<div className='end'>
 			<Link to="/profile" className='menu-bars'>
-				<img className='Header-pic' src={DefaultPicture} alt='profile'/>
+			<div>
+				
+ 				{profilePicture ? (
+ 				    // <img className='Header-pic' src={profilePicture} alt="Profile Picture" />
+					 <img className='Header-pic' src={`data:image/jpeg;base64,${profilePicture}`} />
+					// <img className='Header-pic' src={`data:image/jpeg;base64,${profilePicture.data}`} alt="Profile Picture" />
+ 				) : (
+ 				    <img className='Header-pic' src={DefaultPicture} alt="Default Profile Picture" />
+ 				)}
+ 			</div>
+
 			</Link>
 			</div>
 			<AnimatePresence

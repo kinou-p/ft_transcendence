@@ -1,32 +1,21 @@
-import DefaultPic from '../../assets/profile.jpg'
+import DefaultPicture from '../../assets/profile.jpg'
 import api from '../../script/axiosApi';
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
+
+import Friend  from './Friend.jsx';
+
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
+
 // import React from "react";
 
 import { useNavigate } from "react-router-dom";
 
-const UserChat = styled.div `
-	padding: 5px;
-	display: flex;
-	align-items: center;
-	gap: 5px;
-	color: white;
-	cursor: pointer;
 
-	&:hover{
-		background-color: #3e3c61;
-	}
-`
 
-const SideP = styled.p`
-	font-size: 14px;
-	color: lightgray;
-	margin-left: 15px;
-`
+
 const TouchDiv = styled.div`
 	margin-left: 10px;
 	margin-right: 4px;
@@ -45,6 +34,7 @@ function Social (){
 	const [friends, setFriends] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [user, setUser] = useState(null);
+	const [profilePicture, setProfilePicture] = useState('');
 
 	useEffect(()=> {
 
@@ -52,6 +42,8 @@ function Social (){
 			try{
 				const tmpFriends = await api.get("/friends")
 				const tmpUser = await api.get("/profile")
+				const pic = await api.post("/getPicture", {username: tmpUser.data.username})
+				setProfilePicture(pic.data);
 				setUser(tmpUser.data);
 				setFriends(tmpFriends.data);
 				// return tmpUser;
@@ -67,18 +59,35 @@ function Social (){
 
 	}, [])
 
-	const handleButtonClick = (user) => {
-		let path = `http://localhost/profile/${user.username}`; 
-		// history(path, { replace: true });
-		// window.location.replace(path);
-		window.history.pushState({}, null, path);
-		window.location.reload(false);
-	};
+
+
+
+
+	// const { status } = this.props;
+    // let statusColor = '';
+	// // let statusIcon = RxCircle;
+	// let status = 0
+
+    // if (status === 0) {
+    // //   statusIcon = faCircle;
+    //   statusColor = 'green';
+    // } else if (status === 1) {
+    // //   statusIcon = faCircle;
+    //   statusColor = 'red';
+    // } else if (status === 2) {
+    // //   statusIcon = faCircle;
+    //   statusColor = 'blue';
+    // }
 
     return (
         <div>
 			<div className='navbar'>
-				<img src={DefaultPic} alt="profile" className="pic"/>
+				{/* <img src={DefaultPic} alt="profile" className="pic"/> */}
+				{profilePicture ? (
+					<img className="pic" src={`data:image/jpeg;base64,${profilePicture}`} />
+ 				) : (
+ 					<img className="pic" src={DefaultPicture} alt="Default Profile Picture" />
+ 				)}
 				<span>
 					{isLoading ? (
         				<h4>Loading...</h4>
@@ -97,15 +106,27 @@ function Social (){
 			</div>
 
 			{friends.map(c=> (
-			<div onClick={() => handleButtonClick(c)}>
-			<UserChat>
-				<img className="pic-user" src={DefaultPic} alt="User" />
-				<div className="infoSideBar">
-					<span>{c.nickname}</span>
-					<SideP>Desc?</SideP>
-				</div>
-			</UserChat>
-			</div>
+				<Friend currentUser={c}/>
+			// <UserChat>
+			// 	{profilePicture ? (
+			// 		<img className="pic-user" src={`data:image/jpeg;base64,${profilePicture}`} />
+ 			// 	) : (
+ 			// 		<img className="pic-user" src={DefaultPicture} alt="Default Profile Picture" />
+ 			// 	)}
+			// 	<div className="infoSideBar">
+			// 		<span onClick={() => handleButtonClick(c)}>{c.nickname}</span>
+			// 		 <RxCircle icon={RxCircle} color={getStatus(c)} />
+			// 		 <button onClick={() => handleSpectate(c)} >Invite</button>
+			// 		 {getStatus(c) !== 'blue' ? (
+			// 			<></>
+      		// 		) : (
+        	// 			<button onClick={() => handleSpectate(c)} >Spectate</button>
+      		// 		)}
+			// 	</div>
+			// </UserChat>
+
+			// </div>
+			
 			))}
 		</div>
     )

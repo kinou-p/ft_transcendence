@@ -26,6 +26,9 @@ export class User {
 	@Column({ nullable: true })
 	username: string;
 
+	@Column({ type: 'bytea', nullable: true })
+	photo: Buffer;
+
 	@Column({ nullable: true })
 	password: string;
 

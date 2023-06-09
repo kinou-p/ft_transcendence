@@ -69,6 +69,7 @@ export class loginClass {
 				doubleAuth: 0,
 				friendRequest: null,
 				friends: null,
+				photo: null,
 			  };
 			await this.usersService.create(user);
 		}

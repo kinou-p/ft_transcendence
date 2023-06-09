@@ -1,4 +1,5 @@
-import { Controller, Request, Req, Get, Post, UseGuards, Redirect, Res, Body } from '@nestjs/common';
+import { Controller, Request, Req, Get, Post, UseGuards, Redirect, Res, Body, UploadedFile, UseInterceptors} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { AuthService } from './auth/auth.service';
@@ -51,10 +52,29 @@ export class AppController {
 	return await this.userService.findOne(data.username);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/friends')
   async getFriends(@Request() req) {
 	// return await this.userService.getFriends(req.user.username);
-	return await this.userService.getFriends("apommier");
+	return await this.userService.getFriends(req.user.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/friend')
+  async newFriend(@Request() req, @Body() data: any) {
+	// return await this.userService.getFriends(req.user.username);
+	console.log(`user= ${req.user.username}`)
+	const user = await this.userService.findOne(req.user.username)
+	return await this.userService.addFriend(user, data.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/status')
+  async setStatus(@Request() req, @Body() data: any) {
+  	const user = await this.userService.findOne(req.user.username);
+
+  	user.status = data.status;
+  	await this.userService.save(user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -62,10 +82,36 @@ export class AppController {
   async setNickname(@Request() req, @Body() data: any) {
 	// let user = req.user
 	// user.nickname = data.nickname
+	console.log(`user= ${req.user.username}`)
 	let user = await this.userService.findOne(req.user.username)
 	user.nickname = data.nickname;
 	// return await this.userService.getFriends(req.user.username);
 	return await this.userService.save(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/picture')
+  @UseInterceptors(FileInterceptor('photo'))
+  async setProfilPicture(@Request() req, @UploadedFile() file: Express.Multer.File) {
+	let user = await this.userService.findOne(req.user.username)
+	if (!file)
+		user.photo = null;
+	else
+		user.photo = file.buffer;
+	return await this.userService.save(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/getPicture')
+  async getProfilPicture(@Body() data: any) {
+	// console.log(`dataaaaa= ${data.username}`)
+	return await this.userService.getPic(data.username)
+
+	// return user.photo
+	// const photoData = user.photo;
+	// Buffer.from(user.photo, 'binary').buffer;
+	// const arrayBuffer = ArrayBuffer.from(photoData, 'binary');
+	// return await this.userService.save(user);
   }
 
 //========================================================================================================
@@ -123,6 +169,13 @@ export class AppController {
   {
 	const user = await this.userService.findOne(req.user.username);
 	return user.rank;
+  }
+
+//   @UseGuards(JwtAuthGuard)
+  @Get('/ranking')
+  async getRanking()
+  {
+	return await this.userService.getRanking();
   }
 
   @UseGuards(JwtAuthGuard)

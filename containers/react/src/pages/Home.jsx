@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Home.jsx                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
+/*   Updated: 2023/06/09 08:19:05 by apommier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // import { React, useState } from "react";
 import '../styles/Profile.css'
 // import '../styles/App.css'
@@ -34,18 +46,63 @@ function Profile () {
 	const [user, setUser] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [modalOpen, setModalOpen] = useState(false);
+	const [mine, setMine] = useState(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
 
 	const { username } = useParams();
 
+	const [selectedPhoto, setSelectedPhoto] = useState(null);
+	const [profilePicture, setProfilePicture] = useState('');
+
+	const handleFileChange = (event) => {
+	//   const file = event.target.files[0];
+	  setSelectedPhoto(event.target.files[0]);
+	//   try{
+	// 	api.post("/picture", {picture: URL.createObjectURL(file)})
+	// 	}
+	//   catch(err){
+	// 	console.log(err);
+	//     }
+	};
+
+	const handleUpload = async () => {
+		const formData = new FormData();
+		formData.append('photo', selectedPhoto);
+		try {
+		  await api.post('/picture', formData);
+		  console.log('File uploaded successfully');
+		  window.location.reload(false);
+		} catch (error) {
+		  console.error('Error uploading file:', error);
+		}
+	  };
+
 	useEffect(()=> {
 		const getUser = async ()=>{
 			console.log(`username= ${username}`)
+			// const pic
+			let pic
 			try{
-				const tmpUser = await api.post("/user", {username: username})
-				setUser(tmpUser.data);
-				console.log(`user= ${tmpUser.data.username}`)
+				const me = await api.get("/profile")
+				if (!username)
+				{
+					setMine(true);
+					setUser(me.data);
+					console.log(`mine= true = ${mine}`)
+					pic = await api.post("/getPicture", {username: me.data.username}) //good one?
+					// username = me.data.username
+				}
+				else
+				{
+					const tmpUser = await api.post("/user", {username: username})
+					setUser(tmpUser.data);
+					pic = await api.post("/getPicture", {username: username}) //good one?
+
+				}
+				// const pic = await api.get("/picture")//pic du user
+				setProfilePicture(pic.data);
+				// console.log(`user= ${tmpUser.data.username}`)
 				setIsLoading(false)
 			}
 			catch(err){
@@ -57,7 +114,13 @@ function Profile () {
 
 	return (
 		<div className="profile">
-			<img className="profile-pic" src={DefaultPicture} alt="Profile pic" />
+			{/* <img className="profile-pic" src={DefaultPicture} alt="Profile pic" />
+			 */}
+			{profilePicture ? (
+				<img className="profile-pic" src={`data:image/jpeg;base64,${profilePicture}`} />
+ 			) : (
+ 				<img className="profile-pic" src={DefaultPicture} alt="Default Profile Picture" />
+ 			)}
 			<span>
 					{isLoading ? (
         				<h1>Loading...</h1>
@@ -65,11 +128,28 @@ function Profile () {
         				<h1>{user.nickname}</h1>
       				)}
 	  		</span>
+
+
+
+			  {mine ? (
+			<div>
 				<motion.div  onClick={() => (modalOpen ? close() : open())}>
 					<Link to="#" className="edit_name">
 						{modalOpen === true ?  <IoCloseCircleOutline/> : <CgEditMarkup/>}
 					</Link>
 				</motion.div>
+			
+				<div>
+      				<input type="file" accept="image/*" onChange={handleFileChange} />
+      				<button onClick={handleUpload}>Upload</button>
+    			</div>
+			</div>
+				  ) : (
+						  <></>
+				)}
+
+
+
 			<AnimatePresence
 			initial={false}
 			onExitComplete={() => null}>
