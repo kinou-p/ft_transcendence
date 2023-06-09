@@ -12,6 +12,7 @@ import Message from "./Message"
 import { TbSend } from 'react-icons/tb';
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
+import { GrAdd } from 'react-icons/gr'
 
 
 const TouchDiv = styled.div`
@@ -228,7 +229,7 @@ function Chats(){
 
 	return (
 		<div className="chat">
-			<div className='navbar'>
+			{/* <div className='navbar'>
 				<img src={DefaultPic} alt="profile" className="pic"/>
 				<span>
 					{isLoading ? (
@@ -238,7 +239,7 @@ function Chats(){
 						// <h4>{user.username}</h4>
       				)}
 	  			</span>
-			</div>
+			</div> */}
 
 
 		
@@ -260,25 +261,38 @@ function Chats(){
 					</TouchDiv>
 				</div>
 			</div>
-			{conversations.map(c=> (
-				<div onClick={() => setCurrentChat(c)}>
-				<UserChat>
-					<img className="pic-user" src={DefaultPic} alt="User" />
-					<div className="infoSideBar">
-						<span>{c.name}</span>
-						<SideP>Desc?</SideP>
+			<div className="messages_box">
+				<div className="contact">
+					<UserChat>
+
+					<div className="newMessage">
+						<GrAdd/>
+						<span>New Message</span>
 					</div>
-				</UserChat>
+					</UserChat>
+					{conversations.map(c=> (
+						<div onClick={() => setCurrentChat(c)}>
+							<UserChat>
+							<img className="pic-user" src={DefaultPic} alt="User" />
+							<div className="infoSideBar">
+								<span>{c.name}</span>
+								<SideP>Desc?</SideP>
+							</div>
+							</UserChat>
+						</div>
+				
+					))}
 				</div>
-			))}
 
 				{
 					currentChat ? (
-				<>
+						<>
 					<div className="messages">
-						{messages.map(m=>(
-							<Message message = {m} own={m.sender === user.username} user={m}/>
-						))}
+						<div className="scroll">
+							{messages.map(m=>(
+								<Message message = {m} own={m.sender === user.username} user={m}/>
+								))}
+						</div>
 						{/* <Input/> */}
 						<div className="input">
 							<input
@@ -287,7 +301,7 @@ function Chats(){
 								placeholder="What do you want to say"
 								onChange={(e) => setNewMessage(e.target.value)}
 								value={newMessages}
-							/>
+								/>
 							<div className="send">
 								<TbSend onClick={handleSubmit}></TbSend>
 							</div>
@@ -295,19 +309,14 @@ function Chats(){
 					</div>
 				</>
 				) : (
-					<span className="noConv">Open a conversation</span>)}
+					<div className="messages">
+						<span className="noConv">Open a conversation</span>
+					</div>
+				)}
+			</div>
 		</div>
 		// </div>
-	);
-
-
-
-
-
-
-
-
-	
+	);	
 }
 
 export default Chats
