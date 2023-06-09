@@ -69,6 +69,15 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/invite')
+  async getInvite(@Request() req) {
+	// return await this.userService.getFriends(req.user.username);
+	console.log(`useawdawd\n\n\nr= ${req.user.username}`)
+	// const user = await this.userService.findOne(req.user.username)
+	return await this.userService.getInvite(req.user.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('/status')
   async setStatus(@Request() req, @Body() data: any) {
   	const user = await this.userService.findOne(req.user.username);

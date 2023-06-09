@@ -43,7 +43,19 @@ export class UsersService {
 		const user = await this.findOne(username)
 		let friendsTab = user.friends
 		console.log(friendsTab)
-		friendsTab = ['apommier', 'syd']
+		// friendsTab = ['apommier', 'syd']
+		const friends = await this.userRepository.query("SELECT * FROM \"User\" WHERE username = ANY ($1);", [friendsTab]);
+		console.log(friends)
+		return (friends)
+	}
+
+	async getInvite(username: string) {
+		const user = await this.findOne(username)
+		let friendsTab = user.friendRequest
+		// console.log(friendsTab[0])
+		// console.log(friendsTab[1])
+		console.log(friendsTab)
+		// friendsTab = ['apommier', 'syd']
 		const friends = await this.userRepository.query("SELECT * FROM \"User\" WHERE username = ANY ($1);", [friendsTab]);
 		console.log(friends)
 		return (friends)

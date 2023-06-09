@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 
 import Friend  from './Friend.jsx';
+import FriendRequest  from './FriendRequest.jsx';
 
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
@@ -32,6 +33,7 @@ const TouchDiv = styled.div`
 function Social (){
 
 	const [friends, setFriends] = useState([]);
+	const [invite, setInvite] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [user, setUser] = useState(null);
 	const [profilePicture, setProfilePicture] = useState('');
@@ -42,7 +44,10 @@ function Social (){
 			try{
 				const tmpFriends = await api.get("/friends")
 				const tmpUser = await api.get("/profile")
+				const tmpInv = await api.get("/invite")
 				const pic = await api.post("/getPicture", {username: tmpUser.data.username})
+
+				setInvite(tmpInv.data);
 				setProfilePicture(pic.data);
 				setUser(tmpUser.data);
 				setFriends(tmpFriends.data);
@@ -105,28 +110,14 @@ function Social (){
 				</div>
 			</div>
 
+{/* map with fiend request */}
+
+			{invite.map(c=> (
+				<FriendRequest currentUser={c}/>
+			))}
+
 			{friends.map(c=> (
 				<Friend currentUser={c}/>
-			// <UserChat>
-			// 	{profilePicture ? (
-			// 		<img className="pic-user" src={`data:image/jpeg;base64,${profilePicture}`} />
- 			// 	) : (
- 			// 		<img className="pic-user" src={DefaultPicture} alt="Default Profile Picture" />
- 			// 	)}
-			// 	<div className="infoSideBar">
-			// 		<span onClick={() => handleButtonClick(c)}>{c.nickname}</span>
-			// 		 <RxCircle icon={RxCircle} color={getStatus(c)} />
-			// 		 <button onClick={() => handleSpectate(c)} >Invite</button>
-			// 		 {getStatus(c) !== 'blue' ? (
-			// 			<></>
-      		// 		) : (
-        	// 			<button onClick={() => handleSpectate(c)} >Spectate</button>
-      		// 		)}
-			// 	</div>
-			// </UserChat>
-
-			// </div>
-			
 			))}
 		</div>
     )

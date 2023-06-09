@@ -8,7 +8,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	private clients: Record<string, Socket> = {};
 
-	private waitingClients: Set<Socket> = new Set();
+	private waitingClients: Set<{ client: Socket, option: number }> = new Set();
 	// private waitingClients: Set<Socket> = new Set(); // Utilisateurs cherchant un match
 	private games: Map<string, Socket[]> = new Map(); // Parties en cours, identifiées par un ID
 
@@ -32,38 +32,85 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	handleDisconnect(client: Socket)
 	{
 		console.log(`Client disconnected: ${client.id}`);
-		this.waitingClients.delete(client);
+		// this.waitingClients.delete(client);
+		this.waitingClients.forEach((waitingClient) => {
+			if (waitingClient.client === client) {
+			  this.waitingClients.delete(waitingClient);
+			}})
 		delete this.clients[client.id];
 		console.log(`Total connected clients: ${Object.keys(this.clients).length}`);
 	}
 
-	@SubscribeMessage('pong:matchmaking')
-	addMatchmaking(client: Socket, payload: any): void
-	{
-		console.log("matchmaking");
-		console.log(payload);
-		// this.waitingClients.add(client);
-		this.waitingClients.add(client);
-		console.log("Adding client to waiting list...");
-		if (this.waitingClients.size >= 2) {
-			console.log("Creating new game...");
-			const players = Array.from(this.waitingClients).slice(0, 2);
-			players.forEach((player) => {
-				this.waitingClients.delete(player);
-			});
-			const gameId = uuidv4();
-			this.games.set(gameId, players);
-			players.forEach((player) => {
-				player.join(gameId);
-				console.log(`Player ${player.id} joined game ${gameId}`);
-			});
-			players.forEach((player) => {
-				// const playersIds = game.map(socket => socket.id);
-				player.emit('pong:gameId', gameId);
-			});
-		}
-		// console.log(`from: ${client.id}`);
-	}
+	// @SubscribeMessage('pong:matchmaking')
+	// addMatchmaking(client: Socket, payload: any): void
+	// {
+	// 	console.log("matchmaking");
+	// 	console.log(payload);
+	// 	// this.waitingClients.add(client);
+	// 	this.waitingClients.add(client);
+	// 	console.log("Adding client to waiting list...");
+	// 	if (this.waitingClients.size >= 2) {
+	// 		console.log("Creating new game...");
+	// 		const players = Array.from(this.waitingClients).slice(0, 2);
+	// 		players.forEach((player) => {
+	// 			this.waitingClients.delete(player);
+	// 		});
+	// 		const gameId = uuidv4();
+	// 		this.games.set(gameId, players);
+	// 		players.forEach((player) => {
+	// 			player.join(gameId);
+	// 			console.log(`Player ${player.id} joined game ${gameId}`);
+	// 		});
+	// 		players.forEach((player) => {
+	// 			// const playersIds = game.map(socket => socket.id);
+	// 			player.emit('pong:gameId', gameId);
+	// 		});
+	// 	}
+	// 	// console.log(`from: ${client.id}`);
+	// }
+
+@SubscribeMessage('pong:matchmaking')
+addMatchmaking(client: Socket, payload: any): void {
+  console.log("matchmaking");
+  console.log(payload);
+  // Add the client to the waitingClients set along with their chosen option
+  this.waitingClients.add({ client, option: payload.option });
+  console.log("Adding client to waiting list...");
+
+  // Filter the waitingClients set to find clients with the same option
+  const matchingClients = Array.from(this.waitingClients).filter(
+    (waitingClient) =>
+      waitingClient.option === payload.option && waitingClient.client !== client
+  );
+
+  if (matchingClients.length > 0) {
+    console.log("Creating new game...");
+    const players = [matchingClients[0].client, client]; // Add the current client to the players array
+    players.forEach((player) => {
+    //   this.waitingClients.delete(
+    //     this.waitingClients.find(
+    //       (waitingClient) => waitingClient.client === player
+    //     )
+    //   );
+		const matchingClient = Array.from(this.waitingClients).find(
+			(waitingClient) => waitingClient.client === player
+	  	);
+	  	if (matchingClient) {
+			this.waitingClients.delete(matchingClient);
+	  	}
+    });
+    const gameId = uuidv4();
+    this.games.set(gameId, players);
+    players.forEach((player) => {
+      player.join(gameId);
+      console.log(`Player ${player.id} joined game ${gameId}`);
+    });
+    players.forEach((player) => {
+      player.emit('pong:gameId', gameId);
+    });
+  }
+  // console.log(`from: ${client.id}`);
+}
 
 	// @SubscribeMessage('pong:message')
 	// handleMessage(client: Socket, payload: any): void
