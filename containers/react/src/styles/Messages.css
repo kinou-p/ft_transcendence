@@ -1,10 +1,37 @@
 .home{
 	background-color: black;
-	height: 10vh;
+	height: 90vh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	
+}
+
+select{
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	background: black;
+	color: white;
+	box-shadow: none;
+	appearance: none;
+	outline: 0;
+	border: 0!important;
+	margin: 5px;
+	font-size: 18px;
+	border-radius: 6px;
+}
+
+.modal{
+	width: clamp(50%, 700px, 90%);
+	height: min(50%, 300px);
+
+	margin: auto;
+	padding: 2rem;
+	border-radius: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .scroll{
@@ -61,9 +88,11 @@
 .navbar{
 	display: flex;
 	align-items: center;
-	background-color: #000c66;
+	/* background-color: yellow; */
+	background-image: linear-gradient(90deg, #5843e4, #5a0760);
 	color: white;
 	padding: 3px;
+	border-radius: 10px 10px 0px 0px;
 }
 
 .pic{
@@ -143,4 +172,22 @@ input{
 	flex-direction: row-reverse;
 	padding: 20px;
 	color: lightgrey;
+}
+
+.submit{
+	display: inline-block;
+	color: white;
+	background-color:  #5843e4;
+	border-radius: 10px;
+	padding: 5px;
+	font-size: 1.2rem;
+	text-decoration: none;
+	font-weight:lighter;
+}
+
+.div_submit {
+	flex-direction: row;
+	align-items: center;
+	/* margin-left: 4px;
+	margin-right: 4px; */
 }

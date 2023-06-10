@@ -4,6 +4,8 @@ import '../../styles/Messages.css'
 import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi';
+import { motion } from "framer-motion";
+import Modal from "./Modal";
 
 import Message from "./Message"
 // import Input from "./Input";
@@ -214,6 +216,10 @@ function Chats(){
 		}
 	}
 
+	const [modalOpen, setModalOpen] = useState(false);
+	const close = () => setModalOpen(false);
+	const open = () => setModalOpen(true);
+
 	// console.log(`data user1= ${user.username}`)
 
 	// while (user === null)
@@ -265,13 +271,20 @@ function Chats(){
 				<div className="contact">
 					<UserChat>
 
-					<div className="newMessage">
-						<GrAdd/>
-						<span>New Message</span>
-					</div>
+						<motion.div className="newMessage"
+							onClick={() => (modalOpen ? close() : open())}
+						
+						>
+							<GrAdd/>
+							<span>New Conversation</span>
+						</motion.div>
+						{modalOpen && <Modal modalOpen={modalOpen} handleClose={close}/>}
+
 					</UserChat>
-					{conversations.map(c=> (
-						<div onClick={() => setCurrentChat(c)}>
+					{conversations.map((c, index ) => {
+						return (
+						<div key={index}
+						onClick={() => setCurrentChat(c)}>
 							<UserChat>
 							<img className="pic-user" src={DefaultPic} alt="User" />
 							<div className="infoSideBar">
@@ -281,7 +294,7 @@ function Chats(){
 							</UserChat>
 						</div>
 				
-					))}
+						)})}
 				</div>
 
 				{
