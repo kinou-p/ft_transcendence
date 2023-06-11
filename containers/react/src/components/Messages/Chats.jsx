@@ -6,6 +6,7 @@ import DefaultPic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi';
 import { motion } from "framer-motion";
 import Modal from "./Modal";
+import { NavLink } from "react-router-dom"; 
 
 import Message from "./Message"
 // import Input from "./Input";
@@ -40,6 +41,9 @@ const UserChat = styled.div `
 
 	&:hover{
 		background-color: #3e3c61;
+	}
+	&:active {
+		filter: black;
 	}
 `
 
@@ -284,7 +288,7 @@ function Chats(){
 					{conversations.map((c, index ) => {
 						return (
 						<div key={index}
-						onClick={() => setCurrentChat(c)}>
+							onClick={() => setCurrentChat(c)}>
 							<UserChat>
 							<img className="pic-user" src={DefaultPic} alt="User" />
 							<div className="infoSideBar">

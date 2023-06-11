@@ -5,7 +5,6 @@ import '../../styles/Messages.css'
 import { useState } from "react";
 import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
-import AddSelectTag from "./AddSelectTag";
 
 const dropIn = {
     hidden:{y:"-100vh",
@@ -45,18 +44,7 @@ const Modal = ({handleClose, text}) => {
         const selectedOptions = selectTags.map((tag) => tag.selectedOption);
         setSelectedOptionArray(selectedOptions);
     }
-    function try_me()
-    {
-
-        for (let i = 0; i < 2; i++)
-        {
-            AddSelectTag();
-        }
-    }
     let new_name;
-    let number;
-    let array;
-	// const [nickname, setNickname] = useState("");
     return (
         <Backdrop>
             <motion.div
@@ -99,8 +87,6 @@ const Modal = ({handleClose, text}) => {
                     </div>
                 ))
                 }
-                {/* <button onClick={addNewSelectedTag}>Add </button>
-                <button onClick={saveSelectedOptions}>Save </button> */}
                 <div>
                     <h3>Selected Option:</h3>
                     <ul>
@@ -110,9 +96,7 @@ const Modal = ({handleClose, text}) => {
                     </ul>
                 </div>
                 <div>
-                    {/* <p>nickname = "{new_name}"</p> */}
                     {multi === true ? (
-                    // <AddSelectTag number={number} array={array} new_name={new_name}/>
                     <GrAdd onClick={addNewSelectedTag}/>) : " "}
                 </div>
                 <div className="div_submit">
