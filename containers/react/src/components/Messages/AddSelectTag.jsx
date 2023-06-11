@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Rank } from "../../DataBase/DataRank";
+import { GrAdd } from "react-icons/gr";
 
-const AddSelectTag = () => {
+function AddSelectTag ({number, array, new_name}) {
     // const [selectCount, setSelectCount] = useState(0);
     // const [selectValues, setSelectValues] = useState([]);
 
@@ -9,7 +10,11 @@ const AddSelectTag = () => {
     //     setSelectCount((selectCount)  => selectCount + 1);
     //     setSelectCount((selectValues) =>[...selectValues, `select${selectCount + 1}`]   );
     // };
-
+    // function insertInArray  (number, array, new_name)  {
+    //     return (
+    //       array[number] = new_name
+    //     );
+    // };
     return (
         <div>
             {/* <button onClick={handleAddSelect}>Add</button>
@@ -21,15 +26,25 @@ const AddSelectTag = () => {
                     </select>
                 ))}
             </div> */}
-            <select>
+            {/* <select>
                     {Rank.map((item, index) => {
                         return (
                             <option value="data">{item.name}
                             {/* <input type="checkbox" /> */}
-                            </option>
-                        )
-                    })}
-                </select>
+                            {/* </option> */}
+                        {/* ) */}
+                    {/* // })} */}
+                {/* // </select> */}
+            {/* <div onClick={ () => <insertInArray number={number} array={array} new_name={new_name}/>}> */}
+            <div>
+                <GrAdd/>
+                {/* <h4>{new_name}</h4> */}
+            </div>
+            {/* {number != 0 ? (
+                <div>
+                    <p>{array[number]}</p>
+                </div>
+            ) : ("")} */}
         </div>
     )
 }

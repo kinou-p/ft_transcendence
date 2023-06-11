@@ -25,27 +25,26 @@ const dropIn = {
 
 const Modal = ({handleClose, text}) => {
     const [multi, setMulti] = useState(false);
-    // const addButton = document.getElementById('addButton');
-    // const selectContainer = document.getElementById('selectContainer');
-    // let selectCount = 0;
-    // function addSelectTag(){
-    //     selectCount++;
-    //     const select = document.createElement('select');
-    //     select.name = `select${selectCount}`;
+    const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
+    const [selectedOptionArray, setSelectedOptionArray] = useState([]);
 
-    //     const opt1 = document.createElement('option');
-    //     opt1.value = 'opt1';
-    //     opt1.text = 'opt1';
+    const handleOptionChange = (selectId, selectedOption) => {
+        setSelectTag((prevTags) => 
+            prevTags.map((tag) =>
+                tag.id === selectId ? { ...tag, selectedOption } : tag
+            )
+        );
+    };
 
-    //     const opt2 = document.createElement('option');
-    //     opt2.value = 'opt2';
-    //     opt2.text = 'opt2';
+    const addNewSelectedTag = () => {
+        const newSelectedId = Math.max (...selectTags.map((tag) => tag.id)) + 1;
+        setSelectTag([...selectTags, { id: newSelectedId, selectedOption: ''}]);
+    };
 
-    //     select.appendChild(opt1);
-    //     select.appendChild(opt2);
-
-    //     selectContainer.appendChild(select);
-    // }
+    const saveSelectedOptions = () => {
+        const selectedOptions = selectTags.map((tag) => tag.selectedOption);
+        setSelectedOptionArray(selectedOptions);
+    }
     function try_me()
     {
 
@@ -54,6 +53,10 @@ const Modal = ({handleClose, text}) => {
             AddSelectTag();
         }
     }
+    let new_name;
+    let number;
+    let array;
+	// const [nickname, setNickname] = useState("");
     return (
         <Backdrop>
             <motion.div
@@ -78,23 +81,42 @@ const Modal = ({handleClose, text}) => {
                 </select>
 
 {/* Second selection  */}
+                {selectTags.map((selectTag) =>(
+                    <div key={selectTag.id}>
 
-                <select>
+                    <select 
+                        value={selectTag.selectedOption}
+                        onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}>
                     {Rank.map((item, index) => {
                         return (
-                            <option value="data">{item.name}
-                            {/* <input type="checkbox" /> */}
-                            </option>
+                            <>
+                            <option value={new_name}>{item.name}</option>
+                            
+                            </>
                         )
                     })}
-                </select>
-                {/* <button id="addButton">Add</button> */}
-                {/* addButton.addEventListener('click', addSelectTag); */}
-                <div id="selectContainer" onClick={() => (try_me())}>
-                    {multi === true ? <GrAdd/> : " "}
+                    </select>           
+                    </div>
+                ))
+                }
+                {/* <button onClick={addNewSelectedTag}>Add </button>
+                <button onClick={saveSelectedOptions}>Save </button> */}
+                <div>
+                    <h3>Selected Option:</h3>
+                    <ul>
+                        {selectedOptionArray.map((option, index) => (
+                            <li key={index}>{option}</li>
+                        ))}
+                    </ul>
+                </div>
+                <div>
+                    {/* <p>nickname = "{new_name}"</p> */}
+                    {multi === true ? (
+                    // <AddSelectTag number={number} array={array} new_name={new_name}/>
+                    <GrAdd onClick={addNewSelectedTag}/>) : " "}
                 </div>
                 <div className="div_submit">
-                    <Link to="#" className="submit" onClick={handleClose}>Submit</Link>
+                    <Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
                     
                     <Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
                 </div>
