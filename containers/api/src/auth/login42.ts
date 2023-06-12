@@ -25,7 +25,7 @@ export class loginClass {
 		const data = {
 			grant_type: 'authorization_code',
 			client_id: 'u-s4t2ud-6d29dfa49ba7146577ffd8bf595ae8d9e5aaa3e0a9615df18777171ebf836a41',
-			client_secret: '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',
+			client_secret: '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',
 			code: code,
 			redirect_uri: 'http://localhost:80/api/auth/login',
 		  };
