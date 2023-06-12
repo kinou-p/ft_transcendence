@@ -15,7 +15,10 @@ import Message from "./Message"
 import { TbSend } from 'react-icons/tb';
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
-import { GrAdd } from 'react-icons/gr'
+import { GrAdd } from 'react-icons/gr';
+
+import { Rank } from "../../DataBase/DataRank";
+import BasicAlert from "./Alert";
 
 
 const TouchDiv = styled.div`
@@ -220,10 +223,24 @@ function Chats(){
 		}
 	}
 
+	const [friend, setFriend] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
+	const [find, setFind] = useState(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
 
+	const handleFriend = e => {
+		setFriend(e.target.value)
+	};
+
+	const findValue = () => {
+		setFind(false);
+		Rank.map((tab) => {
+			if (tab.name === friend)
+				setFind(true);
+		})
+	}; 
+	
 	// console.log(`data user1= ${user.username}`)
 
 	// while (user === null)
@@ -263,8 +280,12 @@ function Chats(){
       				)}
 	  			</span>
 				<div className="end">
+					<input className="lookForFriends" type="text" value={friend} onChange={handleFriend}/>
 					<TouchDiv>
-						<MdOutlineGroupAdd/>
+						<div  onClick={findValue}>
+							<MdOutlineGroupAdd/>
+							{find ? (<BasicAlert/>) : ("")}
+						</div>
 					</TouchDiv>
 					<TouchDiv>
 						<ImBlocked/>
