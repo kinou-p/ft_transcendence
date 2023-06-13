@@ -1,5 +1,5 @@
 import React from "react";
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route, Navigate} from 'react-router-dom';
 import HomeLogin from "../pages/Home.js";
 
 import Home from "../pages/Home.jsx";
@@ -17,15 +17,32 @@ import SuccessToken from '../script/tokenSuccess'
 import DoubleAuth from "../pages/2fa.js";
 import Game from "../pages/Game.jsx";
 import Social from "../components/Social/Social.jsx";
+import PageNotFound from "../components/404.jsx";
 import Logout from "../components/Profile/Logout.jsx";
 
 function AnimatedRoute () {
 	const location = useLocation();
+	if (!localStorage.getItem('token'))
+	{
+		return (
+			<AnimatePresence>
+			<Routes location={location} key={location.pathname}>
+				<Route exact path="/" element={<HomeLogin/>}/>
+				<Route exact path="/token" element={<SuccessToken />}/>
+
+				<Route path="/404" element={<HomeLogin/>} />
+          		<Route path="*" element={<Navigate to="/404" />} />
+			</Routes>
+		</AnimatePresence>
+		)
+	}
+	
 	return (
 		<AnimatePresence>
 			<Routes location={location} key={location.pathname}>
 
-				<Route exact path="/" element={<HomeLogin/>}/>
+				{/* <Route exact path="/login" element={<HomeLogin/>}/> */}
+				<Route exact path="/" element={<Home/>}/>
 				<Route exact path="/profile" element={<Home/>}/>
 				<Route exact path="/profile/:username" element={<Home/>}/>
 				
@@ -41,6 +58,9 @@ function AnimatedRoute () {
 				<Route exact path="/login42" element={<Login42 />}/>
 				<Route exact path="/logout" element={<Logout />}/>
 				<Route exact path="/messages" element={<Messages />}/>
+
+				<Route path="/404" element={<PageNotFound />} />
+          		<Route path="*" element={<Navigate to="/404" />} />
 			</Routes>
 		</AnimatePresence>
 	)

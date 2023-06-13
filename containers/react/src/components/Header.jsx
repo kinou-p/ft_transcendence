@@ -1,13 +1,9 @@
 import React,  {useState, useEffect} from 'react';
 import {AiOutlineMenuUnfold} from 'react-icons/ai';
-// import * as AiIcons from 'react-icons/ai';
 import {Link} from 'react-router-dom';
-// import { SidebarData } from './Sidebar/SidebarData';
 import DefaultPicture from '../assets/profile.jpg'
 import { motion, AnimatePresence } from 'framer-motion'
 import Modal from './Sidebar/Modal';
-// import {BiLogOutCircle} from 'react-icons/bi';
-// import AnimatePresence from 
 import '../styles/Header.css';
 
 import api from '../script/axiosApi';
@@ -32,8 +28,8 @@ function Header() {
 			console.error('Error fetching profile picture:', error);
 		  }
 		};
-	  
-		fetchProfilePicture();
+		if (localStorage.getItem('token'))
+			fetchProfilePicture();
 	  }, []);
 
 	// console.log(`profile pic= ${profilePicture}`)

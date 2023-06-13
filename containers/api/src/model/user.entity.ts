@@ -20,6 +20,18 @@ export class User {
 	@PrimaryGeneratedColumn()
 	id: number;
 
+	// otp_enabled  Boolean @default(false)
+	// otp_verified Boolean @default(false)
+
+	@Column({ default: false })
+	otp_enabled: boolean;
+
+	@Column({ default: false })
+	otp_verified: boolean;
+
+	@Column({ nullable: true })
+	otp_base32: string;
+
 	@Column({ nullable: true })
 	nickname: string;
 	
@@ -47,8 +59,8 @@ export class User {
 	@Column({ default: 0 })
 	userId: number;
 
-	@Column({ default: 0 })
-	doubleAuth: number;
+	// @Column({ default: 0 })
+	// doubleAuth: number;
 	
 	@Column('text', { array: true, nullable: true })
 	friendRequest: string[];

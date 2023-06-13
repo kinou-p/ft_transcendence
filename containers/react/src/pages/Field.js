@@ -1,13 +1,48 @@
-import { useEffect } from 'react';
+import { useEffect, useLocation } from 'react';
 // import { useState, useRef } from 'react';
-import { drawCanvas } from './canvas.js';
+import DrawCanvas from './canvas.js';
+import queryString from 'query-string';
 import '../styles/field.css';
+
+import { useParams } from "react-router-dom";
+
+// import { withRouter } from 'react-router-dom';
 
 function Field()
 {
 	useEffect(() => {
+		// const location = useLocation();
+		const queryParams = queryString.parse(window.location.search);
+		
 		console.log("launch canva hehe")
-		drawCanvas();
+		let Modifiers = 0;
+	  
+		if (queryParams.superpower === 'true') {
+		  Modifiers += 1;
+		}
+	  
+		if (queryParams.obstacle === 'true') {
+		  Modifiers += 2;
+		}
+	  
+		if (queryParams.speed === 'true') {
+		  Modifiers += 4;
+		}
+		// console.log(`modifiers= ${Modifiers}`)
+		// DrawCanvas(Modifiers);
+		// 		return () => {
+		// 	console.log("000000000000000000000000000000000")
+		// //   socketRef.current.disconnect();
+		// };
+
+		// console.log(`modifiers= ${Modifiers}`)
+		const cleanup = DrawCanvas(Modifiers);
+	
+		return () => {
+		  console.log("Cleanup");
+		  cleanup(); // Call the cleanup function to stop the ongoing process or perform necessary cleanup tasks
+		};
+
 	}, []);
 
 	// const [buttonClicked, setButtonClicked] = useState(false);
@@ -28,6 +63,7 @@ function Field()
 }
 
 export default Field;
+// export default withRouter(Field);
 
 
 // function Field() {

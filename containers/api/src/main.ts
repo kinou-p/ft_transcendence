@@ -1,6 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+console.log(process.env);
 
 // async function bootstrap() {
 //   const app = await NestFactory.create(AppModule);
@@ -27,6 +31,6 @@ async function bootstrap() {
 		  saveUninitialized: false,
 		}),
 	  );
-  await app.listen(3000);
+  await app.listen(parseInt(process.env.API_PORT) || 3000);
 }
 bootstrap();

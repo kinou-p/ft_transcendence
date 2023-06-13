@@ -26,6 +26,7 @@
     "@nestjs/platform-socket.io": "^9.4.0",
     "@nestjs/websockets": "^9.4.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "socket.io-client": "^4.6.1",

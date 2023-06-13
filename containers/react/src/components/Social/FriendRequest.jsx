@@ -46,28 +46,7 @@ export default function  Friend({currentUser})
 		  };
 		
 		  fetchProfilePicture();
-	})
-
-	function getStatus(friend)
-	{
-		let status = friend.status
-		console.log(`status= ${status}`)
-		let statusColor;
-
-		if (status === 0)
-			statusColor = 'grey';
-		else if (status === 1) 
-			statusColor = 'green';
-		else if (status === 2) 
-			statusColor = 'blue';
-		return statusColor;
-	}
-
-	const handleSpectate = (user) => {
-		//socket connection and add to party with one with username
-		console.log(`spectate hehe`)
-		console.log(`user= ${user}`)
-	};
+	}, [])
 
 	const handleButtonClick = (user) => {
 		let path = `http://localhost/profile/${user.username}`; 
@@ -79,10 +58,12 @@ export default function  Friend({currentUser})
 
 	const Accept = (user) => {
 		console.log("accept")
+		console.log(`request = ${request}`)
 	}
 
 	const Refuse = (user) => {
 		console.log("refuse")
+		console.log(`request = ${request}`)
 	}
 
 	return (
