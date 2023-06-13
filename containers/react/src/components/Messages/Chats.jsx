@@ -235,10 +235,16 @@ function Chats(){
 
 	const findValue = () => {
 		setFind(false);
+		console.log(friend);
 		Rank.map((tab) => {
 			if (tab.name === friend)
+			{
+				console.log("ok bon");
 				setFind(true);
+			}
 		})
+		console.log(find);
+		// if (!find)
 	}; 
 	
 	// console.log(`data user1= ${user.username}`)
@@ -284,7 +290,7 @@ function Chats(){
 					<TouchDiv>
 						<div  onClick={findValue}>
 							<MdOutlineGroupAdd/>
-							{find ? (<BasicAlert/>) : ("")}
+							{find ? ("<BasicAlert/>") : ("")}
 						</div>
 					</TouchDiv>
 					<TouchDiv>
