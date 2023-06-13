@@ -203,3 +203,61 @@ input{
 	height: 1.5rem;
 	margin-top: 1rem;
 }
+
+.greenAlert{
+	width: clamp(50%, 500px, 90%);
+	height: min(50%, 100px);
+
+	margin: auto;
+	padding: 1rem;
+	border-radius: 12px;
+	/* display: flex; */
+	flex-direction: row;
+	align-items: center;
+	background-color: rgba(0, 86, 27, 0.7);
+	font-size: 25px;
+	color: rgba(255, 255, 255, 1);
+}
+
+.redAlert{
+	width: clamp(50%, 500px, 90%);
+	height: min(50%, 100px);
+
+	margin: auto;
+	padding: 1rem;
+	border-radius: 12px;
+	flex-direction: row;
+	align-items: center;
+	background-color: rgba(133, 6, 6, 0.7);
+	font-size: 25px;
+	color: rgba(255, 255, 255, 1);
+}
+
+.redAlert{
+	width: clamp(50%, 500px, 90%);
+	height: min(50%, 100px);
+
+	margin: auto;
+	padding: 1rem;
+	border-radius: 12px;
+	flex-direction: row;
+	align-items: center;
+	background-color: rgba(133, 6, 6, 0.7);
+	font-size: 25px;
+	color: rgba(255, 255, 255, 1);
+}
+
+.yellowAlert{
+	width: clamp(50%, 500px, 90%);
+	height: min(50%, 100px);
+
+	margin: auto;
+	padding: 1rem;
+	border-radius: 12px;
+	flex-direction: row;
+	align-items: center;
+	background-color: rgba(212, 175, 55, 0.7);
+	font-size: 25px;
+	color: rgba(255, 255, 255, 1);
+}
+

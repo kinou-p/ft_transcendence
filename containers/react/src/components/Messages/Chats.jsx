@@ -4,9 +4,8 @@ import '../../styles/Messages.css'
 import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi';
-import { motion } from "framer-motion";
+import { motion , AnimatePresence} from "framer-motion";
 import Modal from "./Modal";
-import { NavLink } from "react-router-dom"; 
 
 import Message from "./Message"
 // import Input from "./Input";
@@ -18,7 +17,9 @@ import { MdOutlineGroupAdd } from 'react-icons/md';
 import { GrAdd } from 'react-icons/gr';
 
 import { Rank } from "../../DataBase/DataRank";
-import BasicAlert from "./Alert";
+import GreenAlert from "../Alert/GreenAlert";
+import RedAlert from "../Alert/RedAlert";
+import YellowAlert from "../Alert/YellowAlert";
 
 
 const TouchDiv = styled.div`
@@ -225,27 +226,31 @@ function Chats(){
 
 	const [friend, setFriend] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
-	const [find, setFind] = useState(false);
+	const [addFriend, setAddFriend] = useState(false);
+	const [block, setBlock] = useState(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
+	const closeAddFriend = () => setAddFriend(false);
+	const closeBlock = () => setBlock(false);
+
 
 	const handleFriend = e => {
 		setFriend(e.target.value)
 	};
 
-	const findValue = () => {
-		setFind(false);
-		console.log(friend);
-		Rank.map((tab) => {
-			if (tab.name === friend)
-			{
-				console.log("ok bon");
-				setFind(true);
-			}
-		})
-		console.log(find);
-		// if (!find)
-	}; 
+	// const findValue = () => {
+	// 	// setFind(false);
+	// 	console.log(friend);
+	// 	Rank.map((tab) => {
+	// 		if (tab.name === friend)
+	// 		{
+	// 			console.log("ok bon");
+	// 			setFind(true);
+	// 		}
+	// 	})
+	// 	console.log(find);
+	// 	// if (!find)
+	// }; 
 	
 	// console.log(`data user1= ${user.username}`)
 
@@ -288,13 +293,31 @@ function Chats(){
 				<div className="end">
 					<input className="lookForFriends" type="text" value={friend} onChange={handleFriend}/>
 					<TouchDiv>
-						<div  onClick={findValue}>
+						<motion.div
+						onClick={() => (addFriend ? setAddFriend(false) : setAddFriend(true))}>
 							<MdOutlineGroupAdd/>
-							{find ? ("<BasicAlert/>") : ("")}
-						</div>
+							{/* {console.log("find = ",find) && setFind(true)} */}
+						</motion.div>
+						<AnimatePresence
+							initial={false}
+							onExitComplete={() => null}
+						>
+							{addFriend && <GreenAlert handleClose={closeAddFriend} text={friend + " was successfuly added"}/>}
+						</AnimatePresence>
+							{/* {console.log("find2 = ", find) && find && <BasicAlert modalOpen={find} handleClose={setFind(false)}/>} */}
 					</TouchDiv>
 					<TouchDiv>
+						<motion.div 
+						onClick={() => (block ? setBlock(false) : setBlock(true))}
+						>
 						<ImBlocked/>
+						<AnimatePresence
+							initial={false}
+							onExitComplete={() => null}
+							>
+							{block && <RedAlert handleClose={closeBlock} text={friend + " was successfuly blocked"}/>}
+						</AnimatePresence>
+						</motion.div>
 					</TouchDiv>
 				</div>
 			</div>
@@ -304,7 +327,6 @@ function Chats(){
 
 						<motion.div className="newMessage"
 							onClick={() => (modalOpen ? close() : open())}
-						
 						>
 							<GrAdd/>
 							<span>New Conversation</span>
