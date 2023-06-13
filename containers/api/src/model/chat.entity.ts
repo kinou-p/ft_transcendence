@@ -8,7 +8,7 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } 
 	@Column('text', { array: true, nullable: true })
 	members: string[];
 
-	@Column({ nullable: true })
+	@Column({ default: "Unnamed Conv" })
     name: string
 
 	@Column({ nullable: true })
@@ -17,11 +17,14 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } 
 	// @Column()
 	// members: string;// arry ??? one to many ???
 
-	@Column({ nullable: true })
-	banned: string;// arry ??? one to many ???
+	@Column('text', { array: true, nullable: true })
+	banned: string[];
+
+	@Column('text', { array: true, nullable: true })
+	admin: string[];
 
 	@Column({ nullable: true })
-	admin: string;// arry ??? one to many ???
+	owner: string;
 	
 	@Column({ nullable: true })
 	messages: string;

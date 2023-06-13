@@ -224,38 +224,75 @@ function Chats(){
 		}
 	}
 
+
+	
 	const [friend, setFriend] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [addFriend, setAddFriend] = useState(false);
 	const [block, setBlock] = useState(false);
+	
+	const [showAddFriendAlert, setShowAddFriendAlert] = useState(false);
+	const [showBlockAlert, setShowBlockAlert] = useState(false);
+	
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
-	const closeAddFriend = () => setAddFriend(false);
-	const closeBlock = () => setBlock(false);
 
 
-	const handleFriend = e => {
-		setFriend(e.target.value)
-	};
+	// const closeAddFriend = () => setAddFriend(false);
+	// const closeBlock = () => setBlock(false);
 
-	// const findValue = () => {
-	// 	// setFind(false);
-	// 	console.log(friend);
-	// 	Rank.map((tab) => {
-	// 		if (tab.name === friend)
-	// 		{
-	// 			console.log("ok bon");
-	// 			setFind(true);
-	// 		}
-	// 	})
-	// 	console.log(find);
-	// 	// if (!find)
-	// }; 
+
+	const handleFriend = (event) => {
+		setFriend(event.target.value);
+	  };
 	
-	// console.log(`data user1= ${user.username}`)
-
-	// while (user === null)
-		// ;
+	  const handleAddFriend = async () => {
+		try{
+			const res = await api.post("/friend", {username: friend})
+			// if (res.data === 1)
+			// console.log("res in friend= ", res)
+			console.log("res in friend= ", res.data)
+			if(res.data === 1)
+			{
+			  setAddFriend(true);
+			  setBlock(false); // Reset block state
+			  setShowBlockAlert(false);
+			}
+			else
+				setAddFriend(false);
+			setShowAddFriendAlert(true);
+		} catch(err) {
+			console.log(err)
+		}
+	  };
+	
+	  const handleBlockFriend = async () => {
+		try{
+			const res = await api.post("/block", {username: friend})
+			// if(1)
+			if (res.data === 1)
+			{
+				setBlock(true);
+				setAddFriend(false); // Reset addFriend state
+				setShowAddFriendAlert(false);
+			}
+			else
+				setBlock(false);
+			setShowBlockAlert(true);
+		} catch(err) {
+			console.log(err)
+		}
+	  };
+	
+	  const closeAddFriend = () => {
+		setAddFriend(false);
+		setShowAddFriendAlert(false);
+	  };
+	
+	  const closeBlock = () => {
+		setBlock(false);
+		setShowBlockAlert(false);
+	  };
 
 
 //========================================================================================================
@@ -290,13 +327,17 @@ function Chats(){
         				<h4>{user.nickname}</h4>
       				)}
 	  			</span>
-				<div className="end">
+
+
+
+				{/* work here bitch */}
+
+				{/* <div className="end">
 					<input className="lookForFriends" type="text" value={friend} onChange={handleFriend}/>
 					<TouchDiv>
 						<motion.div
 						onClick={() => (addFriend ? setAddFriend(false) : setAddFriend(true))}>
 							<MdOutlineGroupAdd/>
-							{/* {console.log("find = ",find) && setFind(true)} */}
 						</motion.div>
 						<AnimatePresence
 							initial={false}
@@ -304,7 +345,6 @@ function Chats(){
 						>
 							{addFriend && <GreenAlert handleClose={closeAddFriend} text={friend + " was successfuly added"}/>}
 						</AnimatePresence>
-							{/* {console.log("find2 = ", find) && find && <BasicAlert modalOpen={find} handleClose={setFind(false)}/>} */}
 					</TouchDiv>
 					<TouchDiv>
 						<motion.div 
@@ -319,7 +359,43 @@ function Chats(){
 						</AnimatePresence>
 						</motion.div>
 					</TouchDiv>
-				</div>
+				</div> */}
+    <div className="end">
+      <input className="lookForFriends" type="text" value={friend} onChange={handleFriend} />
+      <TouchDiv>
+        <motion.div onClick={handleAddFriend}>
+          <MdOutlineGroupAdd />
+        </motion.div>
+        <AnimatePresence initial={false} onExitComplete={() => null}>
+			{showAddFriendAlert && addFriend && (
+				<GreenAlert handleClose={closeAddFriend} text={friend + ' was successfully added'} />
+			)}
+          {showAddFriendAlert && !addFriend && (
+			  <RedAlert handleClose={closeAddFriend} text={friend + ' was not found'} />
+			  )}
+        </AnimatePresence>
+      </TouchDiv>
+      <TouchDiv>
+        <motion.div onClick={handleBlockFriend}>
+          <ImBlocked />
+        </motion.div>
+        <AnimatePresence initial={false} onExitComplete={() => null}>
+          {showBlockAlert && block && (
+            <GreenAlert handleClose={closeBlock} text={friend + ' was successfully blocked'} />
+          )}
+          {showBlockAlert && !block && (
+            <RedAlert handleClose={closeBlock} text={friend + ' was not found'} />
+          )}
+        </AnimatePresence>
+      </TouchDiv>
+    </div>
+				
+
+
+
+
+
+
 			</div>
 			<div className="messages_box">
 				<div className="contact">

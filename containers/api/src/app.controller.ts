@@ -77,6 +77,15 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('/block')
+  async newBlocked(@Request() req, @Body() data: any) {
+	// return await this.userService.getFriends(req.user.username);
+	console.log(`user= ${req.user.username}`)
+	const user = await this.userService.findOne(req.user.username)
+	return await this.userService.addBlocked(user, data.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('/invite')
   async getInvite(@Request() req) {
 	// return await this.userService.getFriends(req.user.username);
@@ -317,13 +326,20 @@ export class AppController {
 //========================================================================================================
 //========================================================================================================
 
+  @UseGuards(JwtAuthGuard)
   @Post('/conv')
   async createConv(@Request() req, @Body() data: any) {
 	///create conv and return it ? id?
 	console.log(`data post /conv= ${data}`);
 	console.log(`data post /conv= ${data.members}`);
 	console.log(`data post /conv= ${data.name}`);
+
+	// const param = data;
+	const amIhere = data.members.includes(req.user.username);
+	if (!amIhere)
+		data.members.push(req.user.username)
 	// let test = {id: 2, members: "cc"};
+	data.owner = req.user.username
 	return await this.chatService.createConv(data);
 	// res.json(messages);
   }

@@ -68,6 +68,9 @@ export class User {
 	@Column('text', { array: true, nullable: true })
 	friends: string[];
 
+	@Column('text', { array: true, nullable: true })
+	blocked: string[];
+
 	@OneToMany(() => MatchLog, (child) => child.parent, { eager: true })
 	children: MatchLog[];
 

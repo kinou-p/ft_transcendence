@@ -73,6 +73,7 @@ export class loginClass {
 				otp_verified: false,
 				friendRequest: null,
 				friends: null,
+				blocked: null,
 				photo: null,
 			  };
 			await this.usersService.create(user);

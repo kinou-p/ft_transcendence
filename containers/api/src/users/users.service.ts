@@ -79,9 +79,21 @@ export class UsersService {
 	}
 
 	async addFriend(user: User, username: string) {
+		if (!(await this.findOne(username)))
+			return (0);
 		user.friends = user.friends || [];
 		user.friends.push(username);
 		this.save(user);
+		return (1);
+	}
+
+	async addBlocked(user: User, username: string) {
+		if (!(await this.findOne(username)))
+			return (0);
+		user.blocked = user.blocked || [];
+		user.blocked.push(username);
+		this.save(user);
+		return (1);
 	}
 
 	async getRanking() {
