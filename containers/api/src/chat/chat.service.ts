@@ -31,7 +31,7 @@ export class ChatService {
 //  import { createConnection } from 'typeorm';
  
   async getConv(username: string): Promise<Conv[]>{
-	// username = "apommier"
+	username = "sadjigui"
 	const convs = await this.chatRepository.query("SELECT * FROM \"conv\" WHERE $1 = ANY (ARRAY[members]);", [username])
 	console.log(`convs= ${convs}`)
 	return convs;
