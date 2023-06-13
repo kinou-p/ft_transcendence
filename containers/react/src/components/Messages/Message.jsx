@@ -19,10 +19,10 @@ import DefaultPicture from '../../assets/profile.jpg'
 import '../../styles/Messages.css'
 
 const MeStyleP = styled.p`
-	background-color: lightgray;
+	background-color: #5843e4;
 	padding 10px 20px;
 	border-radius 10px 0px 10px 10px;
-	color: black;
+	color: white;
 	margin-right: 20px;
 `
 

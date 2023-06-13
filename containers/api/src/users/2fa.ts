@@ -5,6 +5,8 @@ import crypto from "crypto";
 import * as OTPAuth from "otpauth";
 import { encode } from "hi-base32";
 
+import * as qr from 'qrcode';
+
 // [...] Register user
 
 // [...] Login user
@@ -32,6 +34,24 @@ export const generateOTP = async (user) => {
 	});
 
 	let otpauth_url = totp.toString();
+	const qrCodeDataUrl = await qr.toDataURL(otpauth_url, { errorCorrectionLevel: 'H' });
+
+	const filePath = 'qrcode.png'; // Specify the file path where the QR code should be saved
+	
+	qr.toFile(filePath, qrCodeDataUrl, (error) => {
+	  if (error) {
+		console.error(error);
+		// Handle the error appropriately
+		return;
+	  }
+	  // QR code image has been generated and saved to the file
+	  // Or, you can create a buffer of the image data directly
+	})
+
+
+
+
+
 
 	const res = {
 		otpauth_url: otpauth_url, 
@@ -87,7 +107,6 @@ export const generateOTP = async (user) => {
 		period: 15,
 		secret: user.otp_base32,
 	});
-  
 	  let delta = totp.validate({ token });
 
 	  if (delta === null) {

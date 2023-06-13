@@ -38,8 +38,12 @@
 .chat {
   width: 100%;
   height: 100vh;
-  display: flex;
+  display:inline-block;
   align-items: center;
+}
+
+.chat_2{
+  display:flex;
 }
 .chat__sidebar {
   height: 100%;

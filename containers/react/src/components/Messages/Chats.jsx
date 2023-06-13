@@ -4,6 +4,8 @@ import '../../styles/Messages.css'
 import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi';
+import { motion , AnimatePresence} from "framer-motion";
+import Modal from "./Modal";
 
 import Message from "./Message"
 // import Input from "./Input";
@@ -12,6 +14,12 @@ import Message from "./Message"
 import { TbSend } from 'react-icons/tb';
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
+import { GrAdd } from 'react-icons/gr';
+
+import { Rank } from "../../DataBase/DataRank";
+import GreenAlert from "../Alert/GreenAlert";
+import RedAlert from "../Alert/RedAlert";
+import YellowAlert from "../Alert/YellowAlert";
 
 
 const TouchDiv = styled.div`
@@ -37,6 +45,9 @@ const UserChat = styled.div `
 
 	&:hover{
 		background-color: #3e3c61;
+	}
+	&:active {
+		filter: black;
 	}
 `
 
@@ -213,6 +224,34 @@ function Chats(){
 		}
 	}
 
+	const [friend, setFriend] = useState("");
+	const [modalOpen, setModalOpen] = useState(false);
+	const [addFriend, setAddFriend] = useState(false);
+	const [block, setBlock] = useState(false);
+	const close = () => setModalOpen(false);
+	const open = () => setModalOpen(true);
+	const closeAddFriend = () => setAddFriend(false);
+	const closeBlock = () => setBlock(false);
+
+
+	const handleFriend = e => {
+		setFriend(e.target.value)
+	};
+
+	// const findValue = () => {
+	// 	// setFind(false);
+	// 	console.log(friend);
+	// 	Rank.map((tab) => {
+	// 		if (tab.name === friend)
+	// 		{
+	// 			console.log("ok bon");
+	// 			setFind(true);
+	// 		}
+	// 	})
+	// 	console.log(find);
+	// 	// if (!find)
+	// }; 
+	
 	// console.log(`data user1= ${user.username}`)
 
 	// while (user === null)
@@ -228,7 +267,7 @@ function Chats(){
 
 	return (
 		<div className="chat">
-			<div className='navbar'>
+			{/* <div className='navbar'>
 				<img src={DefaultPic} alt="profile" className="pic"/>
 				<span>
 					{isLoading ? (
@@ -238,7 +277,7 @@ function Chats(){
 						// <h4>{user.username}</h4>
       				)}
 	  			</span>
-			</div>
+			</div> */}
 
 
 		
@@ -252,33 +291,74 @@ function Chats(){
       				)}
 	  			</span>
 				<div className="end">
+					<input className="lookForFriends" type="text" value={friend} onChange={handleFriend}/>
 					<TouchDiv>
-						<MdOutlineGroupAdd/>
+						<motion.div
+						onClick={() => (addFriend ? setAddFriend(false) : setAddFriend(true))}>
+							<MdOutlineGroupAdd/>
+							{/* {console.log("find = ",find) && setFind(true)} */}
+						</motion.div>
+						<AnimatePresence
+							initial={false}
+							onExitComplete={() => null}
+						>
+							{addFriend && <GreenAlert handleClose={closeAddFriend} text={friend + " was successfuly added"}/>}
+						</AnimatePresence>
+							{/* {console.log("find2 = ", find) && find && <BasicAlert modalOpen={find} handleClose={setFind(false)}/>} */}
 					</TouchDiv>
 					<TouchDiv>
+						<motion.div 
+						onClick={() => (block ? setBlock(false) : setBlock(true))}
+						>
 						<ImBlocked/>
+						<AnimatePresence
+							initial={false}
+							onExitComplete={() => null}
+							>
+							{block && <RedAlert handleClose={closeBlock} text={friend + " was successfuly blocked"}/>}
+						</AnimatePresence>
+						</motion.div>
 					</TouchDiv>
 				</div>
 			</div>
-			{conversations.map(c=> (
-				<div onClick={() => setCurrentChat(c)}>
-				<UserChat>
-					<img className="pic-user" src={DefaultPic} alt="User" />
-					<div className="infoSideBar">
-						<span>{c.name}</span>
-						<SideP>Desc?</SideP>
-					</div>
-				</UserChat>
+			<div className="messages_box">
+				<div className="contact">
+					<UserChat>
+
+						<motion.div className="newMessage"
+							onClick={() => (modalOpen ? close() : open())}
+						>
+							<GrAdd/>
+							<span>New Conversation</span>
+						</motion.div>
+						{modalOpen && <Modal modalOpen={modalOpen} handleClose={close}/>}
+
+					</UserChat>
+					{conversations.map((c, index ) => {
+						return (
+						<div key={index}
+							onClick={() => setCurrentChat(c)}>
+							<UserChat>
+							<img className="pic-user" src={DefaultPic} alt="User" />
+							<div className="infoSideBar">
+								<span>{c.name}</span>
+								<SideP>Desc?</SideP>
+							</div>
+							</UserChat>
+						</div>
+				
+						)})}
 				</div>
-			))}
 
 				{
 					currentChat ? (
-				<>
+						<>
 					<div className="messages">
-						{messages.map(m=>(
-							<Message message = {m} own={m.sender === user.username} user={m}/>
-						))}
+						<div className="scroll">
+							{messages.map(m=>(
+								<Message message = {m} own={m.sender === user.username} user={m}/>
+								))}
+						</div>
 						{/* <Input/> */}
 						<div className="input">
 							<input
@@ -287,7 +367,7 @@ function Chats(){
 								placeholder="What do you want to say"
 								onChange={(e) => setNewMessage(e.target.value)}
 								value={newMessages}
-							/>
+								/>
 							<div className="send">
 								<TbSend onClick={handleSubmit}></TbSend>
 							</div>
@@ -295,19 +375,14 @@ function Chats(){
 					</div>
 				</>
 				) : (
-					<span className="noConv">Open a conversation</span>)}
+					<div className="messages">
+						<span className="noConv">Open a conversation</span>
+					</div>
+				)}
+			</div>
 		</div>
 		// </div>
-	);
-
-
-
-
-
-
-
-
-	
+	);	
 }
 
 export default Chats
