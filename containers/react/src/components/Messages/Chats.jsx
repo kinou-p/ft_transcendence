@@ -248,7 +248,7 @@ function Chats(){
 	
 	  const handleAddFriend = async () => {
 		try{
-			const res = await api.post("/friend", {username: friend})
+			const res = await api.post("/invite", {username: friend})
 			// if (res.data === 1)
 			// console.log("res in friend= ", res)
 			console.log("res in friend= ", res.data)
@@ -368,7 +368,7 @@ function Chats(){
         </motion.div>
         <AnimatePresence initial={false} onExitComplete={() => null}>
 			{showAddFriendAlert && addFriend && (
-				<GreenAlert handleClose={closeAddFriend} text={friend + ' was successfully added'} />
+				<GreenAlert handleClose={closeAddFriend} text={ 'invitation sent to ' + friend} />
 			)}
           {showAddFriendAlert && !addFriend && (
 			  <RedAlert handleClose={closeAddFriend} text={friend + ' was not found'} />

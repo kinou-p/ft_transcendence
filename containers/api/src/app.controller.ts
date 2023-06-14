@@ -61,6 +61,13 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/users')
+  async getUsers( @Body() data: any) {
+	console.log(`usernamewwww= ${data.username}`)
+	return await this.userService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('/friends')
   async getFriends(@Request() req) {
 	// return await this.userService.getFriends(req.user.username);
@@ -68,11 +75,13 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('/friend')
+  @Post('/friend')//need to do it 2 time when user accept one for each
   async newFriend(@Request() req, @Body() data: any) {
 	// return await this.userService.getFriends(req.user.username);
 	console.log(`user= ${req.user.username}`)
 	const user = await this.userService.findOne(req.user.username)
+	if (!user)
+		return (0);
 	return await this.userService.addFriend(user, data.username);
   }
 
@@ -86,12 +95,31 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/invite')
+  @Post('/invite')
+  async newInvite(@Request() req, @Body() data: any) {
+	console.log(`user= ${req.user.username}`)
+	const user = await this.userService.findOne(data.username)
+	if (!user)
+		return (0);
+	return await this.userService.newInvite(user, req.user.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/inviteRequest')
   async getInvite(@Request() req) {
 	// return await this.userService.getFriends(req.user.username);
 	console.log(`useawdawd\n\n\nr= ${req.user.username}`)
 	// const user = await this.userService.findOne(req.user.username)
 	return await this.userService.getInvite(req.user.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/refuseInvite')
+  async refuseInvite(@Request() req, @Body() data: any) {
+	// return await this.userService.getFriends(req.user.username);
+	// console.log(`useawdawd\n\n\nr= ${req.user.username}`)
+	const user = await this.userService.findOne(req.user.username) 
+	return await this.userService.refuseInvite(user, data.username);
   }
 
   @UseGuards(JwtAuthGuard)

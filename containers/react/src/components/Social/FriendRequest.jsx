@@ -28,14 +28,18 @@ const SideP = styled.p`
 export default function  Friend({currentUser})
 {
 	const [profilePicture, setProfilePicture] = useState('');
-	const [request, setRequest] = useState('');
+	const [request, setRequest] = useState(''); //user who invite
+	const [clickEvent, setClickEvent] = useState(false);
+	// const [user, setUser] = useState(null);
 	
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
-			//   const user = await api.get("/profile");
+			//   const user = await api.get("/profile");\
+				// const tmpUser = await api.get("/profile")
 				const pic = await api.post("/getPicture", {username: currentUser.username})
 				const tmpRequest = await api.post("/user", {username: currentUser.username})
+				// setUser(tmpUser.data);
 				setRequest(tmpRequest.data);
 				// console.log(`user naem profile pic222= ${currentUser.username}`)
 				// console.log(` profile pic222= ${pic.data}`)
@@ -46,7 +50,7 @@ export default function  Friend({currentUser})
 		  };
 		
 		  fetchProfilePicture();
-	}, [])
+	}, [clickEvent])
 
 	const handleButtonClick = (user) => {
 		let path = `http://localhost/profile/${user.username}`; 
@@ -56,15 +60,32 @@ export default function  Friend({currentUser})
 		window.location.reload(false);
 	};
 
-	const Accept = (user) => {
+	const Accept = async (request) => {
+		try{
+			await api.post("/friend", {username: request.username})
+			setClickEvent(true);
+		} catch(err) {
+			console.log(err);
+		}
 		console.log("accept")
 		console.log(`request = ${request}`)
 	}
 
-	const Refuse = (user) => {
+	const Refuse = async (request) => {
+		try{
+			await api.post("/refuseInvite", {username: request.username})
+			setClickEvent(true);
+		} catch(err) {
+			console.log(err);
+		}
 		console.log("refuse")
 		console.log(`request = ${request}`)
 	}
+
+  // Vérifier si le contenu doit être caché
+  	if (clickEvent) {
+    	return null; // Rendre null pour ne pas afficher le contenu
+  	}
 
 	return (
 		<UserChat>

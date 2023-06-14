@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import Backdrop from "../Sidebar/Backdrop";
-import { Rank } from "../../DataBase/DataRank"
+// import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import api from "../../script/axiosApi";
@@ -23,10 +23,25 @@ const dropIn = {
 
 };
 
-const Modal = ({handleClose, text}) => {
+const Modal = ({handleClose}) => {
     // const [multi, setMulti] = useState(false);
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
     const [selectedOptionArray, setSelectedOptionArray] = useState([]);
+	const [users, setUsers] = useState([]);
+
+	useEffect(()=> {
+
+		const getConv = async ()=>{
+			try {
+				const tmpUsers = await api.get("/users");
+				console.log("users=", tmpUsers.data);
+				setUsers(tmpUsers.data);
+			} catch(err){
+				console.log(err)
+			}
+		}
+		getConv();
+	}, []);
 
     const handleOptionChange = (selectId, selectedOption) => {
 		console.log("selected Option=", selectedOption)
@@ -62,7 +77,8 @@ const Modal = ({handleClose, text}) => {
         setSelectedOptionArray(selectedOptions);
 
     }
-    let new_name;
+    // let new_name;
+
     return (
         <Backdrop>
             <motion.div
@@ -84,9 +100,9 @@ const Modal = ({handleClose, text}) => {
 				      <option value="">{
 				        selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
 				      }</option>
-				      {Rank.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
-				        <option key={index} value={item.name}>
-				          {item.name}
+				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
+				        <option key={index} value={item.username}>
+				          {item.username}
 				        </option>
 				      ))}
 				    </select>
