@@ -28,7 +28,7 @@ export class loginClass {
 			// client_secret: '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',
 			client_secret: process.env.API_SECRET,
 			code: code,
-			redirect_uri: process.env.REDIRECT_URI || 'http://192.168.1.19:80/api/auth/login',
+			redirect_uri: process.env.REDIRECT_URI || 'http://'192.168.1.19':80/api/auth/login',
 		  };
 
 		try {
