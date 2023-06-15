@@ -53,7 +53,7 @@ export default function  Friend({currentUser})
 	}, [clickEvent])
 
 	const handleButtonClick = (user) => {
-		let path = `http://localhost/profile/${user.username}`; 
+		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`; 
 		// history(path, { replace: true });
 		// window.location.replace(path);
 		window.history.pushState({}, null, path);
