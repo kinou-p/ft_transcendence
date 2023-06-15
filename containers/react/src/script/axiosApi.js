@@ -12,7 +12,7 @@ function getToken() {
 console.log(`getToken = ${getToken()}`)
 console.log(`Bearer ${localStorage.getItem("token")}`)
 
-const url = 
+const url = 'http://' + process.env.BASE_URL + '/api'
 
 console.log("url= ", url)
 
