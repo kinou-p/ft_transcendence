@@ -267,7 +267,7 @@ export class AppController {
 
 
 
-@Redirect('http://localhost/token', 302)
+@Redirect('http://'localhost'/token', 302)
 @Get('auth/login')
   async login2(@Req() request: Request) {
 	  const url = request.url;
