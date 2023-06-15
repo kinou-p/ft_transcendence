@@ -25,7 +25,7 @@ function DrawCanvas(option) {
 	
 	// const socketRef = useRef(null);
 	// socketRef.current = io('http://localhost:4000');
-	const socket = io('http://localhost:4000');
+	const socket = io('http://' + process.env. + ':4000');
 	// const socket = socketRef.current
 	console.log("start function");
 	const canvas = document.getElementById('myCanvas');
