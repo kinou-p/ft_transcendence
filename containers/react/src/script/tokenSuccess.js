@@ -7,7 +7,7 @@ function SuccessToken() {
   const cleanData = data.slice(1, -1);
   localStorage.setItem('token', `${cleanData}`);
   console.log(`prout token2= ${localStorage.getItem('token')}`)
-  window.location.replace("http://localhost/pong");
+  window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
 }
 
 export default SuccessToken;
