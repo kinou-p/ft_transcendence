@@ -15,6 +15,8 @@ console.log(`Bearer ${localStorage.getItem("token")}`)
 const url = 'http://' + process.env.BASE_URL + '/api'
 
 console.log("url= ", url)
+console.log("env= ", process.env)
+console.log("env= ", process.env.BASE_URL)
 
 let api = axios.create({
 //   baseURL: 'http://localhost/api', 
