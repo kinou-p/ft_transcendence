@@ -13,7 +13,8 @@ console.log(`getToken = ${getToken()}`)
 console.log(`Bearer ${localStorage.getItem("token")}`)
 
 let api = axios.create({
-  baseURL: 'http://localhost/api', 
+//   baseURL: 'http://localhost/api', 
+baseURL: 'http://localhost/api', 
   headers: {
 	//   Authorization: `Bearer ${getToken()}`,
 		Authorization : `Bearer ${localStorage.getItem("token")}`
