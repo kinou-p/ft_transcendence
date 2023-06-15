@@ -362,7 +362,7 @@ matchmaking();
 
 function draw(timestamp)
 {
-	console.log("send loose");
+	console.log("turning");
 	if (!running)	
 		return ;
 	if (gameId === 0 )
