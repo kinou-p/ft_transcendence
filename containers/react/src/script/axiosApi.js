@@ -22,7 +22,7 @@ console.log("env= ", process.env.BASE_URL)
 
 let api = axios.create({
 //   baseURL: 'http://localhost/api', 
-baseURL: 'http://' + process.env.BASE_URL + '/api', 
+baseURL: 'http://' + test + '/api', 
   headers: {
 	//   Authorization: `Bearer ${getToken()}`,
 		Authorization : `Bearer ${localStorage.getItem("token")}`
