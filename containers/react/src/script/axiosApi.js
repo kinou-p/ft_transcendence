@@ -17,7 +17,7 @@ const test = "192.168.1.19"
 const url = 'http://' + test + '/api'
 
 console.log("url= ", url)
-console.log("env= ", process.env)
+console.log("test= ", test)
 console.log("env= ", process.env.BASE_URL)
 
 let api = axios.create({
