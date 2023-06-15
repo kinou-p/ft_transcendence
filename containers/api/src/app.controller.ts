@@ -285,7 +285,7 @@ export class AppController {
 	  const token = (await data).access_token;
 	//   console
 	  await this.userService.save(user);
-	  return { url: 'http://' + process.env.BASE_URL + 'localhost/token?data=${encodeURIComponent(JSON.stringify(token))}' };
+	  return { url: 'http://' + process.env.BASE_URL + '/token?data=${encodeURIComponent(JSON.stringify(token))}' };
   }
 
   @UseGuards(JwtAuthGuard)
