@@ -390,7 +390,7 @@ function draw(timestamp)
 			api.post('/status', {status: 1});
 			console.log("send loose");
 		}
-		window.location.replace("http://localhost/pong");
+		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
 		return ;
 	}
 
