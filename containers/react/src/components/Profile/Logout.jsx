@@ -4,7 +4,7 @@
 function Logout(){
 
 	localStorage.clear();
-	const path = `http://localhost/`; 
+	const path = `http://''/`; 
 	// history(path, { replace: true });
 	// window.location.replace(path);
 	// window.history.pushState({}, '', path);
