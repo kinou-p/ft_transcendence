@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:18:58 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/15 19:03:01 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/15 19:03:04 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ export default function  Friend({currentUser})
 	};
 
 	const handleButtonClick = (user) => {
-		let path = `http://` process.env.REACT_APP_BASE_URL `/profile/${user.username}`; 
+		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`; 
 		// history(path, { replace: true });
 		// window.location.replace(path);
 		window.history.pushState({}, null, path);
