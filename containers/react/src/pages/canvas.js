@@ -25,7 +25,7 @@ function DrawCanvas(option) {
 	
 	// const socketRef = useRef(null);
 	// socketRef.current = io('http://localhost:4000');
-	const socket = io('http://localhost:4000');
+	const socket = io('http://' + process.env.REACT_APP_BASE_URL + ':4000');
 	// const socket = socketRef.current
 	console.log("start function");
 	const canvas = document.getElementById('myCanvas');
@@ -362,7 +362,7 @@ matchmaking();
 
 function draw(timestamp)
 {
-	console.log("send loose");
+	console.log("turning");
 	if (!running)	
 		return ;
 	if (gameId === 0 )
@@ -390,7 +390,7 @@ function draw(timestamp)
 			api.post('/status', {status: 1});
 			console.log("send loose");
 		}
-		window.location.replace("http://localhost/pong");
+		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
 		return ;
 	}
 

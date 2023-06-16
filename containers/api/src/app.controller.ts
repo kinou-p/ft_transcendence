@@ -289,7 +289,7 @@ export class AppController {
 
 
 
-@Redirect('http://localhost/token', 302)
+@Redirect('http://' + process.env.BASE_URL + '/token', 302)
 @Get('auth/login')
   async login2(@Req() request: Request) {
 	  const url = request.url;
@@ -307,7 +307,7 @@ export class AppController {
 	  const token = (await data).access_token;
 	//   console
 	  await this.userService.save(user);
-	  return { url: `http://localhost/token?data=${encodeURIComponent(JSON.stringify(token))}` };
+	  return { url: 'http://' + process.env.BASE_URL + `/token?data=${encodeURIComponent(JSON.stringify(token))}` };
   }
 
   @UseGuards(JwtAuthGuard)

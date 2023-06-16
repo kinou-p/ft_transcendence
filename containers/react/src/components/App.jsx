@@ -30,8 +30,8 @@ function AnimatedRoute () {
 				<Route exact path="/" element={<HomeLogin/>}/>
 				<Route exact path="/token" element={<SuccessToken />}/>
 
-				<Route path="/404" element={<HomeLogin/>} />
-          		<Route path="*" element={<Navigate to="/404" />} />
+				{/* <Route path="/404" element={<HomeLogin/>} /> */}
+          		{/* <Route path="*" element={<Navigate to="/404" />} /> */}
 			</Routes>
 		</AnimatePresence>
 		)

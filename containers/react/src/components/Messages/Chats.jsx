@@ -104,7 +104,7 @@ function Chats(){
 				// console.log(`user= ${tmpUser.data.username}`);
 				// console.log(`user= ${tmpUser.data.nickname}`);
 				// console.log(`user= ${tmpUser.data}`);
-				socket.current = io("ws://localhost:4001");
+				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001');
 				console.log(`connection....`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				// const socket = io("http://localhost:4001", {
