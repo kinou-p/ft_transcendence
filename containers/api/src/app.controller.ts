@@ -14,6 +14,7 @@ import { generate } from 'rxjs';
 import { generateOTP } from './users/2fa';
 import { VerifyOTP } from './users/2fa';
 import { ValidateOTP } from './users/2fa';
+import { privateDecrypt } from 'crypto';
 
 
 //2fa
@@ -82,6 +83,27 @@ export class AppController {
 	const user = await this.userService.findOne(req.user.username)
 	if (!user)
 		return (0);
+	//create personnal conv for user
+	//await this.userService.addFriend(user, data.username);
+
+
+
+	// const amIhere = data.members.includes(req.user.username);
+	// if (!amIhere)
+	const conv = {
+		id: null,
+		name: req.user.username + ", " + data.username,
+		banned: null,
+		admin: null,
+		messages: null,
+		members: [],
+		owner: req.user.username,
+		group: false,
+	};
+	conv.members.push(req.user.username);
+	conv.members.push(data.username);
+	await this.chatService.createConv(conv);
+
 	return await this.userService.addFriend(user, data.username);
   }
 
@@ -368,6 +390,7 @@ export class AppController {
 		data.members.push(req.user.username)
 	// let test = {id: 2, members: "cc"};
 	data.owner = req.user.username
+	data.group = true;
 	return await this.chatService.createConv(data);
 	// res.json(messages);
   }
