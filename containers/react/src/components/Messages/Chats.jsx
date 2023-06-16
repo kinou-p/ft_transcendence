@@ -15,11 +15,13 @@ import { TbSend } from 'react-icons/tb';
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import { GrAdd } from 'react-icons/gr';
+import { RiListSettingsLine } from 'react-icons/ri'
 
 import { Rank } from "../../DataBase/DataRank";
 import GreenAlert from "../Alert/GreenAlert";
 import RedAlert from "../Alert/RedAlert";
 import YellowAlert from "../Alert/YellowAlert";
+import ModalSetting from "./ModalSetting";
 
 
 const TouchDiv = styled.div`
@@ -228,10 +230,12 @@ function Chats(){
 	const [modalOpen, setModalOpen] = useState(false);
 	const [addFriend, setAddFriend] = useState(false);
 	const [block, setBlock] = useState(false);
+	const [setting, setSetting] = useState(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
 	const closeAddFriend = () => setAddFriend(false);
 	const closeBlock = () => setBlock(false);
+	const closeSetting = () => setSetting(false);
 
 
 	const handleFriend = e => {
@@ -319,6 +323,22 @@ function Chats(){
 						</AnimatePresence>
 						</motion.div>
 					</TouchDiv>
+					{currentChat ? (
+
+						<TouchDiv>
+						<motion.div 
+						onClick={() => (setting ? setSetting(false) : setSetting(true))}
+						>
+						<RiListSettingsLine/>
+						<AnimatePresence
+							initial={false}
+							onExitComplete={() => null}
+							>
+							{setting && <ModalSetting handleClose={closeSetting}/>}
+						</AnimatePresence>
+						</motion.div>
+					</TouchDiv>
+					):("")}
 				</div>
 			</div>
 			<div className="messages_box">
