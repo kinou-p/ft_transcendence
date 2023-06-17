@@ -8,6 +8,7 @@ import PlayButton from "./Game/PlayButton.js";
 import Field from "../pages/Field";
 import Login42 from "../pages/Login42.js";
 import Messages from "../pages/Messages.jsx";
+import QrCode from '../pages/QrCode.jsx'
 import { useLocation } from "react-router-dom";
 import {AnimatePresence} from "framer-motion";
 
@@ -28,6 +29,7 @@ function AnimatedRoute () {
 				<Route exact path="/" element={<HomeLogin/>}/>
 				<Route exact path="/profile" element={<Home/>}/>
 				<Route exact path="/profile/:username" element={<Home/>}/>
+				<Route exact path="/qr" element={<QrCode/>}/>
 				
 				<Route exact path="/2fa" element={<DoubleAuth/>}/>
 				<Route exact path="/Social" element={<Social/>}/>
