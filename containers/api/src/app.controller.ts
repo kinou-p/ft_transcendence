@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   app.controller.ts                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
+/*   Updated: 2023/06/17 01:47:43 by apommier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Controller, Request, Req, Get, Post, UseGuards, Redirect, Res, Body, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -93,12 +105,16 @@ export class AppController {
 	const conv = {
 		id: null,
 		name: req.user.username + ", " + data.username,
-		banned: null,
-		admin: null,
-		messages: null,
+		banned: [],
+		admin: [],
+		muted: [],
 		members: [],
 		owner: req.user.username,
+		password: null,
+		messages: null,
 		group: false,
+		private: false,
+
 	};
 	conv.members.push(req.user.username);
 	conv.members.push(data.username);
@@ -440,5 +456,43 @@ export class AppController {
 	
 	// res.json(messages);
   }
+
+  @Post('/ban')
+  async banUser(@Body() data: any) {
+	return await this.chatService.banUser(data.convId, data.username)
+  }
+
+  @Post('/name')
+  async setName(@Body() data: any) {
+	//find conv
+	// data.convId
+	return await this.chatService.setName(data.convId, data.name)
+  }
+
+  @Post('/invite')
+  async inviteUser(@Body() data: any) {
+	return await this.chatService.inviteUser(data.convId, data.username)
+  }
+
+  @Post('/password')
+  async setPassword(@Body() data: any) {
+	return await this.chatService.setPassword(data.convId, data.password)
+  }
+
+  @Post('/admin')
+  async setAdmin(@Body() data: any) {
+	return await this.chatService.setAdmin(data.convId, data.username)
+  }
+
+  @Post('/mute')
+  async muteUser(@Body() data: any) {
+	return await this.chatService.muteUser(data.convId, data.username)
+  }
+
+  @Post('/private')
+  async setPrivate(@Body() data: any) {
+	return await this.chatService.setPrivate(data.convId)
+  }
+
 
 } 

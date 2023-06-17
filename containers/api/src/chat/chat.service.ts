@@ -1,7 +1,14 @@
-// import { Injectable } from '@nestjs/common';
-
-// @Injectable()
-// export class ConvService {}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   chat.service.ts                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
+/*   Updated: 2023/06/17 01:48:15 by apommier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +18,7 @@ import { Message } from '../model/chat.entity';
 
 import { ArrayContains } from "typeorm"
 import { query } from 'express';
+import { InitializeOnPreviewAllowlist } from '@nestjs/core';
 
  
 @Injectable()
@@ -19,17 +27,14 @@ export class ChatService {
  	@InjectRepository(Message) private messageRepository: Repository<Message>,
  ) {}
  
+ async save(conv: Conv): Promise<Conv> {
+	return await this.chatRepository.save(conv);
+}
+
  async createConv(conv: Conv): Promise<Conv> {
 	return await this.chatRepository.save(conv);
   }
 
-  
- 
-//   SELECT "conv"."id" AS "conv_id", "conv"."members" AS "conv_members", "conv"."name" AS "conv_name", "conv"."banned" AS "conv_banned", "conv"."admin" AS "conv_admin", "conv"."messages" AS "conv_messages" FROM "conv" "conv" WHERE $1 = ANY("conv"."members")
- 
- 
-//  import { createConnection } from 'typeorm';
- 
   async getConv(username: string): Promise<Conv[]>{
 	// username = "apommier"
 	const convs = await this.chatRepository.query("SELECT * FROM \"conv\" WHERE $1 = ANY (ARRAY[members]);", [username])
@@ -44,56 +49,76 @@ async findConv(number: number){
 	return conv;
 }
 
-// Usage
-// const user = 'user1';
-// findConvsContainingUser(user)
-//   .then((convs) => {
-//     console.log('Convs containing user:', convs);
-//   })
-//   .catch((error) => {
-//     console.error('Error:', error);
-//   });
-	  // return await this.chatRepository.findOneBy({
-		  // 	members: { $in: [username] },
-		  //   });
-		  
-		//   return await this.chatRepository.find()
-
-
-	// return await this.chatRepository.findOneBy({
-	// 	members: ArrayContains(["apommier"]),
-	// })
-
-	// console.log(`get conv username= ${username} `)
-	// let test =  await this.chatRepository.find({
-	// 	where : {
-	// 		members: { $all: ["apommier"] },
-	// }})
-	// console.log(`test= ${test}`)
-	// return test
-//   }
-
-
-
-
-
-//
-// message
-//
-
  async createMessage(message: Message): Promise<Message> {
    return await this.messageRepository.save(message);
  }
 
  async getMessages(convId: number): Promise<Message[]> {
-//    return await this.messageRepository.find({
-// 		where: {
-// 			convId: convId,
-// 		},
-// 	});
 	const convs = await this.chatRepository
 	.query("SELECT * FROM \"message\" WHERE $1 = message.convid;", [convId])
 	
 	return (convs)
 }
+
+async banUser(convId: number, username: string) {
+	const conv = await this.findConv(convId);
+
+	conv.banned = conv.banned || [];
+	if (conv.banned.find(item => item === username))
+			return (1);
+	conv.banned.push(username);
+	this.save(conv);
+}
+
+async inviteUser(convId: number, username: string) {
+	// const conv = await this.findConv(convId);
+	// this.save(conv);
+
+	//find user
+	//add in chanInvite chanID
+	//save user
+}
+
+async setPassword(convId: number, password: string) {
+	//verify is user is admin ?
+	const conv = await this.findConv(convId);
+	conv.password = password
+	this.save(conv);
+}
+
+async muteUser(convId: number, username: string) {
+	const conv = await this.findConv(convId);
+
+	conv.muted = conv.muted || [];
+	if (conv.muted.find(item => item === username))
+		return (1);
+	conv.muted.push(username);
+	this.save(conv);
+}
+
+async setAdmin(convId: number, username: string) {
+	const conv = await this.findConv(convId);
+
+	conv.admin = conv.admin || [];
+	if (conv.admin.find(item => item === username))
+		return (1);
+	conv.admin.push(username);
+	this.save(conv);
+}
+
+async setPrivate(convId: number) {
+	const conv = await this.findConv(convId);
+	if (conv.private === true)
+		conv.private = false;
+	else
+		conv.private = true;
+	this.save(conv);
+}
+
+async setName(convId: number, name: string) {
+	const conv = await this.findConv(convId);
+	conv.name = name;
+	this.save(conv);
+}
+
 }
