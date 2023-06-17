@@ -28,14 +28,23 @@ const Modal = ({handleClose}) => {
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
     const [selectedOptionArray, setSelectedOptionArray] = useState([]);
 	const [users, setUsers] = useState([]);
+	const [user, setUser] = useState();
+	const [convs, setConvs] = useState([]);
+
+	const [channel, setChannel] = useState('');
 
 	useEffect(()=> {
 
 		const getConv = async ()=>{
 			try {
 				const tmpUsers = await api.get("/users");
+				const tmpUser = await api.get("/profile");
+				const tmpConvs = await api.get("/convs");
 				console.log("users=", tmpUsers.data);
+				console.log("convs=", tmpConvs.data);
 				setUsers(tmpUsers.data);
+				setUser(tmpUser.data);
+				setConvs(tmpConvs.data);
 			} catch(err){
 				console.log(err)
 			}
@@ -56,6 +65,15 @@ const Modal = ({handleClose}) => {
         const newSelectedId = Math.max (...selectTags.map((tag) => tag.id)) + 1;
         setSelectTag([...selectTags, { id: newSelectedId, selectedOption: ''}]);
 		console.log(selectTags)
+    };
+
+	const joinChannel = async () => {
+		try {
+			console.log("channel= ", channel)
+			await api.post("/join", {convId: channel})
+		} catch(err) {
+			console.log(err);
+		}
     };
 
     const saveSelectedOptions = () => {
@@ -108,24 +126,63 @@ const Modal = ({handleClose}) => {
 				    </select>
 				  </div>
 				))}
-
-
             	<div>
             	    <GrAdd onClick={addNewSelectedTag}/>
             	</div>
-            	<div>
-            	    <h3>Selected Option:</h3>
-            	    <ul>
-            	        {selectedOptionArray.map((option, index) => (
-            	            <li key={index}>{option}</li>
-            	        ))}
-            	    </ul>
-            	</div>
-            	<div className="div_submit">
-            	    <Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
+				<div className="div_submit">
+					<Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
 						
-            	    <Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
-            	</div>
+					<Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
+				</div>
+
+
+
+				{convs.length > 0 && (
+        			<select
+        			  value={channel}
+        			  onChange={(event) => setChannel(event.target.value)}
+
+        			>
+        			  <option value="">Select an option</option>
+        			  {convs.map((conv) => (
+        			    !(!conv.group || conv.private || (conv.banned && conv.banned.includes(channel)) || (conv.members && conv.members.includes(user.username))) && (
+        			      <option key={conv.id} value={conv.id}>
+        			        {conv.name}
+        			      </option>
+        			    )
+        			  ))}
+        			</select>
+      			)}
+
+				<div className="div_submit">
+					<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>
+				</div>
+
+
+				{/* {selectTags.map((selectTag) => (
+				  <div key={selectTag.id}>
+				    <select
+				      value={selectTag.selectedOption}
+				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
+				    >
+				      <option value="">{
+				        selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
+				      }</option>
+				      {convs.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
+				        <option key={index} value={item.name}>
+				          {item.name}
+				        </option>
+				      ))}
+				    </select>
+				  </div>
+				))} */}
+
+
+
+            	{/* <div>
+            	    <GrAdd onClick={addNewSelectedTag}/>
+            	</div> */}
+
 
             </motion.div>
         </Backdrop>

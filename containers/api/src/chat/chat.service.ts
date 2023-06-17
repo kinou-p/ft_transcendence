@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/17 01:48:15 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/17 17:31:11 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Conv } from '../model/chat.entity';
 import { Message } from '../model/chat.entity';
+
+import * as bcrypt from 'bcrypt';
 
 import { ArrayContains } from "typeorm"
 import { query } from 'express';
@@ -29,6 +31,10 @@ export class ChatService {
  
  async save(conv: Conv): Promise<Conv> {
 	return await this.chatRepository.save(conv);
+}
+
+async findAll(): Promise<Conv[]> {
+	return await this.chatRepository.find();
 }
 
  async createConv(conv: Conv): Promise<Conv> {
@@ -49,8 +55,22 @@ async findConv(number: number){
 	return conv;
 }
 
- async createMessage(message: Message): Promise<Message> {
-   return await this.messageRepository.save(message);
+ async createMessage(message: Message, username: string): Promise<Message> {
+	const conv = await this.findConv(message.convid);
+	if (conv.banned.find(item => item === username))
+		return ;
+	if (conv.muted.find(item => item === username))
+		return ;
+	return await this.messageRepository.save(message);
+ }
+
+ async isAllowed(convId: number, username: string) {
+	const conv = await this.findConv(convId);
+	if (conv.banned.find(item => item === username))
+		return (0);
+	if (conv.muted.find(item => item === username))
+		return (0);
+	return (1);
  }
 
  async getMessages(convId: number): Promise<Message[]> {
@@ -79,11 +99,24 @@ async inviteUser(convId: number, username: string) {
 	//save user
 }
 
+
+
 async setPassword(convId: number, password: string) {
 	//verify is user is admin ?
 	const conv = await this.findConv(convId);
-	conv.password = password
+	const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    // return hashedPassword;
+	conv.password = hashedPassword
 	this.save(conv);
+}
+
+async verifyPassword(convId: number, password: string) {
+	//verify is user is admin ?
+	const conv = await this.findConv(convId);
+	return await bcrypt.compare(password, conv.password);
+	
+	// conv.password = password
 }
 
 async muteUser(convId: number, username: string) {
@@ -106,6 +139,16 @@ async setAdmin(convId: number, username: string) {
 	this.save(conv);
 }
 
+async isAdmin(convId: number, username: string) {
+	const conv = await this.findConv(convId);
+
+	conv.admin = conv.admin || [];
+	if (conv.admin.find(item => item === username))
+		return (1);
+	console.log("nope");
+	return (0);
+}
+
 async setPrivate(convId: number) {
 	const conv = await this.findConv(convId);
 	if (conv.private === true)
@@ -118,6 +161,16 @@ async setPrivate(convId: number) {
 async setName(convId: number, name: string) {
 	const conv = await this.findConv(convId);
 	conv.name = name;
+	this.save(conv);
+}
+
+async joinChannel(convId: number, username: string) {
+	const conv = await this.findConv(convId);
+	conv.members = conv.members || [];
+	if (conv.members.find(item => item === username))
+		return ;
+	conv.members.push(username);
+	// conv.name = name;
 	this.save(conv);
 }
 

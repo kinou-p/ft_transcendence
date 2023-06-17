@@ -77,6 +77,8 @@ function Chats(){
 	const [conversations, setConversation] = useState([]);
 	const [user, setUser] = useState(null);
 	const [currentChat, setCurrentChat] = useState(false); // false is good?
+	const [isAdmin, setIsAdmin] = useState(false); // false is good?
+	// const [currentChat, setCurrentChat] = useState(false); // false is good?
 	const [messages, setMessage] = useState([]);
 	const [newMessages, setNewMessage] = useState("");
 	const [incomingMessage, setIncomingMessage] = useState("");
@@ -115,11 +117,30 @@ function Chats(){
 	}, [])
 
 	useEffect(()=> {
-		if (currentChat)
-		console.log(currentChat.id)
-		// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
-		if (currentChat !== null && currentChat.id === incomingMessage.convId)
-			setMessage((prev) => [...prev, incomingMessage]);
+		
+		const updateChat = async ()=> {
+			// if (currentChat)
+			// 	console.log(currentChat.id)
+			if (currentChat)
+			{
+
+				try {
+					const res = await api.post("/isAdmin", {convId: currentChat.id})
+					console.log("isadmin= ", res.data)
+					setIsAdmin(res.data);
+				} catch (err) {
+					console.log(err);
+				}
+			}
+			// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
+			if (currentChat !== null && currentChat.id === incomingMessage.convId)
+			{
+				
+				setMessage((prev) => [...prev, incomingMessage]);
+			}
+		}
+		updateChat();
+
 	}, [incomingMessage, currentChat])
 
 	useEffect(()=> { 
@@ -149,6 +170,10 @@ function Chats(){
 		};
 		try{
 			console.log(`id= ${currentChat.id}`)
+			const allowed = await api.post('/allowed', {convId: message.convId, username: user.username});
+			console.log("allowed= ", allowed.data)
+			if (!allowed.data)
+				return ;
 			const res = await api.post('/message', message);
 			const convMember = await api.post('/member', message);
 			message.members = convMember.data.members;
@@ -358,6 +383,21 @@ function Chats(){
           )}
         </AnimatePresence>
       </TouchDiv>
+	  {currentChat && isAdmin ? (
+		<TouchDiv>
+		<motion.div 
+		onClick={() => (setting ? setSetting(false) : setSetting(true))}
+		>
+		<RiListSettingsLine/>
+		<AnimatePresence
+			initial={false}
+			onExitComplete={() => null}
+			>
+			{setting && <ModalSetting handleClose={closeSetting} convId={currentChat.id}/>}
+		</AnimatePresence>
+		</motion.div>
+		</TouchDiv>
+	  ):("")}
     </div>
 
 

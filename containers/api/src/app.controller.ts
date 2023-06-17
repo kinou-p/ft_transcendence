@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/17 01:47:43 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/17 17:29:05 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,7 +419,13 @@ export class AppController {
 	return await this.chatService.getConv(req.user.username);
   }
 
-//   @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @Get('/convs')
+  async getConvs() {
+	return await this.chatService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('/message')
   async postMessage(@Request() req, @Body() data: any) {
 	//if i can post post ?
@@ -432,16 +438,18 @@ export class AppController {
 		id: null,
 	}
 	console.log(data);
-	return await this.chatService.createMessage(message);
+	return await this.chatService.createMessage(message, req.user.username);
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/member')
   async getMember(@Body() data: any) {
 	console.log(data);
 	console.log(`get member= ${data.convId}`);
 	return await this.chatService.findConv(data.convId);
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/getMessage')
   async getMessage(@Body() data: any) {
 	console.log(data);
@@ -455,44 +463,75 @@ export class AppController {
 	
 	
 	// res.json(messages);
-  }
-
+  }	
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/ban')
   async banUser(@Body() data: any) {
 	return await this.chatService.banUser(data.convId, data.username)
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/name')
   async setName(@Body() data: any) {
 	//find conv
 	// data.convId
 	return await this.chatService.setName(data.convId, data.name)
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/invite')
   async inviteUser(@Body() data: any) {
 	return await this.chatService.inviteUser(data.convId, data.username)
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/password')
   async setPassword(@Body() data: any) {
 	return await this.chatService.setPassword(data.convId, data.password)
   }
-
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/verifyPassword')
+  async verifyPassword(@Body() data: any) {
+	return await this.chatService.verifyPassword(data.convId, data.password)
+  }
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/admin')
   async setAdmin(@Body() data: any) {
 	return await this.chatService.setAdmin(data.convId, data.username)
   }
-
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/isAdmin')
+  async isAdmin(@Request() req, @Body() data: any) {
+	console.log("isdamin= ", req.user.username, " id=", data.convId)
+	return await this.chatService.isAdmin(data.convId, req.user.username)
+  }
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/mute')
   async muteUser(@Body() data: any) {
 	return await this.chatService.muteUser(data.convId, data.username)
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/private')
   async setPrivate(@Body() data: any) {
 	return await this.chatService.setPrivate(data.convId)
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('/allowed')
+  async isAllowed(@Request() req, @Body() data: any) {
+	return await this.chatService.isAllowed(data.convId, req.user.username)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/join')
+  async joinChannel(@Request() req, @Body() data: any) {
+	return await this.chatService.joinChannel(data.convId, req.user.username)
+  }
 
 } 
