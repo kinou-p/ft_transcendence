@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/17 17:31:11 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/17 23:28:11 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ async findAll(): Promise<Conv[]> {
   }
 
   async getConv(username: string): Promise<Conv[]>{
-	username = "sadjigui"
 	const convs = await this.chatRepository.query("SELECT * FROM \"conv\" WHERE $1 = ANY (ARRAY[members]);", [username])
 	console.log(`convs= ${convs}`)
 	return convs;
