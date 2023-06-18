@@ -10,7 +10,7 @@ export const SidebarData = [
 	{
 		title: 'Home/Login',
 		path: '/',
-		icon: <AiIcons.AiFillHome/>,
+		icon: <AiIcons.AiFillHome />,
 		cName: 'nav-text'
 	},
 	{
@@ -32,8 +32,8 @@ export const SidebarData = [
 		cName: 'nav-text'
 	},
 	{
-		title: 'Settings',
-		path: '/team',
+		title: 'Double Auth',
+		path: '/qr',
 		icon: <IoSettingsSharp />,
 		cName: 'nav-text'
 	},
