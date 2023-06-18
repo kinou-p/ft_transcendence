@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 import reportWebVitals from './reportWebVitals';
-import Header from './components/Header';
+import Header from './components/Header.tsx';
 import Head from './pages/Head';
-import App from './components/App';
+import App from './components/App.tsx';
 
 import './styles/index.css';
 import './styles/App.css'

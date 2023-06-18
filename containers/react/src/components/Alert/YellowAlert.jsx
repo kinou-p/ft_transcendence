@@ -1,4 +1,4 @@
-import Backdrop from "../Sidebar/Backdrop"
+import Backdrop from "../Sidebar/Backdrop.tsx"
 import { motion } from 'framer-motion'
 import { GrTrophy } from "react-icons/gr";
 import '../../styles/Messages.css'

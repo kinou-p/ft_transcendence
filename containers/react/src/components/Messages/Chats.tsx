@@ -5,9 +5,9 @@ import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi';
 import { motion , AnimatePresence} from "framer-motion";
-import Modal from "./Modal";
+import Modal from "./Modal.tsx";
 
-import Message from "./Message"
+import Message from "./Message.tsx"
 // import Input from "./Input";
 
 //react icons
@@ -21,7 +21,7 @@ import { Rank } from "../../DataBase/DataRank";
 import GreenAlert from "../Alert/GreenAlert";
 import RedAlert from "../Alert/RedAlert";
 import YellowAlert from "../Alert/YellowAlert";
-import ModalSetting from "./ModalSetting";
+import ModalSetting from "./ModalSetting.tsx";
 
 
 const TouchDiv = styled.div`

@@ -1,4 +1,4 @@
-import Backdrop from "../Sidebar/Backdrop"
+import Backdrop from "../Sidebar/Backdrop.tsx"
 import { motion } from 'framer-motion'
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import '../../styles/Messages.css'

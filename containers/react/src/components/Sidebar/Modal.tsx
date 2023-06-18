@@ -1,6 +1,6 @@
 import {motion} from "framer-motion"
-import Backdrop from "./Backdrop"
-import { SidebarData } from "./SidebarData"
+import Backdrop from "./Backdrop.tsx"
+import { SidebarData } from "./SidebarData.tsx"
 import {Link} from 'react-router-dom';
 import * as AiIcons from 'react-icons/ai';
 

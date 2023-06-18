@@ -2,23 +2,23 @@ import React from "react";
 import {Routes, Route} from 'react-router-dom';
 import HomeLogin from "../pages/Home.js";
 
-import Home from "../pages/Home.jsx";
+import Home from "../pages/Home.tsx";
 
 import PlayButton from "./Game/PlayButton.js";
-import Field from "../pages/Field";
-import Login42 from "../pages/Login42.js";
-import Messages from "../pages/Messages.jsx";
+import Field from "../pages/Field.js";
+import Login42 from "../pages/Login42.tsx";
+import Messages from "../pages/Messages.tsx";
 import QrCode from '../pages/QrCode.jsx'
 import { useLocation } from "react-router-dom";
 import {AnimatePresence} from "framer-motion";
 
-import SuccessToken from '../script/tokenSuccess'
+import SuccessToken from '../script/tokenSuccess.js'
 
 
 import DoubleAuth from "../pages/2fa.js";
-import Game from "../pages/Game.jsx";
-import Social from "../components/Social/Social.jsx";
-import Logout from "../components/Profile/Logout.jsx";
+import Game from "../pages/Game.tsx";
+import Social from "./Social/Social.tsx";
+import Logout from "./Profile/Logout.tsx";
 
 function AnimatedRoute () {
 	const location = useLocation();

@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 // import { SidebarData } from './Sidebar/SidebarData';
 import DefaultPicture from '../assets/profile.jpg'
 import { motion, AnimatePresence } from 'framer-motion'
-import Modal from './Sidebar/Modal';
+import Modal from './Sidebar/Modal.tsx';
 // import {BiLogOutCircle} from 'react-icons/bi';
 // import AnimatePresence from 
 import '../styles/Header.css';

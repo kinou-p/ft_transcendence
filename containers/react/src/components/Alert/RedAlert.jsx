@@ -1,4 +1,4 @@
-import Backdrop from "../Sidebar/Backdrop"
+import Backdrop from "../Sidebar/Backdrop.tsx"
 import { motion } from 'framer-motion'
 import { BiErrorCircle } from "react-icons/bi";
 import '../../styles/Messages.css'

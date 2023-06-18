@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 
-import Friend  from './Friend.jsx';
-import FriendRequest  from './FriendRequest.jsx';
+import Friend  from './Friend.tsx';
+import FriendRequest  from './FriendRequest.tsx';
 
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';

@@ -14,12 +14,12 @@
 import '../styles/Profile.css'
 // import '../styles/App.css'
 import DefaultPicture from "../assets/profile.jpg";
-import WinLoss from "../components/Profile/Win_Loss";
+import WinLoss from "../components/Profile/Win_Loss.tsx";
 import { motion, AnimatePresence } from 'framer-motion'
 // import { AiFillEdit } from 'react-icons/ai'
 // import { GrClose } from 'react-icons/gr'
 import { Link } from "react-router-dom";
-import ModalEdit from "../components/Profile/EditName";
+import ModalEdit from "../components/Profile/EditName.tsx";
 import {AiOutlineHistory} from 'react-icons/ai'
 // import { Link } from "react-router-dom";
 // import {UserProfile} from "../DataBase/DataUserProfile";

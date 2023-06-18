@@ -32,7 +32,10 @@ function MessageMe({message, own}){
 	const scrollRef = useRef();
 
 	useEffect(() => {
-		scrollRef.current?.scrollIntoView({ behavior: "smooth"})
+		if (scrollRef.current)
+		{
+			scrollRef.current.scrollIntoView({ behavior: "smooth",})
+		}
 		const fetchProfilePicture = async () => {
 			try {
 			//   const user = await api.get("/profile");

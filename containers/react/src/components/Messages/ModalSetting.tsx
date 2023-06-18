@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import Backdrop from "../Sidebar/Backdrop";
+import Backdrop from "../Sidebar/Backdrop.tsx";
 import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
 import { useState } from "react";
@@ -22,7 +22,12 @@ const dropIn = {
 
 };
 
-const Modal = ({handleClose, text}) => {
+const ModalSetting = ({handleClose, text}) => {
+    const [password, setPassword] = useState(false);
+
+    const handleCheckpass = (e) => {
+        setPassword(e.target.checked);
+    }
     const [multi, setMulti] = useState(false);
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
     const [selectedOptionArray, setSelectedOptionArray] = useState([]);
@@ -49,27 +54,67 @@ const Modal = ({handleClose, text}) => {
         <Backdrop>
             <motion.div
                 onClick={(e) => e.stopPropagation()}
-                className="modal"
+                className="modalSetting"
                 variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
             >
-                <p>New Convewrstion</p>
+                {/* <p>New Convewrstion</p> */}
 
 {/* First selection  */}
+                <div className="settingFirstPart">
+                    <div>
+                        <p className="checkbox">Private  <input class="check"type="checkbox" value="private"/></p>
+                        <p className="checkbox">PassW <input type="checkbox" value="password" checked={password} onChange={handleCheckpass}/> </p>
+                        {password ? (<input type="text" className="in" placeholder="password"/>):("")}
+                    </div>
+                    <div className="forName">
+                        <input type="text" className="in" placeholder="group name"/>
+                    </div>
+                </div>
 
-                <select className="custom-select"
+                {/* <select
                 onChange={(e) => {
                     const selection = e.target.value;
                     selection === "group" ? setMulti(true) : setMulti(false)
                 }}>
                     <option value="1v1">1v1</option>
                     <option value="group">Group</option>
-                </select>
+                </select> */}
 
 {/* Second selection  */}
-                {selectTags.map((selectTag) =>(
+                
+                <div className="settingSecondPart">
+                    <Link to="#" className="submit" onClick={handleClose}>Send</Link>
+
+                    {selectTags.map((selectTag) =>(
+                    <div key={selectTag.id}>
+
+                    <select 
+                        value={selectTag.selectedOption}
+                        onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}>
+                    {Rank.map((item, index) => {
+                        return (
+                            <>
+                            <option >Select a name</option>
+                            <option value={new_name}>{item.name}</option>
+                            
+                            </>
+                        )
+                    })}
+                    </select>           
+                    </div>
+                ))
+                }
+                <div>
+                    <Link to="#" className="submit">Ban</Link>
+                    <Link to="#" className="submit">Mute</Link>
+                    <Link to="#" className="submit">Admin</Link>
+                </div>
+
+                </div>
+                {/* {selectTags.map((selectTag) =>(
                     <div key={selectTag.id}>
 
                     <select 
@@ -103,11 +148,11 @@ const Modal = ({handleClose, text}) => {
                     <Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
                     
                     <Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
-                </div>
+                </div> */}
 
             </motion.div>
         </Backdrop>
     )
 }
 
-export default Modal
+export default ModalSetting

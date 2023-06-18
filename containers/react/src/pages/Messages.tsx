@@ -1,6 +1,6 @@
 import React from "react";
 // import Sidebar from '../components/Messages/Sidebar'
-import Chats from "../components/Messages/Chats"
+import Chats from "../components/Messages/Chats.tsx"
 import '../styles/Messages.css'
 import { motion } from 'framer-motion'
 
