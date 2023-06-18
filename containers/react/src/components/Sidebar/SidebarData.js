@@ -32,8 +32,8 @@ export const SidebarData = [
 		cName: 'nav-text'
 	},
 	{
-		title: 'Settings',
-		path: '/team',
+		title: 'Double Auth',
+		path: '/qr',
 		icon: <IoSettingsSharp />,
 		cName: 'nav-text'
 	},

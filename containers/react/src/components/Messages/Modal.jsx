@@ -84,7 +84,7 @@ const Modal = ({handleClose}) => {
 		//do db stuff here
 		const data = {
 			members: selectedOptions,
-			name: "prout"
+			// name: "prout"
 		}
 		try{
 			api.post("/conv", data);
