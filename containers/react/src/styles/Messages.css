@@ -50,7 +50,8 @@ select{
 .contact{
 	background-color: rgb(46, 46, 46);
 	align-items: left;
-	height: 30.2rem;
+	height: 74vh;
+	width: 30%;
 	overflow: scroll;
 	/* width: 2rem; */
 	/* height: 4rem; */
@@ -92,6 +93,8 @@ select{
 }
 
 .navbar{
+	/* width: clamp(50%, 500px, 20%); */
+	/* height: min(50%, 100px); */
 	display: flex;
 	align-items: center;
 	/* background-color: yellow; */
@@ -130,6 +133,7 @@ select{
 	background-color: rgb(26, 26, 26);
 	/* height: calc(100% - 118px); */
 	width: 70%;
+	/* height: 300px; */
 	overflow: scroll;
 }
 

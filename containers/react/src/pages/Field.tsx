@@ -1,6 +1,7 @@
-import { useEffect, useLocation } from 'react';
+import React from 'react';
+import { useEffect } from 'react';
 // import { useState, useRef } from 'react';
-import DrawCanvas from './canvas.tsx';
+import DrawCanvas from './canvas';
 import queryString from 'query-string';
 import '../styles/field.css';
 

@@ -13,18 +13,18 @@
 // import { React, useState } from "react";
 import '../styles/Profile.css'
 // import '../styles/App.css'
-import DefaultPicture from "../assets/profile.jpg";
-import WinLoss from "../components/Profile/Win_Loss.tsx";
+// import DefaultPicture from "../assets/profile.jpg";
+import WinLoss from "../components/Profile/Win_Loss";
 import { motion, AnimatePresence } from 'framer-motion'
 // import { AiFillEdit } from 'react-icons/ai'
 // import { GrClose } from 'react-icons/gr'
 import { Link } from "react-router-dom";
-import ModalEdit from "../components/Profile/EditName.tsx";
+import ModalEdit from "../components/Profile/EditName";
 import {AiOutlineHistory} from 'react-icons/ai'
 // import { Link } from "react-router-dom";
 // import {UserProfile} from "../DataBase/DataUserProfile";
 // import axios from "axios";
-import api from '../script/axiosApi.tsx';
+import api from '../script/axiosApi';
 import { CgEditMarkup } from 'react-icons/cg'
 import { IoCloseCircleOutline } from "react-icons/io5";
 
@@ -43,6 +43,7 @@ import { useParams } from 'react-router-dom';
 
 
 function Profile () {
+	const DefaultPicture: string = "../assets/profile.jpg";
 	const [user, setUser] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [modalOpen, setModalOpen] = useState(false);
@@ -67,8 +68,10 @@ function Profile () {
 	};
 
 	const handleUpload = async () => {
-		const formData = new FormData();
-		formData.append('photo', selectedPhoto);
+		const formData: FormData = new FormData();
+		if (selectedPhoto){
+			formData.append('photo', selectedPhoto);
+		}
 		try {
 		  await api.post('/picture', formData);
 		  console.log('File uploaded successfully');
@@ -125,7 +128,9 @@ function Profile () {
 					{isLoading ? (
         				<h1>Loading...</h1>
       				) : (
-        				<h1>{user.nickname}</h1>
+						user ?  (
+							<h1>{user.nickname}</h1>
+						) : ("")
       				)}
 	  		</span>
 

@@ -1,0 +1,8 @@
+{
+    "compiledOptions": {
+        "composite": true,
+        "allowJs": true,
+        "allowImportingTsExtensions": true,
+        "jsx": "react"
+    }
+}

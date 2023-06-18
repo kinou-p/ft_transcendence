@@ -3,10 +3,11 @@ import React, { useEffect, useRef, useState } from "react";
 // import { redirect } from "react-router-dom";
 
 import "../styles/App.css";
-import api from '../script/axiosApi.tsx';
+import api from '../script/axiosApi';
 
 import QRCodeStyling from "qr-code-styling";
 import { motion } from 'framer-motion'
+import { MutableRefObject } from "react";
 
 
 
@@ -29,7 +30,8 @@ const qrCode = new QRCodeStyling({
 
 function QrCode () {
     // const url = "https://www.youtube.com";
-    const ref = useRef(null);
+    // const ref = useRef(null);
+	const ref: MutableRefObject<HTMLElement | null> = {current: null};
 	const [user, setUser] = useState(false);
 	const [url, setUrl] = useState(false);
 	const [secret, setSecret] = useState(false);
@@ -39,7 +41,9 @@ function QrCode () {
 	// const history = useHistory();
 
     useEffect(() => {
-        qrCode.append(ref.current);
+		if (ref.current){
+			qrCode.append(ref.current);
+		}
 
 		const getUser = async ()=>{
 			try{
@@ -67,7 +71,7 @@ function QrCode () {
 
     useEffect(() => {
         qrCode.update({
-        data: url
+        	data: url
         });
     }, [url]);
 

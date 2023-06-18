@@ -3,11 +3,11 @@ import io from 'socket.io-client';
 import '../../styles/Messages.css'
 import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
-import api from '../../script/axiosApi.tsx';
+import  api from '../../script/axiosApi.tsx'
 import { motion , AnimatePresence} from "framer-motion";
 import Modal from "./Modal.tsx";
 
-import Message from "./Message.tsx"
+import Message  from './Message.tsx';
 // import Input from "./Input";
 
 //react icons

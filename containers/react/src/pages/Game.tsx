@@ -1,6 +1,6 @@
 import React from "react";
-import PlayButton from "../components/Game/PlayButton.tsx";
-import Ranking from "../components/Game/Ranking.tsx";
+import PlayButton from "../components/Game/PlayButton";
+import Ranking from "../components/Game/Ranking";
 import '../styles/Game.css'
 
 function Game(){

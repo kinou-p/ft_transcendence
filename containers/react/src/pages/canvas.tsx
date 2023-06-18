@@ -1,6 +1,6 @@
 // import io from 'socket.io-client';
 
-import api from '../script/axiosApi.tsx';
+import api from '../script/axiosApi';
 
 // import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
