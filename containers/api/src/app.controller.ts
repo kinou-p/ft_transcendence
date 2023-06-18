@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/18 13:16:23 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/18 13:30:50 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,10 +314,10 @@ export class AppController {
 	  console.log(`user in auth/login= ${user.username}`);
 	  const data = await this.authService.login(user);
 	  console.log(`all data in api = ${data}`)
-	  
+
 	  const myJSON = JSON.stringify(data);
 	  console.log(`all data json version= ${myJSON}`)
-	  
+
 	  console.log(`data in api = ${(await data).access_token}`)
 	//   console.log(`data i = ${(await data).access_token}`)
 	  const token = (await data).access_token;
@@ -353,6 +353,8 @@ export class AppController {
   {
 	const user = await this.userService.findOne(req.user.username);
 	const res = await VerifyOTP(user, data.token)
+	console.log('token in verify=', data.token)
+	console.log('res in verify=', res)
 	await this.userService.save(user);
 	return res
   }
@@ -365,6 +367,18 @@ export class AppController {
 	const res = await ValidateOTP(user, data.token)
 	// await this.userService.save(user);
 	return res
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/deleteOtp')
+  async deleteOTP(@Request() req, @Body() data: any)
+  {
+	const user = await this.userService.findOne(req.user.username);
+	user.otp_verified = false;
+	await this.userService.save(user);
+	// const res = await ValidateOTP(user, data.token)
+	// await this.userService.save(user);
+	// return res
   }
 
 //   @UseGuards(JwtAuthGuard)
@@ -396,18 +410,16 @@ export class AppController {
   @Post('/conv')
   async createConv(@Request() req, @Body() data: any) {
 	///create conv and return it ? id?
-	// console.log(`data post /conv= ${data}`);
-	// console.log(`data post /conv= ${data.members}`);
+	console.log(`data post /conv= ${data}`);
+	console.log(`data post /conv= ${data.members}`);
 	// console.log(`data post /conv= ${data.name}`);
 
 	// const param = data;
 	const amIhere = data.members.includes(req.user.username);
 	if (!amIhere)
-		data.members.push(req.user.username);
-	data.admin = [];
-	data.admin.push(req.user.username);
+		data.members.push(req.user.username)
 	// let test = {id: 2, members: "cc"};
-	data.owner = req.user.username;
+	data.owner = req.user.username
 	data.group = true;
 	return await this.chatService.createConv(data);
 	// res.json(messages);

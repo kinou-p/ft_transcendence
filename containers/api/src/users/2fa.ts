@@ -85,12 +85,13 @@ export const generateOTP = async (user) => {
 
 	  if (delta === null) {
 		console.log("error verify token")
-		return ("error verify token")
+		return (0)
 	  }
 	  else
 	  {
 		user.otp_verified = true;
 		console.log("token verified")
+		return (1)
 	  }
 	} catch (error) {
 		console.log(error)
@@ -111,12 +112,13 @@ export const generateOTP = async (user) => {
 
 	  if (delta === null) {
 		console.log("error validate token")
-		return ("error validate token")
+		return (0);
 	  }
 	  else
 	  {
 		// user.otp_verified = true;
 		console.log("token validated")
+		return (1);
 	  }
 	} catch (error) {
 		console.log(error)
