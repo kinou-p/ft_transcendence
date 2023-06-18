@@ -13,12 +13,13 @@
 // import React from "react"
 import React, { useState, useEffect, useRef } from "react";
 // import {Rank} from '../../DataBase/DataRank.js'
-import DefaultPicture from '../../assets/profile.jpg'
-import api from '../../script/axiosApi.tsx';
+// import DefaultPicture from '../../assets/profile.jpg'
+import api from '../../script/axiosApi';
 
 function Rank({user, index}){
 
 	const [profilePicture, setProfilePicture] = useState('');
+	const DefaultPicture:string = '../../assets/profile.jpg';
 	
 	useEffect(() => {
 		const fetchProfilePicture = async () => {

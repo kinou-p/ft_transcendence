@@ -46,7 +46,7 @@ import '../../styles/Win_Loss.css'
   
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from 'react-router-dom';
-import api from '../../script/axiosApi.tsx';
+import api from '../../script/axiosApi';
 
 
 function WinLoss() {
@@ -99,8 +99,8 @@ function WinLoss() {
                         <div key={index} className='elements'>
                         <li key={index}>
                                 {/* <h4 className='content'>{c.id}</h4> */}
-                                <div className='content2nd'>
-                                    <h4 className='me'>{user.username}</h4>  <h4 className='score'>{c.myScore} - {c.opScore} </h4>  <h4 className="opponent">{c.opponent}</h4>
+                                <div key={index} className='content2nd'>
+                                    <h4 key={index} className='me'>{user.username}</h4>  <h4 key={index} className='score'>{c.myScore} - {c.opScore} </h4>  <h4 key={index} className="opponent">{c.opponent}</h4>
                                 </div>
                                 {/* <h4 className='content'>{c.openent}</h4> */}
                             </li>

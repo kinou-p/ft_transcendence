@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+import React, { HtmlHTMLAttributes } from "react";
 import { useEffect, useState, useRef } from "react";
-import api from '../../script/axiosApi.tsx';
+import api from '../../script/axiosApi';
 import styled from "styled-components"
-import DefaultPicture from '../../assets/profile.jpg'
+// import DefaultPicture from '../../assets/profile.jpg'
 // import { useRef } from "react";
 // import { useEffect } from "react";
 import '../../styles/Messages.css'
@@ -25,12 +26,11 @@ const MeStyleP = styled.p`
 	color: white;
 	margin-right: 20px;
 `
-
 function MessageMe({message, own}){
 	
 	const [profilePicture, setProfilePicture] = useState('');
-	const scrollRef = useRef();
-
+	const scrollRef = useRef<HTMLDivElement>(null);
+	const DefaultPicture: string = '../../assets/profile.jpg'
 	useEffect(() => {
 		if (scrollRef.current)
 		{

@@ -1,6 +1,7 @@
+import React from "react";
 import {motion} from "framer-motion"
-import Backdrop from "./Backdrop.tsx"
-import { SidebarData } from "./SidebarData.tsx"
+import Backdrop from "./Backdrop"
+import { SidebarData } from "./SidebarData"
 import {Link} from 'react-router-dom';
 import * as AiIcons from 'react-icons/ai';
 
@@ -19,26 +20,6 @@ const dropIn = {
 	},
 }
 
-
-// function showBar (){
-// 	return (
-// 		 {SidebarData.map((item, index) => {	
-// 					 return (	
-// 					<motion.div
-// 					className="nav-menu"
-// 					// whileHover={{scale: 1.1}}
-// 					>
-// 				 <li key={index} className={item.cName}>	
-// 					 <Link to={item.path}>	
-// 						 {item.icon}	
-// 						 <span>{item.title}</span>	
-// 					 </Link>	
-// 				 </li>	
-// 			</motion.div>
-// 			 )
-// 		 })}	
-// 	)
-// }
 const Modal = ({ handleclose }) => {
 	return (
 		<Backdrop onClick={handleclose}>

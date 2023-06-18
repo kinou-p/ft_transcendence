@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import Backdrop from "../Sidebar/Backdrop.tsx";
+import Backdrop from "../Sidebar/Backdrop";
 // import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
 import { useState, useEffect } from "react";
 import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
-import api from "../../script/axiosApi.tsx";
+import api from "../../script/axiosApi";
 import React from "react";
 
 const dropIn = {
@@ -99,7 +99,7 @@ const Modal = ({handleClose}) => {
     // let new_name;
 
     return (
-        <Backdrop>
+        <Backdrop >
             <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="modal"
