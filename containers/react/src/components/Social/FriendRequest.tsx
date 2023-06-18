@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 import DefaultPicture from '../../assets/profile.jpg'
 import styled from "styled-components";
 

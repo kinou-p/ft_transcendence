@@ -14,7 +14,7 @@
 import React, { useState, useEffect, useRef } from "react";
 // import {Rank} from '../../DataBase/DataRank.js'
 import DefaultPicture from '../../assets/profile.jpg'
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 
 function Rank({user, index}){
 

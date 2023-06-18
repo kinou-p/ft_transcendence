@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import reportWebVitals from './reportWebVitals';
 import Header from './components/Header.tsx';
-import Head from './pages/Head';
+import Head from './pages/Head.tsx';
 import App from './components/App.tsx';
 
 import './styles/index.css';

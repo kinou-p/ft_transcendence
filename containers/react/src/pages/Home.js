@@ -2,7 +2,7 @@ import '../styles/old.css';
 import '../styles/field.css';
 
 import { useLocation } from 'react-router-dom';
-import api from '../script/axiosApi';
+import api from '../script/axiosApi.tsx';
  
 function HomeLogin()
 {

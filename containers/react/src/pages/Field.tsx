@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 // import { useState, useRef } from 'react';
-import { drawCanvas } from './canvas.js';
+import { drawCanvas } from './canvas.tsx';
 import '../styles/field.css';
 
 function Field()

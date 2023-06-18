@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import api from '../script/axiosApi';
+import api from '../script/axiosApi.tsx';
 
 // function DoubleAuth() {
 

@@ -1,5 +1,5 @@
 import DefaultPicture from '../../assets/profile.jpg'
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 

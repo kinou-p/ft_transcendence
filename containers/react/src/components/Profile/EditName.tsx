@@ -5,7 +5,7 @@ import { UserProfile } from "../../DataBase/DataUserProfile";
 import {useState} from 'react';
 import "../../styles/Profile.css"
 
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 
 const dropIn = {
 	hidden: {

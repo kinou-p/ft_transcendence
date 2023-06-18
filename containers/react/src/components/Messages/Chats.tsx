@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import '../../styles/Messages.css'
 import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 import { motion , AnimatePresence} from "framer-motion";
 import Modal from "./Modal.tsx";
 
@@ -18,9 +18,9 @@ import { GrAdd } from 'react-icons/gr';
 import { RiListSettingsLine } from 'react-icons/ri'
 
 import { Rank } from "../../DataBase/DataRank";
-import GreenAlert from "../Alert/GreenAlert";
-import RedAlert from "../Alert/RedAlert";
-import YellowAlert from "../Alert/YellowAlert";
+import GreenAlert from "../Alert/GreenAlert.tsx";
+import RedAlert from "../Alert/RedAlert.tsx";
+import YellowAlert from "../Alert/YellowAlert.tsx";
 import ModalSetting from "./ModalSetting.tsx";
 
 

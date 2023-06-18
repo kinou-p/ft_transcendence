@@ -4,18 +4,18 @@ import HomeLogin from "../pages/Home.js";
 
 import Home from "../pages/Home.tsx";
 
-import PlayButton from "./Game/PlayButton.js";
-import Field from "../pages/Field.js";
+import PlayButton from "./Game/PlayButton.tsx";
+import Field from "../pages/Field.tsx";
 import Login42 from "../pages/Login42.tsx";
 import Messages from "../pages/Messages.tsx";
-import QrCode from '../pages/QrCode.jsx'
+import QrCode from '../pages/QrCode.tsx'
 import { useLocation } from "react-router-dom";
 import {AnimatePresence} from "framer-motion";
 
-import SuccessToken from '../script/tokenSuccess.js'
+import SuccessToken from '../script/tokenSuccess.tsx'
 
 
-import DoubleAuth from "../pages/2fa.js";
+import DoubleAuth from "../pages/2fa.tsx";
 import Game from "../pages/Game.tsx";
 import Social from "./Social/Social.tsx";
 import Logout from "./Profile/Logout.tsx";

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 import { useEffect, useState, useRef } from "react";
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 import styled from "styled-components"
 import DefaultPicture from '../../assets/profile.jpg'
 // import { useRef } from "react";

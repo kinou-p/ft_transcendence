@@ -46,7 +46,7 @@ import '../../styles/Win_Loss.css'
   
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from 'react-router-dom';
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 
 
 function WinLoss() {

@@ -10,7 +10,7 @@ import Modal from './Sidebar/Modal.tsx';
 // import AnimatePresence from 
 import '../styles/Header.css';
 
-import api from '../script/axiosApi';
+import api from '../script/axiosApi.tsx';
 
 function Header() {
 	// const [sidebar, setSidebar] = useState(false);

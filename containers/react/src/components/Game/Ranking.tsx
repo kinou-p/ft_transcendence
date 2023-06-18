@@ -1,8 +1,8 @@
 // import React from "react"
 import React, { useState, useEffect, useRef } from "react";
-import Rank from './Rank.jsx'
+import Rank from './Rank.tsx'
 import defaultpic from '../../assets/profile.jpg'
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 
 function Ranking(){
 

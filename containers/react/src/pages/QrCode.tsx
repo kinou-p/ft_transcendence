@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "../styles/App.css";
 import QRCodeStyling from "qr-code-styling";
 import { motion } from 'framer-motion'
-import api from '../script/axiosApi';
+import api from '../script/axiosApi.tsx';
 
 
 const qrCode = new QRCodeStyling({

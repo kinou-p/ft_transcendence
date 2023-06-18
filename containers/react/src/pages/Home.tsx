@@ -24,7 +24,7 @@ import {AiOutlineHistory} from 'react-icons/ai'
 // import { Link } from "react-router-dom";
 // import {UserProfile} from "../DataBase/DataUserProfile";
 // import axios from "axios";
-import api from '../script/axiosApi';
+import api from '../script/axiosApi.tsx';
 import { CgEditMarkup } from 'react-icons/cg'
 import { IoCloseCircleOutline } from "react-icons/io5";
 
