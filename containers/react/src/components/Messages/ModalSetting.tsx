@@ -2,9 +2,11 @@ import { motion } from "framer-motion";
 import Backdrop from "../Sidebar/Backdrop.tsx";
 import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
+import api from "../../script/axiosApi.tsx";
+
 
 const dropIn = {
     hidden:{y:"-100vh",
@@ -22,34 +24,130 @@ const dropIn = {
 
 };
 
-const ModalSetting = ({handleClose, text}) => {
+const ModalSetting = ({handleClose, convId}) => {
     const [password, setPassword] = useState(false);
+	const [users, setUsers] = useState([]);
+	const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
+	const [selectedUser, setSelectedUser] = useState([]);
+	const [newName, setNewName] = useState("");
+	const [newPassword, setNewPassword] = useState("");
 
-    const handleCheckpass = (e) => {
-        setPassword(e.target.checked);
-    }
-    const [multi, setMulti] = useState(false);
-    const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
-    const [selectedOptionArray, setSelectedOptionArray] = useState([]);
+	useEffect(()=> {
+
+		console.log("convid =", convId)
+		const getUsers = async ()=>{
+			try {
+				const tmpUsers = await api.get("/users");
+				console.log("users=", tmpUsers.data);
+				setUsers(tmpUsers.data);
+			} catch(err){
+				console.log(err)
+			}
+		}
+		getUsers();
+	}, []);
+
+    // const [multi, setMulti] = useState(false);
+    // const [selectedOptionArray, setSelectedOptionArray] = useState([]);
+
 
     const handleOptionChange = (selectId, selectedOption) => {
+		console.log("tag= ", selectTags)
+		console.log("option= ", selectedOption)
         setSelectTag((prevTags) => 
-            prevTags.map((tag) =>
-                tag.id === selectId ? { ...tag, selectedOption } : tag
-            )
+		prevTags.map((tag) =>
+		tag.id === selectId ? { ...tag, selectedOption } : tag
+		)
         );
+		setSelectedUser(selectedOption)
     };
 
-    const addNewSelectedTag = () => {
-        const newSelectedId = Math.max (...selectTags.map((tag) => tag.id)) + 1;
-        setSelectTag([...selectTags, { id: newSelectedId, selectedOption: ''}]);
-    };
+	const handleCheckPass = (e) => {
+		setPassword(e.target.checked);
+		console.log("password??", e.target.checked)
+	}
 
-    const saveSelectedOptions = () => {
-        const selectedOptions = selectTags.map((tag) => tag.selectedOption);
-        setSelectedOptionArray(selectedOptions);
-    }
-    let new_name;
+	const handleCheckPriv = (e) => {
+		// setPassword(e.target.checked);
+		if (e.target.checked)
+		{
+			console.log("chack true", e.target.checked)
+			try{
+				api.post("/private", {convId: convId})
+			} catch(err) {
+				console.log(err);
+			}
+		}
+		else
+		{
+			console.log("chack false", e.target.checked)
+			try{
+				api.post("/private", {convId: convId})
+			} catch(err) {
+				console.log(err);
+			}
+		}
+	}
+
+	const handleName = async (e)=>{
+		if (e.key !== "Enter")
+			return ;
+		try{
+			api.post("/name", {convId: convId, name: newName})
+		} catch(err) {
+			console.log(err);
+		}
+		handleClose();
+	}
+
+	const handlePassword = async (e)=>{
+		if (e.key !== "Enter")
+			return ;
+		try{
+			api.post("/password", {convId: convId, password: newPassword})
+		} catch(err) {
+			console.log(err);
+		}
+		handleClose();
+	}
+
+    const handleBan = () => {
+		// console.log("ban option= ", selectedUser)
+		try{
+			api.post("/ban", {convId: convId, username: selectedUser})
+		} catch(err) {
+			console.log(err);
+		}
+		handleClose();
+	};
+
+	const handleAdmin = () => {
+		try{
+			api.post("/admin", {convId: convId, username: selectedUser})
+		} catch(err) {
+			console.log(err);
+		}
+		handleClose();
+	};
+
+	const handleMute = () => {
+		try{
+			api.post("/mute", {convId: convId, username: selectedUser})
+		} catch(err) {
+			console.log(err);
+		}
+		handleClose();
+	};
+
+	const handleInvite = () => {
+		try{
+			api.post("/invite", {convId: convId, username: selectedUser})
+		} catch(err) {
+			console.log(err);
+		}
+		handleClose();
+	};
+
     return (
         <Backdrop>
             <motion.div
@@ -60,95 +158,69 @@ const ModalSetting = ({handleClose, text}) => {
                 animate="visible"
                 exit="exit"
             >
-                {/* <p>New Convewrstion</p> */}
 
 {/* First selection  */}
                 <div className="settingFirstPart">
                     <div>
-                        <p className="checkbox">Private  <input class="check"type="checkbox" value="private"/></p>
-                        <p className="checkbox">PassW <input type="checkbox" value="password" checked={password} onChange={handleCheckpass}/> </p>
-                        {password ? (<input type="text" className="in" placeholder="password"/>):("")}
+                        <p className="checkbox">Private<input class="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p>
+                        <p className="checkbox">Password<input type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
+                        
+						
+						{password ? (
+							<input 
+								onChange={(e) => setNewPassword(e.target.value)}
+								onKeyDown={handlePassword} 
+								type="text"
+								className="in"
+								placeholder="Password"/>
+							):
+							("")}
+
+
                     </div>
                     <div className="forName">
-                        <input type="text" className="in" placeholder="group name"/>
+                        <input 
+							onChange={(e) => setNewName(e.target.value)}
+							onKeyDown={handleName} 
+							type="text" 
+							className="in" 
+							placeholder="New Name"
+						/>
                     </div>
                 </div>
-
-                {/* <select
-                onChange={(e) => {
-                    const selection = e.target.value;
-                    selection === "group" ? setMulti(true) : setMulti(false)
-                }}>
-                    <option value="1v1">1v1</option>
-                    <option value="group">Group</option>
-                </select> */}
 
 {/* Second selection  */}
                 
                 <div className="settingSecondPart">
-                    <Link to="#" className="submit" onClick={handleClose}>Send</Link>
 
-                    {selectTags.map((selectTag) =>(
-                    <div key={selectTag.id}>
 
-                    <select 
-                        value={selectTag.selectedOption}
-                        onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}>
-                    {Rank.map((item, index) => {
-                        return (
-                            <>
-                            <option >Select a name</option>
-                            <option value={new_name}>{item.name}</option>
-                            
-                            </>
-                        )
-                    })}
-                    </select>           
-                    </div>
-                ))
-                }
+				{selectTags.map((selectTag) => (
+				  <div key={selectTag.id}>
+				    <select
+				      value={selectTag.selectedOption}
+				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
+				    >
+				      <option value="">
+				        {selectTag.selectedOption ? selectTag.selectedOption : "Select an option"}
+				      </option>
+				      {users.map((item, index) => (
+				        <option key={index} value={item.username}>
+				          {item.username}
+				        </option>
+				      ))}
+				    </select>
+				  </div>
+				))}
+
+
                 <div>
-                    <Link to="#" className="submit">Ban</Link>
-                    <Link to="#" className="submit">Mute</Link>
-                    <Link to="#" className="submit">Admin</Link>
+					<Link to="#" onClick={handleInvite} className="submit">Send</Link>
+                    <Link to="#" onClick={handleBan} className="submit">Ban</Link>
+                    <Link to="#" onClick={handleMute} className="submit">Mute</Link>
+                    <Link to="#" onClick={handleAdmin} className="submit">Admin</Link>
                 </div>
 
                 </div>
-                {/* {selectTags.map((selectTag) =>(
-                    <div key={selectTag.id}>
-
-                    <select 
-                        value={selectTag.selectedOption}
-                        onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}>
-                    {Rank.map((item, index) => {
-                        return (
-                            <>
-                            <option value={new_name}>{item.name}</option>
-                            
-                            </>
-                        )
-                    })}
-                    </select>           
-                    </div>
-                ))
-                }
-                <div>
-                    <h3>Selected Option:</h3>
-                    <ul>
-                        {selectedOptionArray.map((option, index) => (
-                            <li key={index}>{option}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                    {multi === true ? (
-                    <GrAdd onClick={addNewSelectedTag}/>) : " "}
-                </div>
-                <div className="div_submit">
-                    <Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
-                    
-                    <Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
-                </div> */}
 
             </motion.div>
         </Backdrop>

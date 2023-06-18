@@ -6,10 +6,33 @@ function PlayButton() {
 
 	const history = useNavigate();
 
+	// const handleButtonClick = () => {
+	// 	let path = `play`; 
+	// 	history(path);
+	// };
 	const handleButtonClick = () => {
-		let path = `play`; 
+		let path = `play?`;
+		
+		const superpowerCheckbox = document.querySelector('input[value="superpower"]');
+		if (superpowerCheckbox.checked) {
+		  path += 'superpower=true&';
+		}
+	  
+		const obstacleCheckbox = document.querySelector('input[value="obstacle"]');
+		if (obstacleCheckbox.checked) {
+		  path += 'obstacle=true&';
+		}
+	  
+		const speedCheckbox = document.querySelector('input[value="speed"]');
+		if (speedCheckbox.checked) {
+		  path += 'speed=true&';
+		}
+	  
+		// Remove the trailing '&' character
+		path = path.slice(0, -1);
+		console.log(path)
 		history(path);
-	};
+	  };
 
 	return (
 		<div className="notClicked" id="canvas_container">

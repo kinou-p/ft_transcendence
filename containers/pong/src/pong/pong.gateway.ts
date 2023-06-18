@@ -68,11 +68,19 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	// 	}
 	// 	// console.log(`from: ${client.id}`);
 	// }
+	@SubscribeMessage('pong:invite')
+	createPrivateGame(client: Socket, payload: any): void {
+		//after invite accepted ?
+		//set the two user in a game ?
+
+	}
+
 
 @SubscribeMessage('pong:matchmaking')
 addMatchmaking(client: Socket, payload: any): void {
   console.log("matchmaking");
   console.log(payload);
+  console.log(`option= ${payload.option}`);
   // Add the client to the waitingClients set along with their chosen option
   this.waitingClients.add({ client, option: payload.option });
   console.log("Adding client to waiting list...");
@@ -146,6 +154,21 @@ addMatchmaking(client: Socket, payload: any): void {
 	// 	// }
 	// 	console.log("END OF HANDLE");
 	// }
+
+	@SubscribeMessage('pong:power')
+	sendPower(client: Socket, payload: any): void
+	{
+		console.log(`from: ${client.id}`);
+		console.log(payload);
+		
+		const game = this.games.get(payload.gameId);
+		const playersIds = game.map(socket => socket.id);
+			if (playersIds[0] === payload.id)
+					this.clients[playersIds[1]].emit('pong:power', payload);
+			else if (playersIds[1] === payload.id)
+					this.clients[playersIds[0]].emit('pong:power', payload);
+		console.log("END OF HANDLE");
+	}
 
 	@SubscribeMessage('pong:message')
 	handleMessage(client: Socket, payload: any): void

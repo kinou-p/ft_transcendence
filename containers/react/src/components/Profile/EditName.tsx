@@ -6,6 +6,7 @@ import {useState} from 'react';
 import "../../styles/Profile.css"
 
 import api from '../../script/axiosApi.tsx';
+import React from "react";
 
 const dropIn = {
 	hidden: {
@@ -58,7 +59,7 @@ const ModalEdit = ( handleClose ) => {
 				<input className="text" type="text" value={nickname} onChange={handler} handleClose/>
 				<div onClick={handleClose}>
 					<div onClick={() => {UserProfile.UserName = nickname;}}>
-						<Link className="button">change</Link>
+						<Link className="button" to={""}>change</Link>
 					</div>
 				</div>
 			</motion.div>

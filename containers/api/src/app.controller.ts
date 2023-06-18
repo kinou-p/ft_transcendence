@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   app.controller.ts                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
+/*   Updated: 2023/06/18 13:16:23 by apommier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Controller, Request, Req, Get, Post, UseGuards, Redirect, Res, Body, UploadedFile, UseInterceptors} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -9,7 +21,16 @@ import { UsersService } from './users/users.service';
 
 import { MatchLog } from './model/user.entity'
 import { generate } from 'rxjs';
-import { generateQRcode } from './users/2fa';
+
+// import { generateQRcode } from './users/2fa';
+import { generateOTP } from './users/2fa';
+import { VerifyOTP } from './users/2fa';
+import { ValidateOTP } from './users/2fa';
+import { privateDecrypt } from 'crypto';
+
+
+//2fa
+
 
 // import { initStorage, getUser, setUser } from './storage';
 
@@ -53,6 +74,13 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/users')
+  async getUsers( @Body() data: any) {
+	console.log(`usernamewwww= ${data.username}`)
+	return await this.userService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('/friends')
   async getFriends(@Request() req) {
 	// return await this.userService.getFriends(req.user.username);
@@ -60,21 +88,76 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('/friend')
+  @Post('/friend')//need to do it 2 time when user accept one for each
   async newFriend(@Request() req, @Body() data: any) {
 	// return await this.userService.getFriends(req.user.username);
 	console.log(`user= ${req.user.username}`)
 	const user = await this.userService.findOne(req.user.username)
+	if (!user)
+		return (0);
+	//create personnal conv for user
+	//await this.userService.addFriend(user, data.username);
+
+
+
+	// const amIhere = data.members.includes(req.user.username);
+	// if (!amIhere)
+	const conv = {
+		id: null,
+		name: req.user.username + ", " + data.username,
+		banned: [],
+		admin: [],
+		muted: [],
+		members: [],
+		owner: req.user.username,
+		password: null,
+		messages: null,
+		group: false,
+		private: false,
+
+	};
+	conv.members.push(req.user.username);
+	conv.members.push(data.username);
+	await this.chatService.createConv(conv);
+
 	return await this.userService.addFriend(user, data.username);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/invite')
+  @Post('/block')
+  async newBlocked(@Request() req, @Body() data: any) {
+	// return await this.userService.getFriends(req.user.username);
+	console.log(`user= ${req.user.username}`)
+	const user = await this.userService.findOne(req.user.username)
+	return await this.userService.addBlocked(user, data.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/invite')
+  async newInvite(@Request() req, @Body() data: any) {
+	console.log(`user= ${req.user.username}`)
+	const user = await this.userService.findOne(data.username)
+	if (!user)
+		return (0);
+	return await this.userService.newInvite(user, req.user.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/inviteRequest')
   async getInvite(@Request() req) {
 	// return await this.userService.getFriends(req.user.username);
 	console.log(`useawdawd\n\n\nr= ${req.user.username}`)
 	// const user = await this.userService.findOne(req.user.username)
 	return await this.userService.getInvite(req.user.username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/refuseInvite')
+  async refuseInvite(@Request() req, @Body() data: any) {
+	// return await this.userService.getFriends(req.user.username);
+	// console.log(`useawdawd\n\n\nr= ${req.user.username}`)
+	const user = await this.userService.findOne(req.user.username) 
+	return await this.userService.refuseInvite(user, data.username);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -216,21 +299,31 @@ export class AppController {
 //========================================================================================================
 //========================================================================================================
 
-@Redirect('http://localhost/token', 302)
+// import { Prisma } from "@prisma/client";
+// import { Request, Response, NextFunction } from "express";
+// import { prisma } from "../server";
+
+
+
+@Redirect('http://' + process.env.BASE_URL + '/token', 302)
 @Get('auth/login')
   async login2(@Req() request: Request) {
 	  const url = request.url;
 	  const user = await this.loginClass.Login42(url);
 	  console.log(`user in auth/login= ${user}`);
-	  const data = this.authService.login(user);
+	  console.log(`user in auth/login= ${user.username}`);
+	  const data = await this.authService.login(user);
 	  console.log(`all data in api = ${data}`)
 	  
 	  const myJSON = JSON.stringify(data);
 	  console.log(`all data json version= ${myJSON}`)
 	  
 	  console.log(`data in api = ${(await data).access_token}`)
+	//   console.log(`data i = ${(await data).access_token}`)
 	  const token = (await data).access_token;
-	  return { url: `http://localhost/token?data=${encodeURIComponent(JSON.stringify(token))}` };
+	//   console
+	  await this.userService.save(user);
+	  return { url: 'http://' + process.env.BASE_URL + `/token?data=${encodeURIComponent(JSON.stringify(token))}` };
   }
 
   @UseGuards(JwtAuthGuard)
@@ -238,16 +331,48 @@ export class AppController {
   async get2fa(@Request() req)
   {
 	const user = await this.userService.findOne(req.user.username);
-	return user.doubleAuth;
+	return user.otp_enabled;
   }
 
 
   @UseGuards(JwtAuthGuard)
-  @Get('/QRcode')
-  async createQrCode(@Request() req)
+  @Post('/otp')
+  async createOTP(@Request() req)
   {
-	return (await generateQRcode(req));
+	const user = await this.userService.findOne(req.user.username);
+	// const user2 = await this.userService.findOne(req.user.username);
+	const res = await generateOTP(user);
+	await this.userService.save(user);
+	// console.log(user);
+	return res;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/verifyOtp')
+  async verifyOTP(@Request() req, @Body() data: any)
+  {
+	const user = await this.userService.findOne(req.user.username);
+	const res = await VerifyOTP(user, data.token)
+	await this.userService.save(user);
+	return res
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/validateOtp')
+  async validateOTP(@Request() req, @Body() data: any)
+  {
+	const user = await this.userService.findOne(req.user.username);
+	const res = await ValidateOTP(user, data.token)
+	// await this.userService.save(user);
+	return res
+  }
+
+//   @UseGuards(JwtAuthGuard)
+//   @Get('/QRcode')
+//   async createQrCode(@Request() req)
+//   {
+// 	return (await generateQRcode(req));
+//   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/quit')
@@ -267,34 +392,42 @@ export class AppController {
 //========================================================================================================
 //========================================================================================================
 
+  @UseGuards(JwtAuthGuard)
   @Post('/conv')
   async createConv(@Request() req, @Body() data: any) {
 	///create conv and return it ? id?
-	console.log(`data post /conv= ${data}`);
+	// console.log(`data post /conv= ${data}`);
+	// console.log(`data post /conv= ${data.members}`);
+	// console.log(`data post /conv= ${data.name}`);
+
+	// const param = data;
+	const amIhere = data.members.includes(req.user.username);
+	if (!amIhere)
+		data.members.push(req.user.username);
+	data.admin = [];
+	data.admin.push(req.user.username);
 	// let test = {id: 2, members: "cc"};
+	data.owner = req.user.username;
+	data.group = true;
 	return await this.chatService.createConv(data);
 	// res.json(messages);
   }
 
 
 
-//   @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/conv')
-  async getConv(@Request() req, @Body() data: any) {
-	///create conv and return it ? id?
-	// console.log(`data get /conv= ${data}`);
-	// let test = {id: 2, members: "cc"};
-
-	// let tab = [data.member, "test"];
-	// console.log(`tab= ${tab}`);
-	return await this.chatService.getConv(data.member);
-	// return await this.chatService.getConv(req.user.username);
-	
-	
-	// res.json(messages);
+  async getConv(@Request() req) {
+	return await this.chatService.getConv(req.user.username);
   }
 
-//   @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @Get('/convs')
+  async getConvs() {
+	return await this.chatService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('/message')
   async postMessage(@Request() req, @Body() data: any) {
 	//if i can post post ?
@@ -307,16 +440,18 @@ export class AppController {
 		id: null,
 	}
 	console.log(data);
-	return await this.chatService.createMessage(message);
+	return await this.chatService.createMessage(message, req.user.username);
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/member')
   async getMember(@Body() data: any) {
 	console.log(data);
 	console.log(`get member= ${data.convId}`);
 	return await this.chatService.findConv(data.convId);
   }
-
+  
+  @UseGuards(JwtAuthGuard)
   @Post('/getMessage')
   async getMessage(@Body() data: any) {
 	console.log(data);
@@ -330,6 +465,75 @@ export class AppController {
 	
 	
 	// res.json(messages);
+  }	
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/ban')
+  async banUser(@Body() data: any) {
+	return await this.chatService.banUser(data.convId, data.username)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/name')
+  async setName(@Body() data: any) {
+	//find conv
+	// data.convId
+	return await this.chatService.setName(data.convId, data.name)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/invite')
+  async inviteUser(@Body() data: any) {
+	return await this.chatService.inviteUser(data.convId, data.username)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/password')
+  async setPassword(@Body() data: any) {
+	return await this.chatService.setPassword(data.convId, data.password)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/verifyPassword')
+  async verifyPassword(@Body() data: any) {
+	return await this.chatService.verifyPassword(data.convId, data.password)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/admin')
+  async setAdmin(@Body() data: any) {
+	return await this.chatService.setAdmin(data.convId, data.username)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/isAdmin')
+  async isAdmin(@Request() req, @Body() data: any) {
+	console.log("isdamin= ", req.user.username, " id=", data.convId)
+	return await this.chatService.isAdmin(data.convId, req.user.username)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/mute')
+  async muteUser(@Body() data: any) {
+	return await this.chatService.muteUser(data.convId, data.username)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/private')
+  async setPrivate(@Body() data: any) {
+	return await this.chatService.setPrivate(data.convId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/allowed')
+  async isAllowed(@Request() req, @Body() data: any) {
+	return await this.chatService.isAllowed(data.convId, req.user.username)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/join')
+  async joinChannel(@Request() req, @Body() data: any) {
+	return await this.chatService.joinChannel(data.convId, req.user.username)
   }
 
 } 

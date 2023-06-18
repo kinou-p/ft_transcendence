@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   chat.entity.ts                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 01:00:20 by apommier          #+#    #+#             */
+/*   Updated: 2023/06/17 01:31:29 by apommier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } from 'typeorm';
 	
    @Entity()
@@ -8,20 +20,32 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } 
 	@Column('text', { array: true, nullable: true })
 	members: string[];
 
-	@Column({ nullable: true })
+	@Column({ default: "Unnamed Conv" })
     name: string
 
 	@Column({ nullable: true })
     group: boolean
 
+	@Column({ nullable: true })
+    private: boolean
+
 	// @Column()
 	// members: string;// arry ??? one to many ???
 
-	@Column({ nullable: true })
-	banned: string;// arry ??? one to many ???
+	@Column('text', { array: true, nullable: true })
+	banned: string[];
+
+	@Column('text', { array: true, nullable: true })
+	muted: string[];
+
+	@Column('text', { array: true, nullable: true })
+	admin: string[];
 
 	@Column({ nullable: true })
-	admin: string;// arry ??? one to many ???
+	owner: string;
+
+	@Column({ nullable: true })
+	password: string;
 	
 	@Column({ nullable: true })
 	messages: string;

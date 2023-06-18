@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import Backdrop from "../Sidebar/Backdrop.tsx";
-import { Rank } from "../../DataBase/DataRank"
+// import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
+import api from "../../script/axiosApi.tsx";
+import React from "react";
 
 const dropIn = {
     hidden:{y:"-100vh",
@@ -22,12 +24,37 @@ const dropIn = {
 
 };
 
-const Modal = ({handleClose, text}) => {
-    const [multi, setMulti] = useState(false);
+const Modal = ({handleClose}) => {
+    // const [multi, setMulti] = useState(false);
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
     const [selectedOptionArray, setSelectedOptionArray] = useState([]);
+	const [users, setUsers] = useState([]);
+	const [user, setUser] = useState();
+	const [convs, setConvs] = useState([]);
+
+	const [channel, setChannel] = useState('');
+
+	useEffect(()=> {
+
+		const getConv = async ()=>{
+			try {
+				const tmpUsers = await api.get("/users");
+				const tmpUser = await api.get("/profile");
+				const tmpConvs = await api.get("/convs");
+				console.log("users=", tmpUsers.data);
+				console.log("convs=", tmpConvs.data);
+				setUsers(tmpUsers.data);
+				setUser(tmpUser.data);
+				setConvs(tmpConvs.data);
+			} catch(err){
+				console.log(err)
+			}
+		}
+		getConv();
+	}, []);
 
     const handleOptionChange = (selectId, selectedOption) => {
+		console.log("selected Option=", selectedOption)
         setSelectTag((prevTags) => 
             prevTags.map((tag) =>
                 tag.id === selectId ? { ...tag, selectedOption } : tag
@@ -38,13 +65,38 @@ const Modal = ({handleClose, text}) => {
     const addNewSelectedTag = () => {
         const newSelectedId = Math.max (...selectTags.map((tag) => tag.id)) + 1;
         setSelectTag([...selectTags, { id: newSelectedId, selectedOption: ''}]);
+		console.log(selectTags)
+    };
+
+	const joinChannel = async () => {
+		try {
+			console.log("channel= ", channel)
+			await api.post("/join", {convId: channel})
+		} catch(err) {
+			console.log(err);
+		}
     };
 
     const saveSelectedOptions = () => {
-        const selectedOptions = selectTags.map((tag) => tag.selectedOption);
+        // const selectedOptions = selectTags.map((tag) => tag.selectedOption);
+		const selectedOptions = selectTags.map((tag) => tag.selectedOption).filter((option) => option !== '');
+
+		console.log("selected= ", selectedOptions);
+		//do db stuff here
+		const data = {
+			members: selectedOptions,
+		}
+		try{
+			api.post("/conv", data);
+			handleClose();
+		} catch(err) {
+			console.log(err);
+		}
         setSelectedOptionArray(selectedOptions);
+
     }
-    let new_name;
+    // let new_name;
+
     return (
         <Backdrop>
             <motion.div
@@ -55,55 +107,82 @@ const Modal = ({handleClose, text}) => {
                 animate="visible"
                 exit="exit"
             >
-                <p>New Convewrstion</p>
+                {/* <p>New Conversation</p> */}
 
-{/* First selection  */}
+				{selectTags.map((selectTag) => (
+				  <div key={selectTag.id}>
+				    <select
+				      value={selectTag.selectedOption}
+				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
+				    >
+				      <option value="">{
+				        selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
+				      }</option>
+				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
+				        <option key={index} value={item.username}>
+				          {item.username}
+				        </option>
+				      ))}
+				    </select>
+				  </div>
+				))}
+            	<div>
+            	    <GrAdd onClick={addNewSelectedTag}/>
+            	</div>
+				<div className="div_submit">
+					<Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
+						
+					<Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
+				</div>
 
-                <select className="custom-select"
-                onChange={(e) => {
-                    const selection = e.target.value;
-                    selection === "group" ? setMulti(true) : setMulti(false)
-                }}>
-                    <option value="1v1">1v1</option>
-                    <option value="group">Group</option>
-                </select>
 
-{/* Second selection  */}
-                {selectTags.map((selectTag) =>(
-                    <div key={selectTag.id}>
 
-                    <select 
-                        value={selectTag.selectedOption}
-                        onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}>
-                    {Rank.map((item, index) => {
-                        return (
-                            <>
-                            <option value={new_name}>{item.name}</option>
-                            
-                            </>
-                        )
-                    })}
-                    </select>           
-                    </div>
-                ))
-                }
-                <div>
-                    <h3>Selected Option:</h3>
-                    <ul>
-                        {selectedOptionArray.map((option, index) => (
-                            <li key={index}>{option}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                    {multi === true ? (
-                    <GrAdd onClick={addNewSelectedTag}/>) : " "}
-                </div>
-                <div className="div_submit">
-                    <Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
-                    
-                    <Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
-                </div>
+				{convs.length > 0 && (
+        			<select
+        			  value={channel}
+        			  onChange={(event) => setChannel(event.target.value)}
+
+        			>
+        			  <option value="">Select an option</option>
+        			  {convs.map((conv) => (
+        			    !(!conv.group || conv.private || (conv.banned && conv.banned.includes(channel)) || (conv.members && conv.members.includes(user.username))) && (
+        			      <option key={conv.id} value={conv.id}>
+        			        {conv.name}
+        			      </option>
+        			    )
+        			  ))}
+        			</select>
+      			)}
+
+				<div className="div_submit">
+					<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>
+				</div>
+
+
+				{/* {selectTags.map((selectTag) => (
+				  <div key={selectTag.id}>
+				    <select
+				      value={selectTag.selectedOption}
+				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
+				    >
+				      <option value="">{
+				        selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
+				      }</option>
+				      {convs.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
+				        <option key={index} value={item.name}>
+				          {item.name}
+				        </option>
+				      ))}
+				    </select>
+				  </div>
+				))} */}
+
+
+
+            	{/* <div>
+            	    <GrAdd onClick={addNewSelectedTag}/>
+            	</div> */}
+
 
             </motion.div>
         </Backdrop>

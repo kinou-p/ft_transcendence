@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Friend.tsx                                         :+:      :+:    :+:   */
+/*   Friend.jsx                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:18:58 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/18 13:12:26 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/15 19:05:14 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ import styled from "styled-components";
 
 import { RxCircle } from "react-icons/rx";
 import { CgFontSpacing } from "react-icons/cg";
-import React from "react";
 
 const UserChat = styled.div `
 	padding: 5px;

@@ -3,6 +3,10 @@ import { AppModule } from './app.module';
 import * as cors from 'cors';
 import { Server } from 'socket.io';
 import * as socketio from 'socket.io';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+console.log(process.env);
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule, {
@@ -36,7 +40,7 @@ async function bootstrap() {
 	});
   });
 
-  await app.listen(4001);
+  await app.listen(parseInt(process.env.CHAT_PORT) || 4001);
 }
 
 bootstrap();

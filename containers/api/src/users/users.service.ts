@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   users.service.ts                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
+/*   Updated: 2023/06/17 01:00:08 by apommier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -49,6 +61,20 @@ export class UsersService {
 		return (friends)
 	}
 
+	async newInvite(user: User, username: string) {
+		if (!(await this.findOne(username)))
+			return (0);
+		// user.friendRequest = user.friendRequest || [];
+		// console.log("newInvite")
+		// console.log(user.friendRequest)
+		user.friendRequest = user.friendRequest || [];
+		if (user.friendRequest.find(item => item === username))
+			return (1);
+		user.friendRequest.push(username);
+		this.save(user);
+		return (1);
+	}
+
 	async getInvite(username: string) {
 		const user = await this.findOne(username)
 		let friendsTab = user.friendRequest
@@ -61,6 +87,11 @@ export class UsersService {
 		return (friends)
 	}
 
+	async refuseInvite(user: User, username: string) {
+		user.friendRequest = user.friendRequest.filter((item) => item !== username);
+		this.save(user);
+	}
+
 	async getHistory(username: string) {
 		const user = await this.findOne(username);
 		
@@ -69,19 +100,35 @@ export class UsersService {
 		  console.log(user); 
 		  console.log(user.children); // or perform any operations with the children
 		  return children;
-		  // You can also access specific properties of each child
-		  // children.forEach((child) => {
-		  //   console.log(child.id);
-		  //   console.log(child.opponent);
-		  //   // Access other child properties as needed
-		  // });
 		}
 	}
 
 	async addFriend(user: User, username: string) {
+		if (!(await this.findOne(username)))
+			return (0);
+			// user.friendRequest = user.friendRequest || [];
 		user.friends = user.friends || [];
+		if (user.friends.find(item => item === username))
+		{		
+			user.friendRequest = user.friendRequest.filter((item) => item !== username);
+			this.save(user);
+			return (1);
+		}
 		user.friends.push(username);
+		user.friendRequest = user.friendRequest.filter((item) => item !== username);
 		this.save(user);
+		return (1);
+	}
+
+	async addBlocked(user: User, username: string) {
+		if (!(await this.findOne(username)))
+			return (0);
+		user.blocked = user.blocked || [];
+		if (user.blocked.find(item => item === username))
+			return (1);
+		user.blocked.push(username);
+		this.save(user);
+		return (1);
 	}
 
 	async getRanking() {
@@ -91,10 +138,6 @@ export class UsersService {
 	async getPic( username: string) {
 		// const user = await this.findOne(username);
 		let result =  await this.userRepository.query("select encode(photo, 'base64') FROM public.\"User\" WHERE username = $1;", [username]);
-		// console.log(`result= ${result}`)
-		// console.log(`result= ${result.text}`)
-		// console.log(`encode= ${result.encode}`)
-		// console.log(`encode= ${result.string}`)
 		if (result.length > 0) {
 			const encodedPhoto = result[0].encode;
 			console.log(`pic!!! =`)

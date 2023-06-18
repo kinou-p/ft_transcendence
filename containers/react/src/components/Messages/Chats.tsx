@@ -20,7 +20,7 @@ import { RiListSettingsLine } from 'react-icons/ri'
 import { Rank } from "../../DataBase/DataRank";
 import GreenAlert from "../Alert/GreenAlert.tsx";
 import RedAlert from "../Alert/RedAlert.tsx";
-import YellowAlert from "../Alert/YellowAlert.tsx";
+import YellowAlert from "../Alert/YellowAlert";
 import ModalSetting from "./ModalSetting.tsx";
 
 
@@ -77,19 +77,14 @@ function Chats(){
 	const [conversations, setConversation] = useState([]);
 	const [user, setUser] = useState(null);
 	const [currentChat, setCurrentChat] = useState(false); // false is good?
+	const [isAdmin, setIsAdmin] = useState(false); // false is good?
+	// const [currentChat, setCurrentChat] = useState(false); // false is good?
 	const [messages, setMessage] = useState([]);
 	const [newMessages, setNewMessage] = useState("");
 	const [incomingMessage, setIncomingMessage] = useState("");
 	const socket = useRef();
 	
-	// Socket handler
 
-	// socket.on('message', (data) => { //data should be a message ?
-	// 	console.log(`message received data= ${data}`)
-	// 	setMessage([...messages, data]);
-	// });
-
-	//End of socket handler
 
 	useEffect(()=> {
 
@@ -100,19 +95,9 @@ function Chats(){
 				console.log(convs);
 				setUser(tmpUser.data);
 				setConversation(convs.data);
-				// return tmpUser;
-
-
-				// console.log(`user= ${tmpUser.data.username}`);
-				// console.log(`user= ${tmpUser.data.nickname}`);
-				// console.log(`user= ${tmpUser.data}`);
-				socket.current = io("ws://localhost:4001");
+				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001');
 				console.log(`connection....`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
-				// const socket = io("http://localhost:4001", {
-				 // 	query: {
-				   // 	username: user.username,
-				  // },});
 				socket.current.on('message', (data) => { //data should be a message ?
 					console.log(`message received data= ${data.sender}`)
 					console.log(`message received data= ${data.convId}`)
@@ -132,29 +117,31 @@ function Chats(){
 	}, [])
 
 	useEffect(()=> {
-		if (currentChat)
-		console.log(currentChat.id)
-		// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
-		if (currentChat !== null && currentChat.id === incomingMessage.convId)
-			setMessage((prev) => [...prev, incomingMessage]);
+		
+		const updateChat = async ()=> {
+			// if (currentChat)
+			// 	console.log(currentChat.id)
+			if (currentChat)
+			{
+
+				try {
+					const res = await api.post("/isAdmin", {convId: currentChat.id})
+					console.log("isadmin= ", res.data)
+					setIsAdmin(res.data);
+				} catch (err) {
+					console.log(err);
+				}
+			}
+			// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
+			if (currentChat !== null && currentChat.id === incomingMessage.convId)
+			{
+				
+				setMessage((prev) => [...prev, incomingMessage]);
+			}
+		}
+		updateChat();
+
 	}, [incomingMessage, currentChat])
-
-	// useEffect(()=> {
-
-	// 	const getConv = async ()=>{
-	// 		try{
-	// 			const convs = await api.get("/conv")
-	// 			const tmpUser = await api.get("/profile")
-	// 			console.log(convs);
-	// 			setUser(tmpUser);
-	// 			setConversation(convs.data);
-	// 		}
-	// 		catch(err){
-	// 			console.log(err);
-	// 		}
-	// 	};
-	// 	getConv();
-	// }, [])
 
 	useEffect(()=> { 
 		const getMessage = async ()=>
@@ -183,6 +170,10 @@ function Chats(){
 		};
 		try{
 			console.log(`id= ${currentChat.id}`)
+			const allowed = await api.post('/allowed', {convId: message.convId, username: user.username});
+			console.log("allowed= ", allowed.data)
+			if (!allowed.data)
+				return ;
 			const res = await api.post('/message', message);
 			const convMember = await api.post('/member', message);
 			message.members = convMember.data.members;
@@ -226,41 +217,79 @@ function Chats(){
 		}
 	}
 
+
+	
 	const [friend, setFriend] = useState("");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [addFriend, setAddFriend] = useState(false);
 	const [block, setBlock] = useState(false);
+
+	const [showAddFriendAlert, setShowAddFriendAlert] = useState(false);
+	const [showBlockAlert, setShowBlockAlert] = useState(false);
+
 	const [setting, setSetting] = useState(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
-	const closeAddFriend = () => setAddFriend(false);
-	const closeBlock = () => setBlock(false);
+	// const closeAddFriend = () => setAddFriend(false);
+	// const closeBlock = () => setBlock(false);
 	const closeSetting = () => setSetting(false);
 
 
-	const handleFriend = e => {
-		setFriend(e.target.value)
-	};
+	// const closeAddFriend = () => setAddFriend(false);
+	// const closeBlock = () => setBlock(false);
 
-	// const findValue = () => {
-	// 	// setFind(false);
-	// 	console.log(friend);
-	// 	Rank.map((tab) => {
-	// 		if (tab.name === friend)
-	// 		{
-	// 			console.log("ok bon");
-	// 			setFind(true);
-	// 		}
-	// 	})
-	// 	console.log(find);
-	// 	// if (!find)
-	// }; 
+
+	const handleFriend = (event) => {
+		setFriend(event.target.value);
+	  };
 	
-	// console.log(`data user1= ${user.username}`)
-
-	// while (user === null)
-		// ;
-
+	  const handleAddFriend = async () => {
+		try{
+			const res = await api.post("/invite", {username: friend})
+			// if (res.data === 1)
+			// console.log("res in friend= ", res)
+			console.log("res in friend= ", res.data)
+			if(res.data === 1)
+			{
+			  setAddFriend(true);
+			  setBlock(false); // Reset block state
+			  setShowBlockAlert(false);
+			}
+			else
+				setAddFriend(false);
+			setShowAddFriendAlert(true);
+		} catch(err) {
+			console.log(err)
+		}
+	  };
+	
+	  const handleBlockFriend = async () => {
+		try{
+			const res = await api.post("/block", {username: friend})
+			// if(1)
+			if (res.data === 1)
+			{
+				setBlock(true);
+				setAddFriend(false); // Reset addFriend state
+				setShowAddFriendAlert(false);
+			}
+			else
+				setBlock(false);
+			setShowBlockAlert(true);
+		} catch(err) {
+			console.log(err)
+		}
+	  };
+	
+	  const closeAddFriend = () => {
+		setAddFriend(false);
+		setShowAddFriendAlert(false);
+	  };
+	
+	  const closeBlock = () => {
+		setBlock(false);
+		setShowBlockAlert(false);
+	  };
 
 //========================================================================================================
 //========================================================================================================
@@ -271,19 +300,6 @@ function Chats(){
 
 	return (
 		<div className="chat">
-			{/* <div className='navbar'>
-				<img src={DefaultPic} alt="profile" className="pic"/>
-				<span>
-					{isLoading ? (
-        				<h4>Loading...</h4>
-      				) : (
-        				<h4>{user.nickname}</h4>
-						// <h4>{user.username}</h4>
-      				)}
-	  			</span>
-			</div> */}
-
-
 		
 			<div className='navbar'>
 				<img src={DefaultPic} alt="profile" className="pic"/>
@@ -294,13 +310,12 @@ function Chats(){
         				<h4>{user.nickname}</h4>
       				)}
 	  			</span>
-				<div className="end">
+				{/* <div className="end">
 					<input className="lookForFriends" type="text" value={friend} onChange={handleFriend}/>
 					<TouchDiv>
 						<motion.div
 						onClick={() => (addFriend ? setAddFriend(false) : setAddFriend(true))}>
 							<MdOutlineGroupAdd/>
-							{/* {console.log("find = ",find) && setFind(true)} */}
 						</motion.div>
 						<AnimatePresence
 							initial={false}
@@ -308,7 +323,6 @@ function Chats(){
 						>
 							{addFriend && <GreenAlert handleClose={closeAddFriend} text={friend + " was successfuly added"}/>}
 						</AnimatePresence>
-							{/* {console.log("find2 = ", find) && find && <BasicAlert modalOpen={find} handleClose={setFind(false)}/>} */}
 					</TouchDiv>
 					<TouchDiv>
 						<motion.div 
@@ -334,12 +348,59 @@ function Chats(){
 							initial={false}
 							onExitComplete={() => null}
 							>
-							{setting && <ModalSetting handleClose={closeSetting}/>}
+							{setting && <ModalSetting handleClose={closeSetting} convId={currentChat.id}/>}
 						</AnimatePresence>
 						</motion.div>
 					</TouchDiv>
 					):("")}
-				</div>
+				</div> */}
+
+<div className="end">
+      <input className="lookForFriends" type="text" value={friend} onChange={handleFriend} />
+      <TouchDiv>
+        <motion.div onClick={handleAddFriend}>
+          <MdOutlineGroupAdd />
+        </motion.div>
+        <AnimatePresence initial={false} onExitComplete={() => null}>
+			{showAddFriendAlert && addFriend && (
+				<GreenAlert handleClose={closeAddFriend} text={ 'invitation sent to ' + friend} />
+			)}
+          {showAddFriendAlert && !addFriend && (
+			  <RedAlert handleClose={closeAddFriend} text={friend + ' was not found'} />
+			  )}
+        </AnimatePresence>
+      </TouchDiv>
+      <TouchDiv>
+        <motion.div onClick={handleBlockFriend}>
+          <ImBlocked />
+        </motion.div>
+        <AnimatePresence initial={false} onExitComplete={() => null}>
+          {showBlockAlert && block && (
+            <GreenAlert handleClose={closeBlock} text={friend + ' was successfully blocked'} />
+          )}
+          {showBlockAlert && !block && (
+            <RedAlert handleClose={closeBlock} text={friend + ' was not found'} />
+          )}
+        </AnimatePresence>
+      </TouchDiv>
+	  {currentChat && isAdmin ? (
+		<TouchDiv>
+		<motion.div 
+		onClick={() => (setting ? setSetting(false) : setSetting(true))}
+		>
+		<RiListSettingsLine/>
+		<AnimatePresence
+			initial={false}
+			onExitComplete={() => null}
+			>
+			{setting && <ModalSetting handleClose={closeSetting} convId={currentChat.id}/>}
+		</AnimatePresence>
+		</motion.div>
+		</TouchDiv>
+	  ):("")}
+    </div>
+
+
 			</div>
 			<div className="messages_box">
 				<div className="contact">

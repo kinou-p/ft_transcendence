@@ -31,7 +31,7 @@ function GreenAlert ({handleClose, text}){
                 <AiOutlineCheckCircle/>
                <p>{text}</p>
             </motion.div>
-               {setTimeout(handleClose, 3000)}
+               {setTimeout(handleClose, 1500)}
         </Backdrop>
     )
 }
