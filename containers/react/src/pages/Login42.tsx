@@ -18,7 +18,7 @@ function Login42()
 			client_id: 'u-s4t2ud-6d29dfa49ba7146577ffd8bf595ae8d9e5aaa3e0a9615df18777171ebf836a41',
 			client_secret: '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',
 			code: code,
-			redirect_uri: 'http://localhost:8080/login42',
+			redirect_uri: 'http://' + process.env.REACT_APP_BASE_URL + '/login42',
 		  };
 		
 		axios.post('https://api.intra.42.fr/oauth/token', data)
