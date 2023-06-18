@@ -28,7 +28,10 @@ function DrawCanvas(option) {
 	const socket = io('http://' + process.env.REACT_APP_BASE_URL + ':4000');
 	// const socket = socketRef.current
 	console.log("start function");
-	const canvas = document.getElementById('myCanvas');
+	
+	let canvas;
+	canvas = document.getElementById('myCanvas');
+
 	const ctx = canvas.getContext('2d');
 	
 	// useEffect(() => {
