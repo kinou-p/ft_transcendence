@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/18 13:30:50 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:45:39 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,6 +419,8 @@ export class AppController {
 	if (!amIhere)
 		data.members.push(req.user.username)
 	// let test = {id: 2, members: "cc"};
+	data.admin = []
+	data.admin.push(req.user.username)
 	data.owner = req.user.username
 	data.group = true;
 	return await this.chatService.createConv(data);

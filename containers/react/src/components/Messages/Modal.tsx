@@ -77,7 +77,7 @@ const Modal = ({handleClose}) => {
 		}
     };
 
-    const saveSelectedOptions = () => {
+    const saveSelectedOptions = async () => {
         // const selectedOptions = selectTags.map((tag) => tag.selectedOption);
 		const selectedOptions = selectTags.map((tag) => tag.selectedOption).filter((option) => option !== '');
 
@@ -88,8 +88,9 @@ const Modal = ({handleClose}) => {
 		}
 		try{
 			// test
-			api.post("/conv", data);
+			await api.post("/conv", data);
 			handleClose();
+			window.location.reload(false);
 		} catch(err) {
 			console.log(err);
 		}
