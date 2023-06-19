@@ -41,7 +41,7 @@ function Ranking(){
 				//   <h1 className='title'>Ranking</h1>
             <div className='scroll'>
                 {ranking.map((user, index) => (
-					<Rank user={user} index={index}/>
+					<Rank user={user} index={index} key={user.username}/>
 					// return (
 						// <div className='rank_elements'>
                         //         <div>

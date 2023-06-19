@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import api from "../../script/axiosApi.tsx";
+import React from "react";
 
 
 const dropIn = {
@@ -114,6 +115,9 @@ const ModalSetting = ({handleClose, convId}) => {
     const handleBan = () => {
 		// console.log("ban option= ", selectedUser)
 		try{
+			// console.log("user select=", selectedUser.length)
+			if (!selectedUser.length)
+				return ;
 			api.post("/ban", {convId: convId, username: selectedUser})
 		} catch(err) {
 			console.log(err);
@@ -122,6 +126,8 @@ const ModalSetting = ({handleClose, convId}) => {
 	};
 
 	const handleAdmin = () => {
+		if (!selectedUser.length)
+			return ;
 		try{
 			api.post("/admin", {convId: convId, username: selectedUser})
 		} catch(err) {
@@ -131,6 +137,8 @@ const ModalSetting = ({handleClose, convId}) => {
 	};
 
 	const handleMute = () => {
+		if (!selectedUser.length)
+			return ;
 		try{
 			api.post("/mute", {convId: convId, username: selectedUser})
 		} catch(err) {
@@ -162,7 +170,7 @@ const ModalSetting = ({handleClose, convId}) => {
 {/* First selection  */}
                 <div className="settingFirstPart">
                     <div>
-                        <p className="checkbox">Private<input class="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p>
+                        <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p>
                         <p className="checkbox">Password<input type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
                         
 						

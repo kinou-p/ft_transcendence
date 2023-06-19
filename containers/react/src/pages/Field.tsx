@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import '../styles/field.css';
 
 import { useParams } from "react-router-dom";
+import React from 'react';
 
 // import { withRouter } from 'react-router-dom';
 
@@ -16,7 +17,8 @@ function Field()
 		
 		console.log("launch canva hehe")
 		let Modifiers = 0;
-	  
+		let info;
+
 		if (queryParams.superpower === 'true') {
 		  Modifiers += 1;
 		}
@@ -28,15 +30,23 @@ function Field()
 		if (queryParams.speed === 'true') {
 		  Modifiers += 4;
 		}
-		// console.log(`modifiers= ${Modifiers}`)
-		// DrawCanvas(Modifiers);
-		// 		return () => {
-		// 	console.log("000000000000000000000000000000000")
-		// //   socketRef.current.disconnect();
-		// };
+		
+		info = {
+			privateParty: false,
+		}
+		if (queryParams.username)
+		{
+				console.log("user= ", queryParams.username)
+				info = {
+					privateParty: true,
+					username: queryParams.username,
+				}
+				if (queryParams.gameId)
+					info.gameId = queryParams.gameId
+			console.log("info of param vefore canvas=", info)
+		}
 
-		// console.log(`modifiers= ${Modifiers}`)
-		const cleanup = DrawCanvas(Modifiers);
+		const cleanup = DrawCanvas(Modifiers, info);
 	
 		return () => {
 		  console.log("Cleanup");

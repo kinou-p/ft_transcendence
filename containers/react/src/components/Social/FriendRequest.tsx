@@ -5,6 +5,7 @@ import DefaultPicture from '../../assets/profile.jpg'
 import styled from "styled-components";
 
 import { RxCheckCircled, RxCircleBackslash } from "react-icons/rx";
+import React from "react";
 
 const UserChat = styled.div `
 	padding: 5px;

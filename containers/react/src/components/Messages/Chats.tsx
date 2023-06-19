@@ -6,6 +6,7 @@ import DefaultPic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi.tsx';
 import { motion , AnimatePresence} from "framer-motion";
 import Modal from "./Modal.tsx";
+import GameModal from "./GameModal.tsx";
 
 import Message from "./Message.tsx"
 // import Input from "./Input";
@@ -22,6 +23,7 @@ import GreenAlert from "../Alert/GreenAlert.tsx";
 import RedAlert from "../Alert/RedAlert.tsx";
 import YellowAlert from "../Alert/YellowAlert";
 import ModalSetting from "./ModalSetting.tsx";
+import PartyInvite from "./PartyInvite.tsx";
 
 
 const TouchDiv = styled.div`
@@ -75,6 +77,7 @@ function Chats(){
 	
 	const [isLoading, setIsLoading] = useState(true);
 	const [conversations, setConversation] = useState([]);
+	const [partyInvite, setPartyInvite] = useState([]);
 	const [user, setUser] = useState(null);
 	const [currentChat, setCurrentChat] = useState(false); // false is good?
 	const [isAdmin, setIsAdmin] = useState(false); // false is good?
@@ -82,7 +85,9 @@ function Chats(){
 	const [messages, setMessage] = useState([]);
 	const [newMessages, setNewMessage] = useState("");
 	const [incomingMessage, setIncomingMessage] = useState("");
-	const socket = useRef();
+	
+	let socket;
+	socket = useRef();
 	
 
 
@@ -91,24 +96,30 @@ function Chats(){
 		const getConv = async ()=>{
 			try{
 				const convs = await api.get("/conv")
+				const tmpInvite = await api.get("/partyInvite")
 				const tmpUser = await api.get("/profile")
 				console.log(convs);
+
+				// console.log("invite data use effect= ", tmpInvite.data);
+				setPartyInvite(tmpInvite.data);
 				setUser(tmpUser.data);
 				setConversation(convs.data);
-				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001');
-				console.log(`connection....`);
+				// console.log(`connection....`);
+				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001', { transports: ['polling'] });
+				// console.log(`connection done`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				socket.current.on('message', (data) => { //data should be a message ?
-					console.log(`message received data= ${data.sender}`)
-					console.log(`message received data= ${data.convId}`)
-					console.log(`message received data= ${data.sender}`)
-					console.log(`current chat = ${currentChat}`)
+					// console.log(`message received data= ${data.sender}`)
+					// console.log(`message received data= ${data.convId}`)
+					// console.log(`message received data= ${data.sender}`)
+					// console.log(`current chat = ${currentChat}`)
 					setIncomingMessage(data);
 				});
 				setIsLoading(false)
 
 			}
 			catch(err){
+				console.log("ERRORRRRR")
 				console.log(err);
 			}
 		};
@@ -135,8 +146,11 @@ function Chats(){
 			// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
 			if (currentChat !== null && currentChat.id === incomingMessage.convId)
 			{
-				
-				setMessage((prev) => [...prev, incomingMessage]);
+				console.log("incoming meaasge=",incomingMessage)
+				// if (user && !user.blocked.find(incomingMessage.sender))
+					// setMessage((prev) => [...prev, incomingMessage, key: incomingMessage.id]);
+					// setMessage((prev) => [...prev, { ...incomingMessage, key: incomingMessage.id }]);
+					setMessage((prev) => [...prev, incomingMessage]);
 			}
 		}
 		updateChat();
@@ -169,17 +183,10 @@ function Chats(){
 			members: null
 		};
 		try{
-			console.log(`id= ${currentChat.id}`)
-			const allowed = await api.post('/allowed', {convId: message.convId, username: user.username});
-			console.log("allowed= ", allowed.data)
-			if (!allowed.data)
-				return ;
 			const res = await api.post('/message', message);
 			const convMember = await api.post('/member', message);
 			message.members = convMember.data.members;
-			console.log(convMember);
-			// console.log(`currentChat= ${currentChat.id}`)
-			
+			message.id = res.data.id
 			setMessage([...messages, res.data]);
 			setNewMessage("");
 			socket.current.emit('sendMessage', message);
@@ -201,13 +208,10 @@ function Chats(){
 			members: null
 		};
 		try{
-			console.log(`id= ${currentChat.id}`)
 			const res = await api.post('/message', message);
 			const convMember = await api.post('/member', message);
 			message.members = convMember.data.members;
-			console.log(convMember);
-			// console.log(`currentChat= ${currentChat.id}`)
-			
+			message.id = res.data.id
 			setMessage([...messages, res.data]);
 			setNewMessage("");
 			socket.current.emit('sendMessage', message);
@@ -220,7 +224,7 @@ function Chats(){
 
 	
 	const [friend, setFriend] = useState("");
-	const [modalOpen, setModalOpen] = useState(false);
+	// const [modalOpen, setModalOpen] = useState(false);
 	const [addFriend, setAddFriend] = useState(false);
 	const [block, setBlock] = useState(false);
 
@@ -228,8 +232,28 @@ function Chats(){
 	const [showBlockAlert, setShowBlockAlert] = useState(false);
 
 	const [setting, setSetting] = useState(false);
-	const close = () => setModalOpen(false);
-	const open = () => setModalOpen(true);
+
+	const [newGameModalOpen, setNewGameModalOpen] = useState(false);
+	const [newConversationModalOpen, setNewConversationModalOpen] = useState(false);
+  
+	const openNewGameModal = () => {
+	  setNewGameModalOpen(true);
+	};
+  
+	const closeNewGameModal = () => {
+	  setNewGameModalOpen(false);
+	};
+  
+	const openNewConversationModal = () => {
+	  setNewConversationModalOpen(true);
+	};
+  
+	const closeNewConversationModal = () => {
+	  setNewConversationModalOpen(false);
+	};
+
+	// const close = () => setModalOpen(false);
+	// const open = () => setModalOpen(true);
 	// const closeAddFriend = () => setAddFriend(false);
 	// const closeBlock = () => setBlock(false);
 	const closeSetting = () => setSetting(false);
@@ -404,17 +428,36 @@ function Chats(){
 			</div>
 			<div className="messages_box">
 				<div className="contact">
-					<UserChat>
 
-						<motion.div className="newMessage"
-							onClick={() => (modalOpen ? close() : open())}
-						>
-							<GrAdd/>
-							<span>New Conversation</span>
-						</motion.div>
-						{modalOpen && <Modal modalOpen={modalOpen} handleClose={close}/>}
+	  				<UserChat>
+      				  <motion.div className="newMessage" onClick={openNewGameModal}>
+      				    <GrAdd />
+      				    <span>New Game</span>
+      				  </motion.div>
+      				  {newGameModalOpen && <GameModal handleClose={closeNewGameModal} />}
+      				</UserChat>
 
-					</UserChat>
+      				<UserChat>
+      				  <motion.div className="newMessage" onClick={openNewConversationModal}>
+      				    <GrAdd />
+      				    <span>New Conversation</span>
+      				  </motion.div>
+      				  {newConversationModalOpen && (
+      				    <Modal handleClose={closeNewConversationModal} />
+      				  )}
+      				</UserChat>
+
+
+					{/* {partyInvite.map((c) => {
+						return (
+
+						)})
+					} */}
+
+					{partyInvite.map( i =>(
+						<PartyInvite currentInvite={i}/>
+					))}
+
 					{conversations.map((c, index ) => {
 						return (
 						<div key={index}
@@ -437,7 +480,7 @@ function Chats(){
 					<div className="messages">
 						<div className="scroll">
 							{messages.map(m=>(
-								<Message message = {m} own={m.sender === user.username} user={m}/>
+								<Message key={m.id} message= {m} own={m.sender === user.username}  user={m}/>
 								))}
 						</div>
 						{/* <Input/> */}

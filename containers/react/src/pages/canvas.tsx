@@ -8,9 +8,7 @@ import io from 'socket.io-client';
 // const socket = io('http://86.209.110.20:4000');
 // const socket = io('http://172.29.113.91:4000');
 
-function DrawCanvas(option) {
-
-
+function DrawCanvas(option: number, gameParam) {
 
 	console.log(`option= ${option}`);
 	const superpowerModifier = option & 1;  // Retrieves the superpower modifier
@@ -26,6 +24,26 @@ function DrawCanvas(option) {
 	// const socketRef = useRef(null);
 	// socketRef.current = io('http://localhost:4000');
 	const socket = io('http://' + process.env.REACT_APP_BASE_URL + ':4000');
+	
+	function launchGame()
+	{
+		if (!gameParam.privateParty)
+		{
+			console.log("laucnh matchmaking")
+			matchmaking();
+		}
+		else if (!gameParam.gameId)
+		{
+			console.log("laucnh private")
+			privateParty();
+		}
+		else
+		{
+			console.log("join private")
+			joinPrivateParty();
+		}
+	}
+
 	// const socket = socketRef.current
 	console.log("start function");
 	
@@ -45,7 +63,7 @@ function DrawCanvas(option) {
 
 //========================================================================================================
 //========================================================================================================
-//                                              Var Declaration			                                  
+//                                        Var Declaration			                                  
 //========================================================================================================
 //========================================================================================================
 
@@ -102,7 +120,136 @@ function DrawCanvas(option) {
 
 //========================================================================================================
 //========================================================================================================
-//                                              Socket handler			                                  
+//                                       Socket ON			                                  
+//========================================================================================================
+//========================================================================================================
+
+socket.on('pong:win', async () => {
+	myScore = maxScore;
+	console.log("instant win opponent disconnect")
+	const data = {
+		myScore: myScore,
+		opScore: hisScore,
+		opName: opName,
+		opRank: opRank,
+	};
+
+	await api.post('/win', data);
+	console.log("after request1")
+	await api.post('/status', {status: 1});
+	console.log("after request2")
+	//disconnect ?
+	running = false;
+	socket.emit('pong:disconnect', {id: myId});
+	console.log("before reload")
+	window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
+	// window.location.reload(false);
+	return ;
+	// console.log("send all ?? win");
+
+});
+
+socket.on('pong:privateId', async (data) => {
+	console.log("private id = ", data)
+	try{
+		await api.post("/partyInvite", {username: gameParam.username, gameId: data});
+	} catch(err) {
+		console.log(err)
+	}
+});
+
+socket.on('pong:gameId', async (data) => {
+	console.log("gameId received");
+	gameId = data;
+  
+	try {
+	  let response = await api.get('/profile');
+	  const myName = response.data.username;
+	  response = await api.get('/rank');
+	  await api.post('/status', {status: 2});
+	  opRank = response.data
+	  console.log(`rank= ${opRank}`);
+	  console.log(`myname= ${myName}`);
+  
+	  const info = {
+		id: myId,
+		name: myName,
+		gameId: gameId,
+		rank: opRank,
+	  };
+  
+	  console.log("emit to name");
+	  socket.emit('pong:name', info);
+	} catch (error) {
+	  console.log(error);
+	  // Handle error here
+	  return;
+	}
+  });
+
+socket.on('pong:name', (data) => {
+	opName = data;
+	console.log(`opponent Name= ${opName}`)
+});
+
+socket.on('connect', () => {
+	console.log('Connected to NestJS server');
+});
+
+socket.on('pong:clientId', (data) => {
+	console.log("receive id")
+	myId = data;
+	console.log(`id is= ${myId}`)
+	launchGame();
+});
+
+socket.on('pong:info', (data) => {
+	oPaddleY = (data.paddleY / data.height) * canvas.height//canvas.height - data.ballY;
+	ballX = canvas.width - (data.ballX * (canvas.width / data.width));//- data.ballX;
+	ballY = ((data.ballY / data.height) * canvas.height)//canvas.height - data.ballY;
+
+	vX = -data.vX;
+	vY = data.vY;
+});
+
+
+socket.on('pong:paddle', (data) => {
+	console.log("paddle info receive")
+	oPaddleY = (data.paddleY / data.height) * canvas.height
+});
+
+socket.on('pong:power', (data) => {
+	console.log("paddle info receive")
+	
+	oPaddleY = 0;
+	opPaddleHeight = canvas.height;
+
+	setTimeout(() => {
+		// code à exécuter après 5 secondes
+		opPaddleHeight = canvas.height * 0.25;
+		oPaddleY = canvas.height / 2 - paddleHeight / 2;
+		console.log('Cinq secondes se sont écoulées.');
+	}, 5000);
+	// oPaddleY = (data.paddleY / data.height) * canvas.height
+});
+
+socket.on('pong:point', (data) => {
+	// hisScore += 1;
+	console.log("gain point");
+	// if (vX != 0)
+	// {
+		// console.log("up point");
+	myScore = data.point;
+	// }
+	vX = 0;
+	vY = 0;
+	ballX = canvas.width / 2;
+	ballY = canvas.height / 2;
+});
+
+//========================================================================================================
+//========================================================================================================
+//                                       Socket EMIT			                                  
 //========================================================================================================
 //========================================================================================================
 
@@ -116,106 +263,26 @@ function DrawCanvas(option) {
 		socket.emit('pong:matchmaking', info);
 	}
 
-	// socket.on('pong:gameId', (data) => {
-	// 	console.log("gameId received")
-	// 	gameId = data;
-	// 	// api.get('/profile');
-
-	// 	let myName;
-
-	// 	api.get('/profile').then((data) => {
-	// 		// Faire quelque chose avec les données
-	// 		console.log(data);
-	// 		myName = data.data.username;
-	// 		console.log(`myname= ${myName}`);
-	// 	  }).catch((error) => {
-	// 		console.log(error);
-	// 		// exit() ;
-	// 		return;
-	// 	  });
-
-	// 	const info = {
-	// 		id: myId,
-	// 		name: myName,
-	// 		gameId: gameId,
-	// 	};
-	// 	console.log("emit to name")
-	// 	socket.emit('pong:name', info);
-	// });
-
-	socket.on('pong:gameId', async (data) => {
-		console.log("gameId received");
-		gameId = data;
-	  
-		try {
-		  let response = await api.get('/profile');
-		  const myName = response.data.username;
-		  response = await api.get('/rank');
-		  await api.post('/status', {status: 2});
-		  opRank = response.data
-		  console.log(`rank= ${opRank}`);
-		  console.log(`myname= ${myName}`);
-	  
-		  const info = {
+	function privateParty()
+	{
+		console.log(`id private party= ${myId}`)
+		const info = {
 			id: myId,
-			name: myName,
-			gameId: gameId,
-			rank: opRank,
-		  };
-	  
-		  console.log("emit to name");
-		  socket.emit('pong:name', info);
-		} catch (error) {
-		  console.log(error);
-		  // Handle error here
-		  return;
-		}
-	  });
+			option: option,
+		};
+		socket.emit('pong:privateParty', info);
+	}
 
-	socket.on('pong:name', (data) => {
-		opName = data;
-		console.log(`opponent Name= ${opName}`)
-	});
-
-	socket.on('connect', () => {
-		console.log('Connected to NestJS server');
-	});
-
-	socket.on('pong:clientId', (data) => {
-		console.log("receive id")
-		myId = data;
-		console.log(`id is= ${myId}`)
-	});
-
-	socket.on('pong:info', (data) => {
-		oPaddleY = (data.paddleY / data.height) * canvas.height//canvas.height - data.ballY;
-		ballX = canvas.width - (data.ballX * (canvas.width / data.width));//- data.ballX;
-		ballY = ((data.ballY / data.height) * canvas.height)//canvas.height - data.ballY;
-
-		vX = -data.vX;
-		vY = data.vY;
-	});
-
-	
-	socket.on('pong:paddle', (data) => {
-		console.log("paddle info receive")
-		oPaddleY = (data.paddleY / data.height) * canvas.height
-	});
-	
-	socket.on('pong:power', (data) => {
-		console.log("paddle info receive")
-		
-		oPaddleY = 0;
-		opPaddleHeight = canvas.height;
-
-		setTimeout(() => {
-			// code à exécuter après 5 secondes
-			opPaddleHeight = canvas.height * 0.25;
-			oPaddleY = canvas.height / 2 - paddleHeight / 2;
-			console.log('Cinq secondes se sont écoulées.');
-		}, 5000);
-		// oPaddleY = (data.paddleY / data.height) * canvas.height
-	});
+	function joinPrivateParty()
+	{
+		console.log(`id private party= ${myId}`)
+		const info = {
+			id: myId,
+			gameId: gameParam.gameId,
+			option: option,
+		};
+		socket.emit('pong:joinParty', info);
+	}
 	
 	function send_info()
 	{
@@ -247,20 +314,6 @@ function DrawCanvas(option) {
 		}
 		socket.emit('pong:point', info);
 	}
-
-	socket.on('pong:point', (data) => {
-		// hisScore += 1;
-		console.log("gain point");
-		// if (vX != 0)
-		// {
-			// console.log("up point");
-		myScore = data.point;
-		// }
-		vX = 0;
-		vY = 0;
-		ballX = canvas.width / 2;
-		ballY = canvas.height / 2;
-	});
 
 	function send_paddle_info()
 	{
@@ -307,7 +360,7 @@ function DrawCanvas(option) {
 
 //========================================================================================================
 //========================================================================================================
-//                                                  Drawer
+//                                          Drawer
 //========================================================================================================
 //========================================================================================================
 
@@ -348,28 +401,50 @@ function DrawCanvas(option) {
  
 //========================================================================================================
 //========================================================================================================
-//                                                  Loop
+//                                           Loop
 //========================================================================================================
 //========================================================================================================
 
-matchmaking();
+
 // while (!gameId)
 // 	;
 
   // Define a function to stop the drawing process
-  const stopDrawCanvas = () => {
+  const stopDrawCanvas = async () => {
     running = false;
+
+	console.log("stopDrawCanvas 1")
+
+	if (gameParam.privateParty && !gameId) //delete invite
+	{
+		console.log("stopDrawCanvas2")
+		try{
+			// const info = {
+				// 	id: myId,
+				// 	option: option,
+				// };
+				
+				await api.post("deleteInvite", {username: gameParam.username})
+		}
+		catch (err){
+			console.log(err)
+		}
+	}
+	socket.emit('pong:disconnect', {id: myId});
+	window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
+	// window.location.reload(false);
     // Perform any necessary cleanup tasks
     // ...
   };
 
-function draw(timestamp)
+async function draw(timestamp)
 {
-	console.log("turning");
+	console.log("turning, running= ", running);
 	if (!running)	
 		return ;
 	if (gameId === 0 )
 	{
+		// console.log("nogameid score= ", myScore);
 		requestAnimationFrame(draw);
 		return ;
 	}
@@ -383,17 +458,22 @@ function draw(timestamp)
 		};
 		if (myScore === maxScore)
 		{
-			api.post('/win', data);
-			api.post('/status', {status: 1});
-			console.log("send win");
+			await api.post('/win', data);
+			await api.post('/status', {status: 1});
+			//disconnect ?
+			socket.emit('pong:disconnect', {id: myId});
+
+			console.log("send all ?? win");	
 		}
 		else
 		{
-			api.post('/loss', data);
-			api.post('/status', {status: 1});
+			// await api.post('/loss', data);
+			// await api.post('/status', {status: 1});
+			//disconnect ?
 			console.log("send loose");
 		}
 		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
+		// window.location.reload(false);
 		return ;
 	}
 
@@ -415,7 +495,7 @@ function draw(timestamp)
 
 //========================================================================================================
 //========================================================================================================
-//                                             Logical Part
+//                                       Logical Part
 //========================================================================================================
 //========================================================================================================
 
@@ -521,7 +601,7 @@ function draw(timestamp)
 
 //========================================================================================================
 //========================================================================================================
-//                                                  Listener
+//                                 Key/Mouse/Finger Listener
 //========================================================================================================
 //========================================================================================================
 

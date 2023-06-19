@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Rank.jsx                                           :+:      :+:    :+:   */
+/*   Rank.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:49:24 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/09 08:55:22 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/19 20:35:39 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,12 @@ function Rank({user, index}){
 		  fetchProfilePicture();
 	})
 	
+	// console.log(index);
 	return (
 		<div className='rank_elements'>
-			<div>
-				<p>{index + 1}</p>
+			<div >
+				{/* <p>{(index + 1).toString()}</p> */}
+				<p>{(index + 1)}</p> 
 				<h4>{user.rank}: {user.nickname} 
 					{profilePicture ? (
 						<img className="profilePic" src={`data:image/jpeg;base64,${profilePicture}`} />

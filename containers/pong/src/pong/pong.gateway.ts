@@ -1,6 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pong.gateway.ts                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/19 15:18:38 by apommier          #+#    #+#             */
+/*   Updated: 2023/06/19 21:38:55 by apommier         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 import { SubscribeMessage, WebSocketGateway, OnGatewayInit, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
+
+
+//========================================================================================================
+//========================================================================================================
+//                                     Connection/Disconnection
+//========================================================================================================
+//========================================================================================================
 
 @WebSocketGateway({ cors: true })
 export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -31,7 +50,8 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	handleDisconnect(client: Socket)
 	{
-		console.log(`Client disconnected: ${client.id}`);
+		// console.log(`Client disconnected: ${client.id}`);
+		console.log(`Normal disconnected: ${client.id}`);
 		// this.waitingClients.delete(client);
 		this.waitingClients.forEach((waitingClient) => {
 			if (waitingClient.client === client) {
@@ -41,40 +61,65 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		console.log(`Total connected clients: ${Object.keys(this.clients).length}`);
 	}
 
-	// @SubscribeMessage('pong:matchmaking')
-	// addMatchmaking(client: Socket, payload: any): void
-	// {
-	// 	console.log("matchmaking");
-	// 	console.log(payload);
-	// 	// this.waitingClients.add(client);
-	// 	this.waitingClients.add(client);
-	// 	console.log("Adding client to waiting list...");
-	// 	if (this.waitingClients.size >= 2) {
-	// 		console.log("Creating new game...");
-	// 		const players = Array.from(this.waitingClients).slice(0, 2);
-	// 		players.forEach((player) => {
-	// 			this.waitingClients.delete(player);
-	// 		});
-	// 		const gameId = uuidv4();
-	// 		this.games.set(gameId, players);
-	// 		players.forEach((player) => {
-	// 			player.join(gameId);
-	// 			console.log(`Player ${player.id} joined game ${gameId}`);
-	// 		});
-	// 		players.forEach((player) => {
-	// 			// const playersIds = game.map(socket => socket.id);
-	// 			player.emit('pong:gameId', gameId);
-	// 		});
-	// 	}
-	// 	// console.log(`from: ${client.id}`);
-	// }
-	@SubscribeMessage('pong:invite')
-	createPrivateGame(client: Socket, payload: any): void {
-		//after invite accepted ?
-		//set the two user in a game ?
 
+	@SubscribeMessage('pong:disconnect')
+	disconnectClient(client: Socket, payload: any): void {
+		console.log("disconnect forced client= ", client.id)
+		
+		for (const key in this.clients) {
+			if (this.clients.hasOwnProperty(key) && this.clients[key] === client) 
+				delete this.clients[key];
+		}
+
+		  // Delete the socket from the 'waitingClients' set
+		  this.waitingClients.forEach((item) => {
+			if (item.client === client)
+				this.waitingClients.delete(item);
+		  });
+
+		  // Delete the socket from the 'games' map
+		  this.games.forEach((sockets, gameId) => {
+			const index = sockets.indexOf(client);
+			if (index !== -1)
+			{
+
+				if (index === 0)
+				{
+					console.log("emit boy1")
+					sockets[1].emit("pong:win")
+					// sockets[0].emit("/win")
+				}
+				else
+				{
+					console.log("emit boy2")
+					sockets[0].emit("pong:win")
+					// sockets[1].emit("/win")
+				}
+				// let playersIds = 
+				// const playersIds = this.games.get(gameId).map(socket => socket.id);
+				// // if (playersIds[0] === payload.id)
+				// // {
+				// if (this.clients[playersIds[1]])
+				// 	this.clients[playersIds[1]].emit('pong:win');
+				// if (this.clients[playersIds[0]])	
+				// 	this.clients[playersIds[0]].emit('pong:win');
+				// }
+				// if (playersIds[1] === payload.id)
+				// {
+				// }
+				//send victory to the other one
+				this.games.delete(gameId);
+				delete this.clients[client.id];
+			}
+			
+		})
 	}
 
+//========================================================================================================
+//========================================================================================================
+//                                           Matchmaking
+//========================================================================================================
+//========================================================================================================
 
 @SubscribeMessage('pong:matchmaking')
 addMatchmaking(client: Socket, payload: any): void {
@@ -90,6 +135,7 @@ addMatchmaking(client: Socket, payload: any): void {
     (waitingClient) =>
       waitingClient.option === payload.option && waitingClient.client !== client
   );
+
 
   if (matchingClients.length > 0) {
     console.log("Creating new game...");
@@ -117,43 +163,76 @@ addMatchmaking(client: Socket, payload: any): void {
       player.emit('pong:gameId', gameId);
     });
   }
+
   // console.log(`from: ${client.id}`);
 }
 
-	// @SubscribeMessage('pong:message')
-	// handleMessage(client: Socket, payload: any): void
-	// {
-	// 	console.log(`from: ${client.id}`);
-	// 	console.log(payload);
-		
-	// 	const game = this.games.get(payload.gameId);
-	// 	const playersIds = game.map(socket => socket.id);
-	// 	// const players = Object.keys(game);
 
-	// 	// if (Object.keys(this.clients).length === 2)
-	// 	// {
-	// 		// const clientIds = Object.keys(this.clients);
-	// 		// console.log(`id of 0= ${clientIds[0]}`);
-			
-	// 		// payload.ballX
-	// 		// payload.ballY
-	// 		// payload.
-			
-	// 		if (clientIds[0] === payload.id)
-	// 		{
-	// 			// console.log("client 0 true");
-	// 			if (payload.ballX <= payload.width / 2)
-	// 				this.clients[clientIds[1]].emit('pong:info', payload);
-	// 		}
-	// 		else if (clientIds[1] === payload.id)
-	// 		{
-	// 			if (payload.ballX < payload.width / 2)
-	// 				this.clients[clientIds[0]].emit('pong:info', payload);
-	// 			// console.log("client 0 true");
-	// 		}
-	// 	// }
-	// 	console.log("END OF HANDLE");
-	// }
+
+//========================================================================================================
+//========================================================================================================
+//                                         Private Match
+//========================================================================================================
+//========================================================================================================
+
+
+
+// @SubscribeMessage('pong:invite')
+// createPrivateGame(client: Socket, payload: any): void {
+// 	//after invite accepted ?
+// 	//set the two user in a game ?
+
+// }
+
+
+@SubscribeMessage('pong:joinParty')
+joinPrivateParty(client: Socket, payload: any): void {
+	console.log(" join PrivateParty")
+	
+	const game = this.games.get(payload.gameId);
+	if (game)
+	{
+		game.push(client);
+		const playersIds = game.map(socket => socket.id);
+		this.clients[playersIds[0]].emit('pong:gameId', payload.gameId);
+		this.clients[playersIds[1]].emit('pong:gameId', payload.gameId);
+	}
+	else
+	{
+		console.log("emit else")
+		client.emit("pong:win")
+	}
+		// console.log("no game ???")
+
+}
+
+
+@SubscribeMessage('pong:privateParty')
+addPrivateParty(client: Socket, payload: any): void {
+	console.log("addPrivateParty")
+
+    const gameId = uuidv4();
+	const players = [client];
+    this.games.set(gameId, players);
+	console.log("game created private")
+	client.emit('pong:privateId', gameId);
+	//create game 
+	//emit private gameId to canvas (don't launch canvas)
+
+}
+
+
+
+
+
+
+//========================================================================================================
+//========================================================================================================
+//                                             In Game
+//========================================================================================================
+//========================================================================================================
+
+
 
 	@SubscribeMessage('pong:power')
 	sendPower(client: Socket, payload: any): void
@@ -191,29 +270,6 @@ addMatchmaking(client: Socket, payload: any): void {
 		console.log("END OF HANDLE");
 	}
 
-	// @SubscribeMessage('pong:forced')
-	// forcedMessage(client: Socket, payload: any): void
-	// {
-	// 	console.log(`from: ${client.id}`);
-	// 	console.log(payload);
-		
-	// 	if (Object.keys(this.clients).length === 2)
-	// 	{
-	// 		const clientIds = Object.keys(this.clients);
-	// 		console.log(`id of 0= ${clientIds[0]}`);
-
-	// 		if (clientIds[0] === payload.id)
-	// 		{
-	// 				this.clients[clientIds[1]].emit('pong:info', payload);
-	// 		}
-	// 		else if (clientIds[1] === payload.id)
-	// 		{
-	// 				this.clients[clientIds[0]].emit('pong:info', payload);
-	// 		}
-	// 	}
-	// 	console.log("END OF HANDLE");
-	// }
-
 	@SubscribeMessage('pong:forced')
 	forcedMessage(client: Socket, payload: any): void
 	{
@@ -235,29 +291,6 @@ addMatchmaking(client: Socket, payload: any): void {
 		}
 		console.log("END OF HANDLE");
 	}
-
-	// @SubscribeMessage('pong:paddle')
-	// handlePaddle(client: Socket, payload: any): void
-	// {
-	// 	console.log(`from: ${client.id}`);
-	// 	console.log(payload);
-		
-	// 	if (Object.keys(this.clients).length === 2)
-	// 	{
-	// 		const clientIds = Object.keys(this.clients);
-	// 		console.log(`id of 0= ${clientIds[0]}`);
-
-	// 		if (clientIds[0] === payload.id)
-	// 		{
-	// 			this.clients[clientIds[1]].emit('pong:paddle', payload);
-	// 		}
-	// 		else if (clientIds[1] === payload.id)
-	// 		{
-	// 			this.clients[clientIds[0]].emit('pong:paddle', payload);
-	// 		}
-	// 	}
-	// 	console.log("END OF HANDLE");
-	// }
 
 	@SubscribeMessage('pong:paddle')
 	handlePaddle(client: Socket, payload: any): void

@@ -147,7 +147,7 @@ const Modal = ({handleClose}) => {
         			>
         			  <option value="">Select an option</option>
         			  {convs.map((conv) => (
-        			    !(!conv.group || conv.private || (conv.banned && conv.banned.includes(channel)) || (conv.members && conv.members.includes(user.username))) && (
+        			    !(!conv.group || conv.private || (conv.banned && conv.banned.includes(user.username)) || (conv.members && conv.members.includes(user.username))) && (
         			      <option key={conv.id} value={conv.id}>
         			        {conv.name}
         			      </option>
@@ -160,30 +160,6 @@ const Modal = ({handleClose}) => {
 					<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>
 				</div>
 
-
-				{/* {selectTags.map((selectTag) => (
-				  <div key={selectTag.id}>
-				    <select
-				      value={selectTag.selectedOption}
-				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
-				    >
-				      <option value="">{
-				        selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
-				      }</option>
-				      {convs.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
-				        <option key={index} value={item.name}>
-				          {item.name}
-				        </option>
-				      ))}
-				    </select>
-				  </div>
-				))} */}
-
-
-
-            	{/* <div>
-            	    <GrAdd onClick={addNewSelectedTag}/>
-            	</div> */}
 
 
             </motion.div>

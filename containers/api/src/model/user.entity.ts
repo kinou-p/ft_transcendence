@@ -65,6 +65,12 @@ export class User {
 	@Column('text', { array: true, nullable: true })
 	friendRequest: string[];
 
+	@Column({ type: 'jsonb', nullable: true })
+	partyInvite: Record<string, string>[];
+
+	// @Column('text', { array: true, nullable: true })
+	// friendRequest: string[];
+
 	@Column('text', { array: true, nullable: true })
 	friends: string[];
 

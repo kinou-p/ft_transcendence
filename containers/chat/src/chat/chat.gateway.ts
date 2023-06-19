@@ -8,15 +8,19 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@WebSocketServer()
 	server: Server;
 
+
 	private clients: Record<string, Socket> = {};
 	// private clientsNames: Record<string, Socket[]> = {};
 	private clientsNames: Map<string, string[]> = new Map();
 	// private games: Map<string, Socket[]> = new Map();// Chat en cours, identifiées par un ID
 
+
+
 	afterInit(server: Server)
 	{
 		console.log('ChatGateway initialized');
 	}
+	
 
 	handleConnection(client: Socket, ...args: any[])
 	{
@@ -92,18 +96,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			console.log("create")
 			this.clientsNames.set(payload.username, [client.id]); // Create a new array with the new client as the value
 		  }
-		// let clientLenght = Object.keys(this.clientsNames[payload.username]).length
-		// const clientArray = this.clientsNames.get(payload.username)
-		// let clientLenght = clientArray.
-		// console.log(`lenght= ${clientLenght}`)
-		
-		// this.clientsNames[payload.username][clientLenght] = this.clients[client.id];
-		// console.log(`clients: ${Object.keys(this.clientsNames).length}`)
-		// this.clients[clientId] = client;
-
-		//add a new client with socket and name for key
-		//payload.username
   }
+
+  @SubscribeMessage('socket.io')
+  socketConnect(client: any, payload: any): void {
+	console.log("/socket.io")
+}
   
 
 	// @SubscribeMessage('sendMessage')

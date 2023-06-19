@@ -58,6 +58,7 @@ export class loginClass {
 			console.log(`no user, creating one`);
 			user = {
 				id: null,
+				partyInvite: null,
 				password: null,
 				username: userName,
 				nickname: userName,

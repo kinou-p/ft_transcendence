@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/18 17:45:39 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/19 19:48:52 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ import { generateOTP } from './users/2fa';
 import { VerifyOTP } from './users/2fa';
 import { ValidateOTP } from './users/2fa';
 import { privateDecrypt } from 'crypto';
+import { formatWithOptions } from 'util';
 
 
 //2fa
@@ -128,6 +129,8 @@ export class AppController {
   async newBlocked(@Request() req, @Body() data: any) {
 	// return await this.userService.getFriends(req.user.username);
 	console.log(`user= ${req.user.username}`)
+	if (data.username === req.user.username)
+		return (0);
 	const user = await this.userService.findOne(req.user.username)
 	return await this.userService.addBlocked(user, data.username);
   }
@@ -136,6 +139,8 @@ export class AppController {
   @Post('/invite')
   async newInvite(@Request() req, @Body() data: any) {
 	console.log(`user= ${req.user.username}`)
+	if (data.username === req.user.username)
+		return (0);
 	const user = await this.userService.findOne(data.username)
 	if (!user)
 		return (0);
@@ -268,6 +273,44 @@ export class AppController {
   async getRanking()
   {
 	return await this.userService.getRanking();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/partyInvite')
+  async partyInvite(@Request() req, @Body() data: any)
+  {
+		//find data.username and add invite to list
+		console.log("data post priv invite=", data);
+		const user = await this.userService.findOne(data.username);
+		user.partyInvite = user.partyInvite || [];
+		user.partyInvite.push({ username: req.user.username, gameId: data.gameId });
+		console.log("usr === ", user)
+		await this.userService.save(user);
+		// user.partyInvite.push(data);
+		console.log("invite === ", user.partyInvite)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/partyInvite')
+  async getPartyInvite(@Body() data: any)
+  {
+		//find data.username and add invite to list
+		const user = await this.userService.findOne(data.username);
+		user.partyInvite = user.partyInvite || [];
+		// this.userService.save(user);
+		// user.partyInvite.push(data);
+		// console.log("data invite === ", data.username)
+		return user.partyInvite;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/deleteInvite')
+  async deleteInvite(@Request() req, @Body() data: any)
+  {
+	console.log("delete invite user= ", data.username)
+	const user = await this.userService.findOne(data.username);
+	user.partyInvite = user.partyInvite.filter(item => Object.values(item)[1] !== req.user.username);
+	this.userService.save(user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -442,6 +485,13 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('/convId')
+  async getConvById(@Body() data: any) {
+	return await this.chatService.findConv(data.convId);
+  }
+
+
+  @UseGuards(JwtAuthGuard)
   @Post('/message')
   async postMessage(@Request() req, @Body() data: any) {
 	//if i can post post ?
@@ -479,12 +529,6 @@ export class AppController {
 	
 	
 	// res.json(messages);
-  }	
-  
-  @UseGuards(JwtAuthGuard)
-  @Post('/ban')
-  async banUser(@Body() data: any) {
-	return await this.chatService.banUser(data.convId, data.username)
   }
   
   @UseGuards(JwtAuthGuard)
@@ -496,27 +540,45 @@ export class AppController {
   }
   
   @UseGuards(JwtAuthGuard)
-  @Post('/invite')
-  async inviteUser(@Body() data: any) {
-	return await this.chatService.inviteUser(data.convId, data.username)
-  }
-  
-  @UseGuards(JwtAuthGuard)
   @Post('/password')
   async setPassword(@Body() data: any) {
-	return await this.chatService.setPassword(data.convId, data.password)
+	  return await this.chatService.setPassword(data.convId, data.password)
   }
   
   @UseGuards(JwtAuthGuard)
   @Post('/verifyPassword')
   async verifyPassword(@Body() data: any) {
-	return await this.chatService.verifyPassword(data.convId, data.password)
-  }
-  
+	  return await this.chatService.verifyPassword(data.convId, data.password)
+	}
+	
+  @UseGuards(JwtAuthGuard)
+  @Post('/invite')
+  async inviteUser(@Body() data: any) {
+      return await this.chatService.inviteUser(data.convId, data.username)
+	}
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/ban')
+  async banUser(@Body() data: any) {
+	if (!data.username)
+		return ;
+	  return await this.chatService.banUser(data.convId, data.username)
+	}
+	
   @UseGuards(JwtAuthGuard)
   @Post('/admin')
   async setAdmin(@Body() data: any) {
+	if (!data.username)
+		return ;
 	return await this.chatService.setAdmin(data.convId, data.username)
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('/mute')
+  async muteUser(@Body() data: any) {
+	if (!data.username)
+		return ;
+	return await this.chatService.muteUser(data.convId, data.username)
   }
   
   @UseGuards(JwtAuthGuard)
@@ -526,11 +588,6 @@ export class AppController {
 	return await this.chatService.isAdmin(data.convId, req.user.username)
   }
   
-  @UseGuards(JwtAuthGuard)
-  @Post('/mute')
-  async muteUser(@Body() data: any) {
-	return await this.chatService.muteUser(data.convId, data.username)
-  }
   
   @UseGuards(JwtAuthGuard)
   @Post('/private')

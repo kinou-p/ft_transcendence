@@ -33,6 +33,7 @@ const ModalEdit = ( handleClose ) => {
 	const handler = e =>
 	{
 		setNickname(e.target.value);
+		console.log("testeeeee")
 		const postNickname = async ()=>{
 			try{
 				await api.post("/nickname", {nickname: nickname})
@@ -45,6 +46,22 @@ const ModalEdit = ( handleClose ) => {
 		};
 		postNickname();
 	}
+
+	const handlePostNickname = async () => 
+	{
+		console.log("nickname=" ,nickname)
+		try{
+			await api.post("/nickname", {nickname: nickname})
+			window.location.reload(false);
+			// setUser(tmpUser.data);
+			// setIsLoading(false)
+		}
+		catch(err){
+			console.log(err);
+		}
+	}
+
+
 	// function handleClose(){
 	// 	//do nothing
 	// }
@@ -56,10 +73,11 @@ const ModalEdit = ( handleClose ) => {
 						animate="visible"
 						exit="exit">
 				<h2>Type your new name</h2>
-				<input className="text" type="text" value={nickname} onChange={handler} handleClose/>
-				<div onClick={handleClose}>
-					<div onClick={() => {UserProfile.UserName = nickname;}}>
-						<Link className="button" to={""}>change</Link>
+				<input className="text" maxLength="10" type="text" value={nickname} onChange={handler} handleClose/>
+				<div>
+					<div className="button" onClick={ () => handlePostNickname()}>
+						change
+						{/* <Link className="button" to={""}>change</Link> */}
 					</div>
 				</div>
 			</motion.div>

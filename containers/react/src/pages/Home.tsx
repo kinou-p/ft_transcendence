@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Home.jsx                                           :+:      :+:    :+:   */
+/*   Home.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/09 08:19:05 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/19 20:27:00 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,10 +139,11 @@ function Profile () {
 					</Link>
 				</motion.div>
 			
-				<div>
-      				<input type="file" accept="image/*" onChange={handleFileChange} />
-      				<button onClick={handleUpload}>Upload</button>
-    			</div>
+				<div className="file-upload-container">
+  					<label htmlFor="file-input" className="file-label">Choose File</label>
+  					<input type="file" id="file-input" className="file-input" accept="image/*" onChange={handleFileChange} />
+  					<button onClick={handleUpload} className="upload-button">Upload</button>
+				</div>
 			</div>
 				  ) : (
 						  <></>
