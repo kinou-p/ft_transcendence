@@ -29,9 +29,10 @@ const qrCode = new QRCodeStyling({
 
 function QrCode () {
     // const url = "https://www.youtube.com";
-    const ref = useRef(null);
+    // const ref = useRef(null);
+	const ref = useRef<HTMLDivElement>(null);
 	const [user, setUser] = useState(false);
-	const [url, setUrl] = useState(false);
+	const [url, setUrl] = useState("");
 	const [secret, setSecret] = useState(false);
 	const [code, setCode] = useState('');
 	const [activated, setActivated] = useState(false);
@@ -39,8 +40,8 @@ function QrCode () {
 	// const history = useHistory();
 
     useEffect(() => {
-        qrCode.append(ref.current);
-
+		if (ref.current)
+        	qrCode.append(ref.current);
 		const getUser = async ()=>{
 			try{
 				const tmpUser = await api.get("/profile");
@@ -66,13 +67,11 @@ function QrCode () {
     }, []);
 
     useEffect(() => {
-        qrCode.update({
-        data: url
-        });
+        qrCode.update({data: url});
     }, [url]);
 
 
-	const handleKeyPress = async (e)=>{
+	const handleKeyPress = async (e: { key: string; })=>{
 		// console.log(`e in press= ${e.key}`)
 		if (e.key !== "Enter")
 			return ;
@@ -87,8 +86,8 @@ function QrCode () {
 				// history.push('/login')
 
 				const path = 'http://' + process.env.REACT_APP_BASE_URL + '/'; 
-				window.history.pushState({}, null, path);
-				window.location.reload(false);
+				window.history.pushState({}, '', path);
+				window.location.reload();
 
 			}
 			else
@@ -107,8 +106,8 @@ function QrCode () {
 		try {
 			await api.post("/deleteOtp")
 			// const path = 'http://' + process.env.REACT_APP_BASE_URL + '/'; 
-			// window.history.pushState({}, null, path);
-			window.location.reload(false);
+			// window.history.pushState({}, '', path);
+			window.location.reload();
 		} catch(err) {
 			console.log(err);
 		}
@@ -139,6 +138,7 @@ function QrCode () {
 			<h3>{secret}</h3>
 			<h1>Or Scan The QRCode</h1>
 			<div ref={ref} />
+			{/* <div>{ref}</div> */}
 		  </>
 		)}
 

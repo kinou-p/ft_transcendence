@@ -62,7 +62,7 @@ function Header() {
 			<AnimatePresence
 			initial={false}
 			onExitComplete={() => null}>
-				{modalOpen && <Modal modalOpen={modalOpen} handleclose={close}/>}
+				{modalOpen && <Modal handleclose={close}/>}
 			</AnimatePresence>
 	</div>
   );

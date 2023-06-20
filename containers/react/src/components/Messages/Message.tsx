@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 18:24:46 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/19 11:45:54 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/20 12:47:33 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ import DefaultPicture from '../../assets/profile.jpg'
 // import { useRef } from "react";
 // import { useEffect } from "react";
 import '../../styles/Messages.css'
+import {User, Conv, Message} from "../../../interfaces.tsx"
 import React from "react";
 
 const MeStyleP = styled.p`
@@ -27,14 +28,19 @@ const MeStyleP = styled.p`
 	margin-right: 20px;
 `
 
-function MessageMe({message, own}){
+interface MessageMeProps {
+	message: Message;
+	own: boolean;
+  }
+
+function MessageMe({message, own}: MessageMeProps){
 	
 	const [profilePicture, setProfilePicture] = useState('');
-	const [sender, setSender] = useState();
-	const [conv, setConv] = useState();
+	const [sender, setSender] = useState<User>();
+	const [conv, setConv] = useState<Conv>();
 	
-	const [user, setUser] = useState();
-	const scrollRef = useRef();
+	const [user, setUser] = useState<User>();
+	const scrollRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (scrollRef.current)
@@ -64,23 +70,23 @@ function MessageMe({message, own}){
 
 	const handleButtonClick = () => {
 		if (!sender)
-			return;
+			return ;
 		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${sender.username}`;
 		// console.log("path= ", path)
 		// history(path, { replace: true });
 		// window.location.replace(path);
-		window.history.pushState({}, null, path);
-		window.location.reload(false);
+		window.history.pushState({}, '', path);
+		window.location.reload();
 	};
 
 	if (!user || !sender || !conv)
-		return ;
+		return (<></>);
 	// console.log("result includes=", conv.banned.includes(user.username))
 	// console.log("result includes=", conv.blocked.includes(user.username))
 	if (user.blocked && user.blocked.includes(message.sender))
-		return ;
+		return (<></>);
 	else if (conv.banned && conv.banned.includes(user.username))
-		return ;
+		return (<></>);
 	// if (user.blocked.includes(message.sender))/
 
 	return (

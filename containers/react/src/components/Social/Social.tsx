@@ -9,6 +9,7 @@ import FriendRequest  from './FriendRequest.tsx';
 
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
+import {User} from "../../../interfaces.tsx"
 
 // import React from "react";
 
@@ -34,12 +35,11 @@ function Social (){
 
 	const [friends, setFriends] = useState([]);
 	const [invite, setInvite] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
-	const [user, setUser] = useState(null);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [user, setUser] = useState<User>();
 	const [profilePicture, setProfilePicture] = useState('');
 
 	useEffect(()=> {
-
 		const getFriend = async ()=>{
 			try{
 				const tmpFriends = await api.get("/friends")	
@@ -94,7 +94,7 @@ function Social (){
  					<img className="pic" src={DefaultPicture} alt="Default Profile Picture" />
  				)}
 				<span>
-					{isLoading ? (
+					{isLoading || !user ? (
         				<h4>Loading...</h4>
       				) : (
         				<h4>{user.nickname}</h4>

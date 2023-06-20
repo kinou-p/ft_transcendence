@@ -2,6 +2,7 @@ import Backdrop from "../Sidebar/Backdrop.tsx"
 import { motion } from 'framer-motion'
 import { GrTrophy } from "react-icons/gr";
 import '../../styles/Messages.css'
+import React from "react";
 
 const dropIn = {
     hidden: {
@@ -15,13 +16,18 @@ const dropIn = {
 	},
 };
 
-function YellowAlert ({handleClose, text}) {
+interface AlertProps {
+	handleClose: Function,
+	text: string
+  }
+
+function YellowAlert ({handleClose, text}: AlertProps) {
     return(
-        <Backdrop>
+        <Backdrop onClick={handleClose}>
         <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="yellowAlert"
-                variant={dropIn}
+                // variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"

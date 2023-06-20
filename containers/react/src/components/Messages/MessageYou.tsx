@@ -14,7 +14,7 @@ const StyleP = styled.p`
 `
 
 function MessageYou(){
-	const scrollRef = useRef();
+	const scrollRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 	scrollRef.current?.scrollIntoView({ behavior: "smooth"})

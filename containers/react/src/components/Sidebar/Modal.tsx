@@ -6,6 +6,7 @@ import * as AiIcons from 'react-icons/ai';
 
 
 import "../../styles/Header.css"
+import React from "react";
 
 const dropIn = {
 	hidden: {
@@ -39,7 +40,11 @@ const dropIn = {
 // 		 })}	
 // 	)
 // }
-const Modal = ({ handleclose }) => {
+interface CloseProps {
+	handleclose: Function;
+  }
+
+const Modal = ({ handleclose }: CloseProps) => {
 	return (
 		<Backdrop onClick={handleclose}>
 			<motion.div 

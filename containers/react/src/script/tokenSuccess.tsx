@@ -68,8 +68,8 @@ function SuccessToken() {
 				window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
 
 				// const path = 'http://' + process.env.REACT_APP_BASE_URL + '/'; 
-				// window.history.pushState({}, null, path);
-				// window.location.reload(false);
+				// window.history.pushState({}, '', path);
+				// window.location.reload();
 	
 			}
 			else
@@ -197,8 +197,8 @@ function SuccessToken() {
 // 			// history.push('/login')
 
 // 			const path = 'http://' + process.env.REACT_APP_BASE_URL + '/'; 
-// 			window.history.pushState({}, null, path);
-// 			window.location.reload(false);
+// 			window.history.pushState({}, '', path);
+// 			window.location.reload();
 
 // 		}
 // 		else

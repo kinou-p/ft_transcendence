@@ -3,11 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import Rank from './Rank.tsx'
 import defaultpic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi.tsx';
+import {User} from "../../../interfaces.tsx"
 
 function Ranking(){
 
 	const [isLoading, setIsLoading] = useState(true);
-	const [ranking, setRanking] = useState([]);
+	const [ranking, setRanking] = useState<User[]>([]);
 
 	useEffect(()=> {
 

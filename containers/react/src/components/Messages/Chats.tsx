@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import '../../styles/Messages.css'
 import styled from "styled-components";
 import DefaultPic from '../../assets/profile.jpg'
@@ -18,13 +18,15 @@ import { MdOutlineGroupAdd } from 'react-icons/md';
 import { GrAdd } from 'react-icons/gr';
 import { RiListSettingsLine } from 'react-icons/ri'
 
-import { Rank } from "../../DataBase/DataRank";
+// import { Rank } from "../../DataBase/DataRank";
 import GreenAlert from "../Alert/GreenAlert.tsx";
 import RedAlert from "../Alert/RedAlert.tsx";
 import YellowAlert from "../Alert/YellowAlert";
 import ModalSetting from "./ModalSetting.tsx";
 import PartyInvite from "./PartyInvite.tsx";
 
+// import {User, Conv, Message} from "../../../interfaces.tsx"
+import {User, Conv} from "../../../interfaces.tsx"
 
 const TouchDiv = styled.div`
 	margin-left: 10px;
@@ -72,24 +74,31 @@ const SideP = styled.p`
 //========================================================================================================
 //========================================================================================================
 
+interface MessageProps {
+	id: number;
+	convId: number;
+ 	sender: string;
+ 	text: string;
+ 	createdAt?: Date;
+  }
 
 function Chats(){
 	
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [conversations, setConversation] = useState([]);
 	const [partyInvite, setPartyInvite] = useState([]);
-	const [user, setUser] = useState(null);
-	const [currentChat, setCurrentChat] = useState(false); // false is good?
-	const [isAdmin, setIsAdmin] = useState(false); // false is good?
+	const [user, setUser] = useState<User>();
+	const [currentChat, setCurrentChat] = useState<Conv>(); // false is good?
+	const [isAdmin, setIsAdmin] = useState<boolean>(false); // false is good?
 	// const [currentChat, setCurrentChat] = useState(false); // false is good?
-	const [messages, setMessage] = useState([]);
+	const [messages, setMessage] = useState<MessageProps[]>([]);
 	const [newMessages, setNewMessage] = useState("");
-	const [incomingMessage, setIncomingMessage] = useState("");
+	const [incomingMessage, setIncomingMessage] = useState<MessageProps>();
 	
-	let socket;
-	socket = useRef();
+	// let socket: Socket;
+	const socket = useRef<Socket | null>(null);
+	// socket = useRef( useRef<SocketIOClient.Socket | null>(null));
 	
-
 
 	useEffect(()=> {
 
@@ -144,7 +153,7 @@ function Chats(){
 				}
 			}
 			// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
-			if (currentChat !== null && currentChat.id === incomingMessage.convId)
+			if (currentChat && incomingMessage && currentChat.id === incomingMessage.convId)
 			{
 				console.log("incoming meaasge=",incomingMessage)
 				// if (user && !user.blocked.find(incomingMessage.sender))
@@ -160,8 +169,10 @@ function Chats(){
 	useEffect(()=> { 
 		const getMessage = async ()=>
 		{
+			if (!currentChat)
+				return ;
 			const data = {convId: currentChat.id};
-			
+
 			try {
 				const res = await api.post('/getMessage', data);
 				setMessage(res.data);
@@ -172,15 +183,19 @@ function Chats(){
 		getMessage();
 	}, [currentChat]);
 
-	const handleSubmit = async (e)=>{
+	const handleSubmit = async (e: { preventDefault: () => void; })=>{
 		e.preventDefault();
 		// console.log(`e= ${e.key}`)
 		// console.log(`name= ${user.username}`)
+		// let message;
+		if (!user || !currentChat)
+			return ;
 		const message = {
 			sender: user.username,
 			text: newMessages,
 			convId: currentChat.id,
-			members: null
+			members: null,
+			id: null,
 		};
 		try{
 			const res = await api.post('/message', message);
@@ -189,23 +204,27 @@ function Chats(){
 			message.id = res.data.id
 			setMessage([...messages, res.data]);
 			setNewMessage("");
-			socket.current.emit('sendMessage', message);
+			if (socket.current)
+				socket.current.emit('sendMessage', message);
 		} 
 		catch(err){
 			 console.log(err)
 		}
 	}
 
-	const handleKeyPress = async (e)=>{
+	const handleKeyPress = async (e: { key: string; })=> {
 		// console.log(`e in press= ${e.key}`)
 		if (e.key !== "Enter")
 			return ;
 		// console.log(`name= ${user.username}`)
+		if (!user || !currentChat)
+			return ;
 		const message = {
 			sender: user.username,
 			text: newMessages,
 			convId: currentChat.id,
-			members: null
+			members: null,
+			id: null,
 		};
 		try{
 			const res = await api.post('/message', message);
@@ -214,7 +233,8 @@ function Chats(){
 			message.id = res.data.id
 			setMessage([...messages, res.data]);
 			setNewMessage("");
-			socket.current.emit('sendMessage', message);
+			if (socket.current)
+				socket.current.emit('sendMessage', message);
 		} 
 		catch(err){
 			 console.log(err)
@@ -263,7 +283,7 @@ function Chats(){
 	// const closeBlock = () => setBlock(false);
 
 
-	const handleFriend = (event) => {
+	const handleFriend = (event: { target: { value: React.SetStateAction<string>; }; }) => {
 		setFriend(event.target.value);
 	  };
 	
@@ -328,7 +348,7 @@ function Chats(){
 			<div className='navbar'>
 				<img src={DefaultPic} alt="profile" className="pic"/>
 				<span>
-					{isLoading ? (
+					{isLoading || !user ? (
         				<h4>Loading...</h4>
       				) : (
         				<h4>{user.nickname}</h4>
@@ -417,7 +437,7 @@ function Chats(){
 			initial={false}
 			onExitComplete={() => null}
 			>
-			{setting && <ModalSetting handleClose={closeSetting} convId={currentChat.id}/>}
+			{setting && <ModalSetting handleClose={closeSetting} convId={currentChat.id.toString()}/>}
 		</AnimatePresence>
 		</motion.div>
 		</TouchDiv>
@@ -458,7 +478,7 @@ function Chats(){
 						<PartyInvite currentInvite={i}/>
 					))}
 
-					{conversations.map((c, index ) => {
+					{conversations.map((c: Conv, index ) => {
 						return (
 						<div key={index}
 							onClick={() => setCurrentChat(c)}>
@@ -466,7 +486,7 @@ function Chats(){
 							<img className="pic-user" src={DefaultPic} alt="User" />
 							<div className="infoSideBar">
 								<span>{c.name}</span>
-								<SideP>Desc?</SideP>
+								{/* <SideP>Desc?</SideP> */}
 							</div>
 							</UserChat>
 						</div>
@@ -475,12 +495,12 @@ function Chats(){
 				</div>
 
 				{
-					currentChat ? (
+					currentChat && user ? (
 						<>
 					<div className="messages">
 						<div className="scroll">
 							{messages.map(m=>(
-								<Message key={m.id} message= {m} own={m.sender === user.username}  user={m}/>
+								<Message key={m.id} message= {m} own={m.sender === user.username}/>
 								))}
 						</div>
 						{/* <Input/> */}

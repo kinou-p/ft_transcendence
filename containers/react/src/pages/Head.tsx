@@ -1,3 +1,5 @@
+import React from "react";
+
 function Head()
 {
 	return (
@@ -7,7 +9,7 @@ function Head()
 			<title>BEST PONG EVER</title>
     		{/* <script src="./script/login.js"></script> */}
 			<link rel="preconnect" href="https://fonts.googleapis.com"></link>
-			<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"></link>
+			{/* <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"></link> */}
 			<link href="https://fonts.googleapis.com/css2?family=Rubik+Iso&display=swap" rel="stylesheet"></link>
 		</div>
 	);

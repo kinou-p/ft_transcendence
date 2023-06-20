@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 16:44:29 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/19 17:26:22 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/20 03:47:52 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ import api from '../../script/axiosApi.tsx';
 import DefaultPicture from '../../assets/profile.jpg'
 import styled from "styled-components";
 
+import {User} from "../../../interfaces.tsx"
 import { RxCheckCircled, RxCircleBackslash } from "react-icons/rx";
 import React from "react";
 
@@ -38,10 +39,19 @@ const SideP = styled.p`
 	margin-left: 15px;
 `
 
-export default function  PartyInvite({currentInvite})
+interface InviteProps {
+	username: string,
+	gameId: string
+  }
+
+interface UserProps {
+	currentInvite: {username: string, gameId: string}
+  }
+
+export default function  PartyInvite({currentInvite}: UserProps)
 {
 	const [profilePicture, setProfilePicture] = useState('');
-	const [request, setRequest] = useState(''); //user who invite
+	const [request, setRequest] = useState<User>(); //user who invite
 	const [clickEvent, setClickEvent] = useState(false);
 	// const [user, setUser] = useState(null);
 	
@@ -65,18 +75,18 @@ export default function  PartyInvite({currentInvite})
 		  fetchProfilePicture();
 	}, [clickEvent])
 
-	const handleButtonClick = (user) => {
+	const handleButtonClick = (user: InviteProps) => {
 		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`; 
 		// history(path, { replace: true });
 		// window.location.replace(path);
-		window.history.pushState({}, null, path);
-		window.location.reload(false);
+		window.history.pushState({}, '', path);
+		window.location.reload();
 	};
 
 
 
 	
-	const Accept = async (request) => {
+	const Accept = async (request: User) => {
 		try{
 			//call canvas ??
 			// await api.post("/friend", {username: request.username})
@@ -85,8 +95,8 @@ export default function  PartyInvite({currentInvite})
 			path += 'username=' + request.username;
 			path += '&gameId=' + currentInvite.gameId;
 			// setClickEvent(true);
-			window.history.pushState({}, null, path);
-			window.location.reload(false);
+			window.history.pushState({}, '', path);
+			window.location.reload();
 		} catch(err) {
 			console.log(err);
 		}
@@ -94,7 +104,7 @@ export default function  PartyInvite({currentInvite})
 		console.log(`request = ${request}`)
 	}
 
-	const Refuse = async (request) => {
+	const Refuse = async (request: User) => {
 		try{
 			await api.post("/deleteInvite", {username: request.username})
 			// await api.post("/refuseInvite", {username: request.username})
@@ -118,12 +128,13 @@ export default function  PartyInvite({currentInvite})
 		 ) : (
 			 <img className="pic-user" src={DefaultPicture} alt="Default Profile Picture" />
 		 )}
+		{request ? (
 		<div className="infoSideBar">
 			<span onClick={() => handleButtonClick(currentInvite)}>{request.nickname}</span>
 			 <RxCheckCircled onClick={() => Accept(request)} color={'green'}/>
 			 <RxCircleBackslash onClick={() => Refuse(request)} color={'red'}/>
-
 		</div>
+			) : ( "" )}
 		</UserChat>
 	)
 }

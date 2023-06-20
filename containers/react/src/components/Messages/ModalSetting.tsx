@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
 import Backdrop from "../Sidebar/Backdrop.tsx";
-import { Rank } from "../../DataBase/DataRank"
+// import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
 import { useState, useEffect } from "react";
 import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import api from "../../script/axiosApi.tsx";
 import React from "react";
+import {User} from "../../../interfaces.tsx"
 
 
 const dropIn = {
@@ -25,11 +26,16 @@ const dropIn = {
 
 };
 
-const ModalSetting = ({handleClose, convId}) => {
+interface ModalSettingProps {
+	handleClose: Function,
+	convId: string
+}
+
+const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
     const [password, setPassword] = useState(false);
-	const [users, setUsers] = useState([]);
+	const [users, setUsers] = useState<User[]>([]);
 	const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
-	const [selectedUser, setSelectedUser] = useState([]);
+	const [selectedUser, setSelectedUser] = useState("");
 	const [newName, setNewName] = useState("");
 	const [newPassword, setNewPassword] = useState("");
 
@@ -52,7 +58,7 @@ const ModalSetting = ({handleClose, convId}) => {
     // const [selectedOptionArray, setSelectedOptionArray] = useState([]);
 
 
-    const handleOptionChange = (selectId, selectedOption) => {
+    const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("tag= ", selectTags)
 		console.log("option= ", selectedOption)
         setSelectTag((prevTags) => 
@@ -63,12 +69,12 @@ const ModalSetting = ({handleClose, convId}) => {
 		setSelectedUser(selectedOption)
     };
 
-	const handleCheckPass = (e) => {
+	const handleCheckPass = (e: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
 		setPassword(e.target.checked);
 		console.log("password??", e.target.checked)
 	}
 
-	const handleCheckPriv = (e) => {
+	const handleCheckPriv = (e: { target: { checked: any; }; }) => {
 		// setPassword(e.target.checked);
 		if (e.target.checked)
 		{
@@ -90,7 +96,7 @@ const ModalSetting = ({handleClose, convId}) => {
 		}
 	}
 
-	const handleName = async (e)=>{
+	const handleName = async (e: { key: string; })=>{
 		if (e.key !== "Enter")
 			return ;
 		try{
@@ -101,7 +107,7 @@ const ModalSetting = ({handleClose, convId}) => {
 		handleClose();
 	}
 
-	const handlePassword = async (e)=>{
+	const handlePassword = async (e: { key: string; })=>{
 		if (e.key !== "Enter")
 			return ;
 		try{
@@ -157,11 +163,10 @@ const ModalSetting = ({handleClose, convId}) => {
 	};
 
     return (
-        <Backdrop>
+        <Backdrop onClick={handleClose}>
             <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="modalSetting"
-                variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"

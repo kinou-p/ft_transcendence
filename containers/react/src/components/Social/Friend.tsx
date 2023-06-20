@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:18:58 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/18 13:12:26 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/20 13:41:44 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ import styled from "styled-components";
 import { RxCircle } from "react-icons/rx";
 import { CgFontSpacing } from "react-icons/cg";
 import React from "react";
+import {User} from "../../../interfaces.tsx"
 
 const UserChat = styled.div `
 	padding: 5px;
@@ -37,8 +38,12 @@ const SideP = styled.p`
 	color: lightgray;
 	margin-left: 15px;
 `
+interface UserProps {
+	currentUser: User
+  }
 
-export default function  Friend({currentUser})
+//   export default function  Friend({currentUser})
+export default function  Friend({currentUser}: UserProps)
 {
 	const [profilePicture, setProfilePicture] = useState('');
 	
@@ -58,7 +63,7 @@ export default function  Friend({currentUser})
 		  fetchProfilePicture();
 	})
 
-	function getStatus(friend)
+	function getStatus(friend: User)
 	{
 		let status = friend.status
 		console.log(`status= ${status}`)
@@ -73,19 +78,19 @@ export default function  Friend({currentUser})
 		return statusColor;
 	}
 
-	const handleSpectate = (user) => {
+	const handleSpectate = (user: User) => {
 		//socket connection and add to party with one with username
 		console.log(`spectate hehe`)
 		console.log(`user= ${user}`)
 	};
 
-	const handleButtonClick = (user) => {
+	const handleButtonClick = (user: User) => {
 		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`;
 		console.log("path= ", path)
 		// history(path, { replace: true });
 		// window.location.replace(path);
-		window.history.pushState({}, null, path);
-		window.location.reload(false);
+		window.history.pushState({}, '', path);
+		window.location.reload();
 	};
 
 	return (
@@ -97,7 +102,7 @@ export default function  Friend({currentUser})
 		 )}
 		<div className="infoSideBar">
 			<span onClick={() => handleButtonClick(currentUser)}>{currentUser.nickname}</span>
-			 <RxCircle icon={RxCircle} color={getStatus(currentUser)} />
+			 <RxCircle color={getStatus(currentUser)} />
 			 <button onClick={() => handleSpectate(currentUser)} >Invite</button>
 			 {getStatus(currentUser) !== 'blue' ? (
 				<></>

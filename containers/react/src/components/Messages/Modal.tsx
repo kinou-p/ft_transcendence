@@ -90,7 +90,7 @@ const Modal = ({handleClose}) => {
 			// test
 			await api.post("/conv", data);
 			handleClose();
-			window.location.reload(false);
+			window.location.reload();
 		} catch(err) {
 			console.log(err);
 		}

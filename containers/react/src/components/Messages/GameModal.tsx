@@ -2,10 +2,9 @@ import { motion } from "framer-motion";
 import Backdrop from "../Sidebar/Backdrop.tsx";
 import '../../styles/Messages.css';
 import { useState, useEffect } from "react";
-import { GrAdd } from "react-icons/gr";
-import { Link } from "react-router-dom";
 import api from "../../script/axiosApi.tsx";
 import React from "react";
+import {User} from "../../../interfaces.tsx"
 // import { useNavigate } from "react-router-dom";
 
 const dropIn = {
@@ -23,10 +22,15 @@ const dropIn = {
   exit: { y: "100vh", opacity: 0 },
 };
 
-const GameModal = ({ handleClose }) => {
+interface ModalGame {
+	handleClose: Function,
+	// convId: string
+}
+
+const GameModal = ({ handleClose }: ModalGame) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState('');
-  const [convs, setConvs] = useState([]);
+//   const [convs, setConvs] = useState([]);
   const [channel, setChannel] = useState('');
 
 //   const history = useNavigate();
@@ -35,9 +39,9 @@ const GameModal = ({ handleClose }) => {
     const fetchData = async () => {
       try {
         const tmpUsers = await api.get("/users");
-        const tmpConvs = await api.get("/convs");
+        // const tmpConvs = await api.get("/convs");
         setUsers(tmpUsers.data);
-        setConvs(tmpConvs.data);
+        // setConvs(tmpConvs.data);
       } catch (err) {
         console.log(err);
       }
@@ -45,7 +49,7 @@ const GameModal = ({ handleClose }) => {
     fetchData();
   }, []);
 
-  const handleUserChange = (event) => {
+  const handleUserChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setSelectedUser(event.target.value);
   };
 
@@ -66,18 +70,19 @@ const GameModal = ({ handleClose }) => {
 	// let path = `play?`;
 	let path = `http://` + process.env.REACT_APP_BASE_URL + `/pong/play?`;
 	
-	const superpowerCheckbox = document.querySelector('input[value="superpower"]');
-	if (superpowerCheckbox.checked) {
+
+	const superpowerCheckbox = document.querySelector<HTMLInputElement>('input[value="superpower"]');
+	if (superpowerCheckbox && superpowerCheckbox.checked) {
 	  path += 'superpower=true&';
 	}
   
-	const obstacleCheckbox = document.querySelector('input[value="obstacle"]');
-	if (obstacleCheckbox.checked) {
+	const obstacleCheckbox = document.querySelector<HTMLInputElement>('input[value="obstacle"]');
+	if (obstacleCheckbox && obstacleCheckbox.checked) {
 	  path += 'obstacle=true&';
 	}
   
-	const speedCheckbox = document.querySelector('input[value="speed"]');
-	if (speedCheckbox.checked) {
+	const speedCheckbox = document.querySelector<HTMLInputElement>('input[value="speed"]');
+	if (speedCheckbox && speedCheckbox.checked) {
 	  path += 'speed=true&';
 	}
 
@@ -91,18 +96,18 @@ const GameModal = ({ handleClose }) => {
 	// console.log("path= ", path)
 	// history(path, { replace: true });
 	// window.location.replace(path);
-	window.history.pushState({}, null, path);
-	window.location.reload(false);
+	window.history.pushState({}, '', path);
+	window.location.reload();
 
 	// history(path);
   };
 
   return (
-    <Backdrop>
+    <Backdrop onClick={handleClose}>
       <motion.div
         onClick={(e) => e.stopPropagation()}
         className="modal"
-        variant={dropIn}
+        // variant={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
@@ -110,7 +115,7 @@ const GameModal = ({ handleClose }) => {
         <div>
           <select value={selectedUser} onChange={handleUserChange}>
             <option value="">Select a user</option>
-            {users.map((user) => (
+            {users.map((user: User) => (
               <option key={user.id} value={user.username}>
                 {user.username}
               </option>
@@ -126,7 +131,7 @@ const GameModal = ({ handleClose }) => {
 				<p><input type="checkbox" value="speed"/> Faster and Faster </p>
 			</div>
 			<button className="submit" onClick={handleButtonClick} >Play</button>
-          	<button className="submit" onClick={handleClose}>Cancel</button>
+          	{/* <button className="submit" onClick={handleClose}>Cancel</button> */}
 		</div>
 
         {/* <div className="div_submit">

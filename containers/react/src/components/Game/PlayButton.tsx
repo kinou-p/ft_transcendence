@@ -1,3 +1,4 @@
+import React from 'react';
 import '../../styles/field.css';
 // import { useHistory } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
@@ -13,18 +14,18 @@ function PlayButton() {
 	const handleButtonClick = () => {
 		let path = `play?`;
 		
-		const superpowerCheckbox = document.querySelector('input[value="superpower"]');
-		if (superpowerCheckbox.checked) {
+		const superpowerCheckbox = document.querySelector<HTMLInputElement>('input[value="superpower"]');
+		if (superpowerCheckbox && superpowerCheckbox.checked) {
 		  path += 'superpower=true&';
 		}
 	  
-		const obstacleCheckbox = document.querySelector('input[value="obstacle"]');
-		if (obstacleCheckbox.checked) {
+		const obstacleCheckbox = document.querySelector<HTMLInputElement>('input[value="obstacle"]');
+		if (obstacleCheckbox && obstacleCheckbox.checked) {
 		  path += 'obstacle=true&';
 		}
 	  
-		const speedCheckbox = document.querySelector('input[value="speed"]');
-		if (speedCheckbox.checked) {
+		const speedCheckbox = document.querySelector<HTMLInputElement>('input[value="speed"]');
+		if (speedCheckbox && speedCheckbox.checked) {
 		  path += 'speed=true&';
 		}
 	  

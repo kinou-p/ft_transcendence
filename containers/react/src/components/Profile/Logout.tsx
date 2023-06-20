@@ -1,3 +1,4 @@
+import React from "react";
 
 
 
@@ -8,8 +9,9 @@ function Logout(){
 	// history(path, { replace: true });
 	// window.location.replace(path);
 	// window.history.pushState({}, '', path);
-	window.history.pushState({}, null, path);
-	window.location.reload(false);
+	window.history.pushState({}, '', path);
+	window.location.reload();
+	return (<></>)
 }
 
 export default Logout;

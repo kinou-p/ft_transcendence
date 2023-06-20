@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/19 20:27:00 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:27:00 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 
 // import * as React from 'react';
 // import { useState, useEffect, useParams} from "react";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, ChangeEventHandler } from "react";
 import { useParams } from 'react-router-dom';
+import {User, Conv} from "../../interfaces.tsx"
 	// axios.get("http://localhost/api")
 	// .then((response) => {
 	// 	response = response.json()
@@ -43,40 +44,88 @@ import { useParams } from 'react-router-dom';
 
 
 function Profile () {
-	const [user, setUser] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
-	const [modalOpen, setModalOpen] = useState(false);
-	const [mine, setMine] = useState(false);
+	const [user, setUser] = useState<User>();
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [modalOpen, setModalOpen] = useState<boolean>(false);
+	const [mine, setMine] = useState<boolean>(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
 
 	const { username } = useParams();
 
-	const [selectedPhoto, setSelectedPhoto] = useState(null);
+	// const [selectedPhoto, setSelectedPhoto] = useState();
+	// const [selectedPhoto, setSelectedPhoto] = useState(null);
+
 	const [profilePicture, setProfilePicture] = useState('');
 
-	const handleFileChange = (event) => {
-	//   const file = event.target.files[0];
-	  setSelectedPhoto(event.target.files[0]);
-	//   try{
-	// 	api.post("/picture", {picture: URL.createObjectURL(file)})
-	// 	}
-	//   catch(err){
-	// 	console.log(err);
-	//     }
-	};
+	// const handleFileChange = (event: { target: { files: React.SetStateAction<null>[]; }; }) => {
+	// //   const file = event.target.files[0];
+	//   setSelectedPhoto(event.target.files[0]);
+	// //   try{
+	// // 	api.post("/picture", {picture: URL.createObjectURL(file)})
+	// // 	}
+	// //   catch(err){
+	// // 	console.log(err);
+	// //     }
+	// };
 
-	const handleUpload = async () => {
-		const formData = new FormData();
-		formData.append('photo', selectedPhoto);
-		try {
-		  await api.post('/picture', formData);
-		  console.log('File uploaded successfully');
-		  window.location.reload(false);
-		} catch (error) {
-		  console.error('Error uploading file:', error);
-		}
+	// const handleFileChange = (event: { target: { files: React.SetStateAction<null>[] | FileList; }; }) => {
+		// const files = event.target.files;
+	// 	if (event.target.files && event.target.files.length > 0) {
+	// 		setSelectedPhoto(event.target.files[0]);
+	// 	}
+	//   };
+
+	const handleFileChange = async (event: { target: { files: any; }; }) => {
+		// const files = event.target.files;
+		// if (files && files.length > 0) {
+		  const photo = (event.target.files[0]);
+		  console.log("file selected")
+		  if (photo) {
+			console.log("selected photo")
+			  const formData = new FormData();
+			  formData.append('photo', photo);
+			  try {
+				await api.post('/picture', formData);
+				console.log('File uploaded successfully');
+				window.location.reload();
+			  } catch (error) {
+				console.error('Error uploading file:', error);
+			  }
+			} 
+		// }
 	  };
+
+	// const handleUpload = async () => {
+	// 	const formData = new FormData();
+	// 	formData.append('photo', selectedPhoto);
+	// 	try {
+	// 	  await api.post('/picture', formData);
+	// 	  console.log('File uploaded successfully');
+	// 	  window.location.reload();
+	// 	} catch (error) {
+	// 	  console.error('Error uploading file:', error);
+	// 	}
+	//   };
+
+	// const handleUpload = async (event: React.FormEvent) => {
+	// 	event.preventDefault()
+	// 	console.log("up photo")
+	// 	if (selectedPhoto) {
+	// 	console.log("selected photo")
+	// 	  const formData = new FormData();
+	// 	  formData.append('photo', selectedPhoto);
+	// 	  try {
+	// 		await api.post('/picture', formData);
+	// 		console.log('File uploaded successfully');
+	// 		window.location.reload();
+	// 	  } catch (error) {
+	// 		console.error('Error uploading file:', error);
+	// 	  }
+	// 	} else {
+	// 	  console.log('No file selected');
+	// 	}
+	//   };
 
 	useEffect(()=> {
 		const getUser = async ()=>{
@@ -122,7 +171,7 @@ function Profile () {
  				<img className="profile-pic" src={DefaultPicture} alt="Default Profile Picture" />
  			)}
 			<span>
-					{isLoading ? (
+					{isLoading || !user ? (
         				<h1>Loading...</h1>
       				) : (
         				<h1>{user.nickname}</h1>
@@ -142,7 +191,8 @@ function Profile () {
 				<div className="file-upload-container">
   					<label htmlFor="file-input" className="file-label">Choose File</label>
   					<input type="file" id="file-input" className="file-input" accept="image/*" onChange={handleFileChange} />
-  					<button onClick={handleUpload} className="upload-button">Upload</button>
+  					{/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
+					  {/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
 				</div>
 			</div>
 				  ) : (

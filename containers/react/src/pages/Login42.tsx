@@ -1,6 +1,7 @@
 // import GoogleLogin from 'react-google-login';
 import { useEffect } from 'react';
 import axios from 'axios';
+import React from 'react';
 // import setupLogin from '../script/login42';
 // import React, { useEffect } from 'react';
 
@@ -37,7 +38,7 @@ function Login42()
 
 	return (
 		<div>
-			<p>"COUCOU LOGIN$@ jeje" </p>
+			<p>"COUCOU LOGIN" </p>
 			{/* <script src="../script/login42.js"></script> */}
 		</div>
 	);

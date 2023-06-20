@@ -52,7 +52,7 @@ const ModalEdit = ( handleClose ) => {
 		console.log("nickname=" ,nickname)
 		try{
 			await api.post("/nickname", {nickname: nickname})
-			window.location.reload(false);
+			window.location.reload();
 			// setUser(tmpUser.data);
 			// setIsLoading(false)
 		}

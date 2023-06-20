@@ -4,6 +4,7 @@
 // import '../DataBase/DataProfileUser.js'
 // import { DBWinLoss } from '../../DataBase/DummyDBWinLoss.js';
 import '../../styles/Win_Loss.css'
+import { User, Matchlog } from "../../../interfaces.tsx"
 // import { UserProfile } from '../../DataBase/DataUserProfile';
 // import color from '../../utils/style/color.js';
 
@@ -51,7 +52,7 @@ import api from '../../script/axiosApi.tsx';
 
 function WinLoss() {
 	
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState<User>();
 	const [history, setHistory] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	
@@ -88,13 +89,13 @@ function WinLoss() {
 
 
         <div className='tab'>
-		{isLoading ? (
+		{isLoading || !history || !user ? (
 			<h1>Loading...</h1>
 			// <span>Loading...</span>
 		  ) : (
 			  <div className='scroll'>
 				 <h2 className='title'>Match history Win/Loss</h2>
-                {history.map((c, index) => {
+                {history.map((c: Matchlog, index) => {
                     return (
                         <div key={index} className='elements'>
                         <li key={index}>

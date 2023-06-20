@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 
 // import {io} from 'socket.io-client'
 
-function Messages(params) {
+function Messages() {
 	// const socket = useRef(io("ws://localhost:8900"))
 
 	// useEffect(() => {

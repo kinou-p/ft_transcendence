@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import { RxCheckCircled, RxCircleBackslash } from "react-icons/rx";
 import React from "react";
+import {User} from "../../../interfaces.tsx"
 
 const UserChat = styled.div `
 	padding: 5px;
@@ -26,10 +27,14 @@ const SideP = styled.p`
 	margin-left: 15px;
 `
 
-export default function  Friend({currentUser})
+interface UserProps {
+	currentUser: User
+  }
+
+export default function  Friend({currentUser}: UserProps)
 {
 	const [profilePicture, setProfilePicture] = useState('');
-	const [request, setRequest] = useState(''); //user who invite
+	const [request, setRequest] = useState<User>(); //user who invite
 	const [clickEvent, setClickEvent] = useState(false);
 	// const [user, setUser] = useState(null);
 	
@@ -53,15 +58,15 @@ export default function  Friend({currentUser})
 		  fetchProfilePicture();
 	}, [clickEvent])
 
-	const handleButtonClick = (user) => {
+	const handleButtonClick = (user: User) => {
 		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`; 
 		// history(path, { replace: true });
 		// window.location.replace(path);
-		window.history.pushState({}, null, path);
-		window.location.reload(false);
+		window.history.pushState({}, '', path);
+		window.location.reload();
 	};
 
-	const Accept = async (request) => {
+	const Accept = async (request: User) => {
 		try{
 			await api.post("/friend", {username: request.username})
 			setClickEvent(true);
@@ -72,7 +77,7 @@ export default function  Friend({currentUser})
 		console.log(`request = ${request}`)
 	}
 
-	const Refuse = async (request) => {
+	const Refuse = async (request: User) => {
 		try{
 			await api.post("/refuseInvite", {username: request.username})
 			setClickEvent(true);
@@ -95,12 +100,13 @@ export default function  Friend({currentUser})
 		 ) : (
 			 <img className="pic-user" src={DefaultPicture} alt="Default Profile Picture" />
 		 )}
+		{request ? (
 		<div className="infoSideBar">
 			<span onClick={() => handleButtonClick(currentUser)}>{currentUser.nickname}</span>
 			 <RxCheckCircled onClick={() => Accept(request)} color={'green'}/>
 			 <RxCircleBackslash onClick={() => Refuse(request)} color={'red'}/>
-
 		</div>
+			) : ( "" )}
 		</UserChat>
 	)
 }

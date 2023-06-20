@@ -8,7 +8,13 @@ import io from 'socket.io-client';
 // const socket = io('http://86.209.110.20:4000');
 // const socket = io('http://172.29.113.91:4000');
 
-function DrawCanvas(option: number, gameParam) {
+interface GameProps {
+	privateParty: boolean,
+	username?: string
+	gameId?: number
+}
+
+function DrawCanvas(option: number, gameParam: GameProps) {
 
 	console.log(`option= ${option}`);
 	const superpowerModifier = option & 1;  // Retrieves the superpower modifier
@@ -23,7 +29,6 @@ function DrawCanvas(option: number, gameParam) {
 	
 	// const socketRef = useRef(null);
 	// socketRef.current = io('http://localhost:4000');
-	const socket = io('http://' + process.env.REACT_APP_BASE_URL + ':4000');
 	
 	function launchGame()
 	{
@@ -43,17 +48,22 @@ function DrawCanvas(option: number, gameParam) {
 			joinPrivateParty();
 		}
 	}
-
+	
 	// const socket = socketRef.current
 	console.log("start function");
 	
-	let canvas;
-	canvas = document.getElementById('myCanvas');
+	// let canvas: HTMLElement | null;
+	const canvas = document.getElementById('myCanvas') as HTMLCanvasElement | null;;
+	if (!canvas)
+		return ;
 
 	const ctx = canvas.getContext('2d');
+	if(!ctx)
+		return ;
 	
+	const socket = io('http://' + process.env.REACT_APP_BASE_URL + ':4000');
 	// useEffect(() => {
-	// 	console.log("useeffect?????????????????")
+		// 	console.log("useeffect?????????????????")
 	// 	return () => {
 	// 		console.log("000000000000000000000000000000000")
 	// 	  socketRef.current.disconnect();
@@ -70,8 +80,8 @@ function DrawCanvas(option: number, gameParam) {
 	//socket
 	let myId = 0;
 	let gameId = 0;
-	let opName;
-	let opRank;
+	let opName: string
+	let opRank: number;
 
 	//general canvas
 	let running = true;
@@ -143,7 +153,7 @@ socket.on('pong:win', async () => {
 	socket.emit('pong:disconnect', {id: myId});
 	console.log("before reload")
 	window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
-	// window.location.reload(false);
+	// window.location.reload();
 	return ;
 	// console.log("send all ?? win");
 
@@ -286,7 +296,7 @@ socket.on('pong:point', (data) => {
 	
 	function send_info()
 	{
-		if (gameId === 0)
+		if (!gameId || !canvas)
 			return ;
 		const info = {
 			id: myId,
@@ -304,7 +314,7 @@ socket.on('pong:point', (data) => {
 
 	function send_point()
 	{
-		if (gameId === 0)
+		if (!gameId || !canvas)
 			return ;
 		console.log("send point");
 		const info = {
@@ -317,7 +327,7 @@ socket.on('pong:point', (data) => {
 
 	function send_paddle_info()
 	{
-		if (gameId === 0)
+		if (!gameId || !canvas)
 			return ;
 		const info = {
 			id: myId,
@@ -331,6 +341,8 @@ socket.on('pong:point', (data) => {
 
 	function use_power()
 	{
+		if (!canvas)
+			return ;
 		const info = {
 			gameId: gameId,
 			width: canvas.width,
@@ -342,7 +354,7 @@ socket.on('pong:point', (data) => {
 
 	function send_forced_info()
 	{
-		if (gameId === 0)
+		if (!gameId || !canvas)
 			return ;
 		const info = {
 			gameId: gameId,
@@ -367,6 +379,8 @@ socket.on('pong:point', (data) => {
 	function drawcenter()
 	{
 		// ctx.restore();
+		if (!ctx || !canvas)
+			return ;
 		ctx.fillStyle = 'white';
 		ctx.fillRect(canvas.width / 2 - ctx.lineWidth / 2, 0, canvas.width / 300, canvas.height);
 		
@@ -379,11 +393,13 @@ socket.on('pong:point', (data) => {
 		ctx.font = canvas.width * 0.1 + "px Arial";
 		ctx.textAlign = "center";
 		ctx.textBaseline = "middle";
-		ctx.fillText(myScore, canvas.width/4, canvas.height/8);
-		ctx.fillText(hisScore, canvas.width/1.25, canvas.height/8);
+		ctx.fillText(myScore.toString(), canvas.width/4, canvas.height/8);
+		ctx.fillText(hisScore.toString(), canvas.width/1.25, canvas.height/8);
 	}
 
 	function drawPaddle() {
+		if (!ctx || !canvas)
+			return ;
 		ctx.fillStyle = 'white';
 		ctx.fillRect(paddleX, paddleY, paddleWidth, paddleHeight);
 		ctx.fillRect(canvas.width - paddleX - paddleWidth, oPaddleY, paddleWidth, opPaddleHeight);
@@ -391,6 +407,8 @@ socket.on('pong:point', (data) => {
 
 	function drawball()
 	{
+		if (!ctx)
+			return ;
 		ctx.beginPath();
 		ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
 		// ctx.lineWidth = 2;
@@ -432,17 +450,17 @@ socket.on('pong:point', (data) => {
 	}
 	socket.emit('pong:disconnect', {id: myId});
 	window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
-	// window.location.reload(false);
+	// window.location.reload();
     // Perform any necessary cleanup tasks
     // ...
   };
 
-async function draw(timestamp)
+async function draw(timestamp: number)
 {
 	console.log("turning, running= ", running);
 	if (!running)	
 		return ;
-	if (gameId === 0 )
+	if (!gameId || !canvas )
 	{
 		// console.log("nogameid score= ", myScore);
 		requestAnimationFrame(draw);
@@ -473,7 +491,7 @@ async function draw(timestamp)
 			console.log("send loose");
 		}
 		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
-		// window.location.reload(false);
+		// window.location.reload();
 		return ;
 	}
 
@@ -482,6 +500,9 @@ async function draw(timestamp)
 	ballX += vX * deltaTime * canvas.width;
 	ballY += vY * deltaTime * canvas.height;
 
+	if (!ctx)
+		return ;
+		// requestAnimationFrame(draw);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	drawPaddle();
 	drawcenter();
@@ -518,14 +539,17 @@ async function draw(timestamp)
 	}
 
 
-	function updatePaddlePosition(newY)
+	function updatePaddlePosition(newY: number)
 	{
-		if (newY >= 0 && newY <= canvas.height - paddleHeight)
+
+		if (canvas && newY >= 0 && newY <= canvas.height - paddleHeight)
 			paddleY = newY;
 	}
 
 	function is_collision()
 	{
+		if (!canvas)
+			return ;
 		if (ballX <= paddleX + paddleWidth + ballRadius)
 		{
 			if (ballY <= paddleY + paddleHeight + ballRadius && ballY >= paddleY - ballRadius)//touch paddle
@@ -559,6 +583,8 @@ async function draw(timestamp)
 
 	function is_out()
 	{
+		if (!canvas)
+			return ;
 		if (ballX < 0)
 		{
 			if (ballY <= paddleY + paddleHeight + ballRadius && ballY >= paddleY - ballRadius)
@@ -605,12 +631,18 @@ async function draw(timestamp)
 //========================================================================================================
 //========================================================================================================
 
-	document.addEventListener('resize', event => {
-		// event.height
-		// event.width
-		const { clientWidth, clientHeight } = canvas.parentElement;
-		console.log(`resize detected widht= ${clientWidth} height= ${clientHeight}`)
-	});
+// interface sizeProps {
+// 	clientWidth: number,
+// 	clientHeight: number
+// }
+
+	// document.addEventListener('resize', event => {
+	// 	// event.height
+	// 	// event.width
+	// 	const { clientWidth, clientHeight } = canvas.parentElement;
+	// 	// const { clientWidth, clientHeight } = canvas.parentElement!;
+	// 	console.log(`resize detected widht= ${clientWidth} height= ${clientHeight}`)
+	// });
 
     document.addEventListener('mousemove', event => {
         const mouseY = event.clientY;

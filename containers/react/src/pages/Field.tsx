@@ -1,4 +1,4 @@
-import { useEffect, useLocation } from 'react';
+import { useEffect } from 'react';
 // import { useState, useRef } from 'react';
 import DrawCanvas from './canvas.tsx';
 import queryString from 'query-string';
@@ -9,6 +9,12 @@ import React from 'react';
 
 // import { withRouter } from 'react-router-dom';
 
+interface GameProps {
+	privateParty: boolean,
+	username?: string
+	gameId?: number
+}
+
 function Field()
 {
 	useEffect(() => {
@@ -17,7 +23,7 @@ function Field()
 		
 		console.log("launch canva hehe")
 		let Modifiers = 0;
-		let info;
+		let info: GameProps;
 
 		if (queryParams.superpower === 'true') {
 		  Modifiers += 1;
@@ -33,16 +39,16 @@ function Field()
 		
 		info = {
 			privateParty: false,
+			
 		}
 		if (queryParams.username)
 		{
 				console.log("user= ", queryParams.username)
 				info = {
 					privateParty: true,
-					username: queryParams.username,
+					username: queryParams.username as string,
+					gameId: queryParams.gameId as unknown as number
 				}
-				if (queryParams.gameId)
-					info.gameId = queryParams.gameId
 			console.log("info of param vefore canvas=", info)
 		}
 
@@ -50,9 +56,10 @@ function Field()
 	
 		return () => {
 		  console.log("Cleanup");
-		  cleanup(); // Call the cleanup function to stop the ongoing process or perform necessary cleanup tasks
+		//   cleanup(); // Call the cleanup function to stop the ongoing process or perform necessary cleanup tasks
+			if (cleanup)
+				cleanup();
 		};
-
 	}, []);
 
 	// const [buttonClicked, setButtonClicked] = useState(false);
