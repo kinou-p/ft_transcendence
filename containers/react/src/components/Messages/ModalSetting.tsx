@@ -38,6 +38,9 @@ const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
 	const [selectedUser, setSelectedUser] = useState("");
 	const [newName, setNewName] = useState("");
 	const [newPassword, setNewPassword] = useState("");
+	const [privateConv, setPrivateConv] = useState(false);
+	const dark = () => setPrivateConv(true);
+	const light = () => setPrivateConv(false);
 
 	useEffect(()=> {
 
@@ -175,7 +178,11 @@ const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
 {/* First selection  */}
                 <div className="settingFirstPart">
                     <div>
-                        <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p>
+						<div>
+                    		<Link to="#" onClick={light} className={ privateConv ?  "submit" : "darkSubmit"}>Public</Link>
+							<Link to="#" onClick={dark} className={ privateConv ?  "darkSubmit" : "submit"}>Private</Link>
+						</div>
+                        {/* <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p> */}
                         <p className="checkbox">Password<input type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
                         
 						

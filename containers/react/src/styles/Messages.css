@@ -204,6 +204,18 @@ p {
 	margin: 1%;
 }
 
+.darkSubmit{
+	display: inline-block;
+	color: white;
+	background-color:  #282155;
+	border-radius: 10px;
+	padding: 5px;
+	font-size: 1.2rem;
+	text-decoration: none;
+	font-weight:lighter;
+	margin: 1%;
+}
+
 .div_submit {
 	flex-direction: row;
 	align-items: center;
