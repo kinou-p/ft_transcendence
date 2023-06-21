@@ -89,6 +89,16 @@ span {
 	border-radius: 50%;
 }
 
+.success {
+	height: 25px;
+	width: 25px;
+	/* border: solid; */
+	margin-top: 2.5vh;
+	margin-left: 1vh;
+	/* border-color: black; */
+	/* border-radius: 50%; */
+}
+
 .header-pic{
 	text-align: end;
 	/* id: right; */
