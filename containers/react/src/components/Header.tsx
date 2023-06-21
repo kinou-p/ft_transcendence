@@ -53,18 +53,7 @@ function Header() {
 				</Link>
 		</motion.div>
 		<div className='end'>
-
-			{success.otp_verified ? (
-					<MdQrCodeScanner className='success' />
-			):("")}
-			{success.win >= 2 ? (
-				<GiWingedSword className="success" />
-			):("")}
-
-			{success.win >= 5 ? (
-				<GiCrownedSkull className="success" />
-			):("")}
-			
+				
 			<Link to="/profile" className='menu-bars'>
 			<div>
 				

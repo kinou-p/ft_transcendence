@@ -288,6 +288,12 @@ p {
 	background-color: rgba(212, 175, 55, 0.7);
 	font-size: 25px;
 	color: rgba(255, 255, 255, 1);
+	flex-wrap: wrap;
+}
+
+.yellowAlert::p {
+	overflow-wrap: break-word;
+	max-width: 1000px;
 }
 
 .modalSetting{

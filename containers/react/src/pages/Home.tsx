@@ -36,6 +36,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import React, { useState, useEffect, useRef, ChangeEventHandler } from "react";
 import { useParams } from 'react-router-dom';
 import {User, Conv} from "../../interfaces.tsx"
+import YellowAlert from '../components/Alert/YellowAlert.tsx';
 	// axios.get("http://localhost/api")
 	// .then((response) => {
 	// 	response = response.json()
@@ -185,8 +186,8 @@ function Profile () {
 
 			  {mine ? (
 			<div>
-				<motion.div  onClick={() => (modalOpen ? close() : open())}>
-					<Link to="#" className="edit_name">
+				<motion.div >
+					<Link to="#" className="edit_name" onClick={() => (modalOpen ? close() : open())}>
 						{modalOpen === true ?  <IoCloseCircleOutline/> : <CgEditMarkup/>}
 					</Link>
 					{modalOpen === true ? ("") : (
@@ -220,6 +221,15 @@ function Profile () {
 function Home () {
 	const [move, setmove ] = useState(false);
 	const [user, setUser] = useState([]);
+
+	const [successQr, setSuccessQr] = useState(false);
+	const [successSword, setSuccessSword] = useState(false);
+	const [successCrown, setSuccessCrown] = useState(false);
+	const closeQr = () => setSuccessQr(false);
+	const closeSword = () => setSuccessSword(false);
+	const closeCrown = () => setSuccessCrown(false);
+
+
 	useEffect(() => {
 		const fetchSuccess = async () => {
 			try {
@@ -240,16 +250,16 @@ function Home () {
 		animate={{opacity: 1}}
 		exit={{opacity: -1}}>
 			<div>
-				{/* {user.otp_verified ? ( */}
-					<MdQrCodeScanner className='success' />
-				{/* ):("")} */}
-				{/* {user.win >= 2 ? ( */}
-					<GiWingedSword className="success" />
-				{/* ):("")} */}
+				{user.otp_verified ? (
+					<MdQrCodeScanner className='success' onClick={() => setSuccessQr(true)}/>
+					 ):("")} 
+				{user.win >= 2 ? (
+					<GiWingedSword className="success" onClick={() => setSuccessSword(true)}/>
+					 ):("")} 
 
-				{/* {user.win >= 5 ? ( */}
-					<GiCrownedSkull className="success" />
-				{/* ):("")} */}
+				{user.win >= 5 ? (
+					<GiCrownedSkull className="success" onClick={() => setSuccessCrown(true)}/>
+					 ):("")} 
 			</div>
 		<div className="home">
 			<motion.div animate={{x: move ? -200: 120}}
@@ -266,7 +276,20 @@ function Home () {
 				onClick={ () => setmove(!move)}>
 					<Link to="#" className="history"><AiOutlineHistory/>  Match History</Link>
 			</motion.div>
-		</motion.div>
+			<AnimatePresence initial={false} onExitComplete={() => null}>
+          		{successQr ? (
+			  	<YellowAlert handleClose={closeQr} text={"Success: You have the 2fa success!"} icon={1} />
+			  	) : ("")}
+
+				{successCrown ? (
+			  	<YellowAlert handleClose={closeCrown} text={"Success: 5 victory ? You won king slayer success!"} icon={2}/>
+			  	) : ("")}
+
+				{successSword ? (
+			  	<YellowAlert handleClose={closeSword} text={"Success: 2 victory ? You won the noobi warrior success!"} icon={3}/>
+			  	) : ("")}
+        </AnimatePresence>
+		</motion.div> 
     )
 }
 
