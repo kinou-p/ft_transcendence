@@ -41,6 +41,10 @@ const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
 	const [privateConv, setPrivateConv] = useState(false);
 	const dark = () => setPrivateConv(true);
 	const light = () => setPrivateConv(false);
+	const [mute, setMute] = useState(false);
+	const darkMute = () => setMute(false);
+	const lightMute = () => setMute(true);
+
 
 	useEffect(()=> {
 
@@ -186,11 +190,11 @@ const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
                         <p className="checkbox">Password<input type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
                         
 						
-						{password ? (
+						{password || privateConv ? (
 							<input 
 								onChange={(e) => setNewPassword(e.target.value)}
 								onKeyDown={handlePassword} 
-								type="text"
+								type="password"
 								className="in"
 								placeholder="Password"/>
 							):
@@ -236,11 +240,14 @@ const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
                 <div>
 					<Link to="#" onClick={handleInvite} className="submit">Send</Link>
                     <Link to="#" onClick={handleBan} className="submit">Ban</Link>
-                    <Link to="#" onClick={handleMute} className="submit">Mute</Link>
+                    <Link to="#" onClick={mute ? darkMute : lightMute} className={mute ? "darkSubmit": "submit"}>Mute</Link>
                     <Link to="#" onClick={handleAdmin} className="submit">Admin</Link>
                 </div>
 
                 </div>
+					{mute ? (
+						<input type="text" className="in_howLong" placeholder="How long ?" />
+					):("")}
 
             </motion.div>
         </Backdrop>

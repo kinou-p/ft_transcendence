@@ -310,7 +310,7 @@ p {
 
 .settingSecondPart{
 	margin-top: 10%;
-	margin-left: 10%;
+	margin-left: 5%;
 
 	/* margin-left: 20%; */
 }
@@ -327,6 +327,15 @@ input.in{
 	color: white;
 	border-radius: 12px;
 	width: 70%;
+}
+
+input.in_howLong{
+	margin-top: 14.5%;
+	margin-left: 0px;
+	background-color: black;
+	color: white;
+	border-radius: 12px;
+	width: 15%;
 }
 
 .mdp{

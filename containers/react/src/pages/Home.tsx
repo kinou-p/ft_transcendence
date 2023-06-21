@@ -21,6 +21,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from "react-router-dom";
 import ModalEdit from "../components/Profile/EditName.tsx";
 import {AiOutlineHistory} from 'react-icons/ai'
+import { MdQrCodeScanner, MdOutlinePhotoLibrary } from 'react-icons/md';
+import { GiWingedSword, GiCrownedSkull } from 'react-icons/gi';
+
 // import { Link } from "react-router-dom";
 // import {UserProfile} from "../DataBase/DataUserProfile";
 // import axios from "axios";
@@ -186,14 +189,18 @@ function Profile () {
 					<Link to="#" className="edit_name">
 						{modalOpen === true ?  <IoCloseCircleOutline/> : <CgEditMarkup/>}
 					</Link>
+					{modalOpen === true ? ("") : (
+						<>
+							<label htmlFor="file-input" className="edit_name"><MdOutlinePhotoLibrary/></label>
+							<input type="file" id="file-input" className="file-input" accept="image/*" onChange={handleFileChange} />
+						</>
+					)}
 				</motion.div>
 			
-				<div className="file-upload-container">
-  					<label htmlFor="file-input" className="file-label">Choose File</label>
-  					<input type="file" id="file-input" className="file-input" accept="image/*" onChange={handleFileChange} />
+				{/* <div className="file-upload-container"> */}
   					{/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
 					  {/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
-				</div>
+				{/* </div> */}
 			</div>
 				  ) : (
 						  <></>
@@ -212,13 +219,40 @@ function Profile () {
 
 function Home () {
 	const [move, setmove ] = useState(false);
+	const [user, setUser] = useState([]);
+	useEffect(() => {
+		const fetchSuccess = async () => {
+			try {
+				const tmpUser = await api.get("/profile");
+				setUser(tmpUser.data);
+			}
+			catch (error)
+			{
+				console.log(error);
+			}
+		};
+		fetchSuccess();
+	})
+
     return (
 		<motion.div className="page"
 		initial={{opacity: -1}}
 		animate={{opacity: 1}}
 		exit={{opacity: -1}}>
+			<div>
+				{/* {user.otp_verified ? ( */}
+					<MdQrCodeScanner className='success' />
+				{/* ):("")} */}
+				{/* {user.win >= 2 ? ( */}
+					<GiWingedSword className="success" />
+				{/* ):("")} */}
+
+				{/* {user.win >= 5 ? ( */}
+					<GiCrownedSkull className="success" />
+				{/* ):("")} */}
+			</div>
 		<div className="home">
-			<motion.div animate={{x: move ? -200: 170}}
+			<motion.div animate={{x: move ? -200: 120}}
 				transition={{type: "tween", duration: 0.5}}>
 					<Profile/>
 			</motion.div>
