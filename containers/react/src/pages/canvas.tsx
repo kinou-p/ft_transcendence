@@ -61,7 +61,7 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 	if(!ctx)
 		return ;
 	
-	const socket = io('http://' + process.env.REACT_APP_BASE_URL + ':4000');
+	const socket = io('http://' + process.env.REACT_APP_BASE_URL + ':4000', { transports: ['polling'] });
 	// useEffect(() => {
 		// 	console.log("useeffect?????????????????")
 	// 	return () => {
@@ -137,14 +137,14 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 socket.on('pong:win', async () => {
 	myScore = maxScore;
 	console.log("instant win opponent disconnect")
-	const data = {
-		myScore: myScore,
-		opScore: hisScore,
-		opName: opName,
-		opRank: opRank,
-	};
+	// const data = {
+	// 	myScore: myScore,
+	// 	opScore: hisScore,
+	// 	opName: opName,
+	// 	opRank: opRank,
+	// };
 
-	await api.post('/win', data);
+	// await api.post('/win', data);
 	console.log("after request1")
 	await api.post('/status', {status: 1});
 	console.log("after request2")
@@ -152,7 +152,7 @@ socket.on('pong:win', async () => {
 	running = false;
 	socket.emit('pong:disconnect', {id: myId});
 	console.log("before reload")
-	window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
+	// window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
 	// window.location.reload();
 	return ;
 	// console.log("send all ?? win");
@@ -468,6 +468,7 @@ async function draw(timestamp: number)
 	}
 	if (myScore === maxScore || hisScore === maxScore)
 	{
+		console.log("maxScore!!!!")
 		const data = {
 			myScore: myScore,
 			opScore: hisScore,
@@ -485,8 +486,9 @@ async function draw(timestamp: number)
 		}
 		else
 		{
-			// await api.post('/loss', data);
-			// await api.post('/status', {status: 1});
+			await api.post('/loss', data);
+			await api.post('/status', {status: 1});
+			socket.emit('pong:disconnect', {id: myId});
 			//disconnect ?
 			console.log("send loose");
 		}
@@ -604,7 +606,9 @@ async function draw(timestamp: number)
 		}
 		if (ballX > canvas.width)
 		{
-			console.log("win point")
+			// if (ballX > canvas.width * 2)
+				// socket.emit
+			// console.log("win point")
 			// if (ballY <= paddleY + paddleHeight + ballRadius && ballY >= paddleY - ballRadius)
 			// {
 			// 	console.log('true hehe');

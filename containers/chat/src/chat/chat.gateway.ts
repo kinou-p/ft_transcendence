@@ -98,85 +98,80 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		  }
   }
 
-  @SubscribeMessage('socket.io')
-  socketConnect(client: any, payload: any): void {
-	console.log("/socket.io")
+//   @SubscribeMessage('socket.io')
+//   socketConnect(client: any, payload: any): void {
+// 	console.log("/socket.io")
+// }
+
+@SubscribeMessage('ban')
+banUser(client: any, payload: any): void {
+	if (!this.clientsNames.has(payload.username))
+	{
+		console.log("No user found.");
+		return;
+	}
+	const bannedClients = this.clientsNames.get(payload.username);
+	bannedClients.forEach(client => {
+		console.log("Banning client:", client);
+		// Perform ban operation on each client, e.g., emit a 'ban' event
+		console.log("clietn socket=", this.clients[client])
+		this.clients[client].emit('ban', payload);
+	  });
+	//   console.log("/ban")
+//   console.log("in ban username=", payload.username)
+//   if (!this.clientsNames[payload.username])
+//   {
+// 	console.log("no user ??")
+// 	return ;	
+//   }
+// 	this.clientsNames[payload.username].forEach()
+// 	console.log("client=", this.clientsNames)
+//   this.clients[payload.username].emit('ban', payload)
+}
+
+@SubscribeMessage('mute')
+muteUser(client: any, payload: any): void {
+	if (!this.clientsNames.has(payload.username))
+	{
+		console.log("No user found.");
+		return;
+	}
+	const mutedClients = this.clientsNames.get(payload.username);
+	mutedClients.forEach(client => {
+		console.log("Banning client:", client);
+		// Perform ban operation on each client, e.g., emit a 'ban' event
+		console.log("clietn socket=", this.clients[client])
+		this.clients[client].emit('mute', payload);
+	});
+	console.log("/mute")
 }
   
-
-	// @SubscribeMessage('sendMessage')
-	// handleMessage(user: any, payload: any): void {
-	// 	console.log(`message recceveid: ${payload}`)
-	// 	console.log(`message recceveid: ${payload.sender}`)
-	// 	console.log(`message recceveid: ${payload.convId}`)
-	// 	console.log(`message recceveid: ${payload.members}`)
-
-	// 	console.log(`client id: ${user.id}`)
-
-	// 	this.clientsNames.forEach((clientArray, clientName) => {
-	// 		console.log(`Clients with name ${clientName}:`);
-			
-	// 		// clientArray.forEach((client) => {
-	// 		this.clientsNames[clientName]
-	// 		// .forEach(client => {
-	// 		// 	// if(client.id != user.id)
-	// 		// 	// {
-	// 		// 		console.log("send to someone")
-	// 		// 		console.log(client); // Perform actions on each client
-	// 		// 		// clients.emit('message', payload)
-	// 		// 		client.emit('message')
-	// 		// 	// }
-	// 		// });
-			
-	// 		// .forEach((client) => {
-	// 			// if(client.id != user.id)
-	// 			// {
-	// 			// 	console.log("send to someone")
-	// 			// 	console.log(client); // Perform actions on each client
-	// 			// 	// clients.emit('message', payload)
-	// 			// 	client.emit('message')
-	// 			// }
-	// 		});
-	// 	  };
 
 	@SubscribeMessage('sendMessage')
 	handleMessage(client: Socket, payload: any): void {
 	//   console.log(`message received: ${payload}`);
-	  console.log(`message sender: ${payload.sender}`);
-	  console.log(`client id: ${client.id}`);
-	  console.log(`conversation ID: ${payload.convId}`);
-	  console.log(`members: ${payload.members}`);
+	//   console.log(`message sender: ${payload.sender}`);
+	//   console.log(`client id: ${client.id}`);
+	//   console.log(`conversation ID: ${payload.convId}`);
+	//   console.log(`members: ${payload.members}`);
 	
 	  this.clientsNames.forEach((clientArray, clientName) =>
 	  {
-		console.log(`		5Clients with name ${clientName}:`);
+		// console.log(`		5Clients with name ${clientName}:`);
 		if (payload.members.includes(clientName))
 		{
 			clientArray.forEach((targetClient, index) =>
 			{
-			  console.log(`client id: ${client.id}`);
-			  console.log(`target: ${targetClient}`);
-			  console.log(`target id: ${targetClient}`);
+			//   console.log(`client id: ${client.id}`);
+			//   console.log(`target: ${targetClient}`);
+			//   console.log(`target id: ${targetClient}`);
 			  if (targetClient && targetClient !== client.id)
 			  {
-				console.log("Sending to someone");
-				console.log(`index= ${index}`);
-				console.log(`target: ${targetClient}`); // Perform actions on each target client
-				// targetClient.emit('message')
-				// this.clientsNames[clientName].emit('message')
-				// this.clientsNames["apommier"].emit('message')
+				// console.log("Sending to someone");
+				// console.log(`index= ${index}`);
+				// console.log(`target: ${targetClient}`); // Perform actions on each target client
 				this.clients[targetClient].emit('message', payload)
-				// console.log(test)
-				// console.log(test)
-				// this.clientsNames[clientName][index].emit('message');
-				// const socket = this.server.sockets.sockets.get(targetClient.id);
-				// if (socket) {
-				//   socket.emit('message', payload);
-				// } else {
-				//   console.log(`Socket with ID ${client.id} not found.`);
-				// }
-				// targetClient.emit('message', payload);
-				// targetClient.emit('message', payload);
+
 			  }
 			  else {
 				console.log("not sending");
@@ -190,42 +185,4 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 
-
-
-		// for (let key in this.clientsNames) {
-		// 	if (payload.members.includes(key)) {
-		// 		console.log("Key exists in the array");
-		// 		// if (key !== payload.sender)
-		// 		// {
-		// 			for (let key2 in this.clientsNames[key])
-		// 			{
-		// 				if (client.id !== this.clientsNames[key][key2])
-		// 				{
-		// 					console.log("send to someone")
-		// 					this.clientsNames[key][key2].emit('message', payload)
-		// 				}
-		// 			}
-		// 		// }
-		// 		//if member socket different from mine
-		// 			//send
-		// 	  } else {
-		// 		console.log("Key does not exist in the array");
-		// 	  }
-			//if key is in member
-				
-			// let socket = this.clients[key];
-			// console.log("Clé:", key);
-			// console.log("Socket:", socket);
-		// }
-		//		payload.convId // conv user instead ? 
-		//find user to send message to 
-		//const res = {
-			//convId: payload.convId
-			//sender: payload.sender
-
-		// }
-		//while (user of conv)//how to get conv user
-			// if (user connected)
-				//send res to user
-//   }
 

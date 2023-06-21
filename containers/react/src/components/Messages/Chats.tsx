@@ -97,6 +97,7 @@ function Chats(){
 	
 	// let socket: Socket;
 	const socket = useRef<Socket | null>(null);
+	// const socket = Socket<DefaultEventsMap, DefaultEventsMap> | null
 	// socket = useRef( useRef<SocketIOClient.Socket | null>(null));
 	
 
@@ -115,15 +116,22 @@ function Chats(){
 				setConversation(convs.data);
 				// console.log(`connection....`);
 				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001', { transports: ['polling'] });
-				// console.log(`connection done`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
-				socket.current.on('message', (data) => { //data should be a message ?
-					// console.log(`message received data= ${data.sender}`)
-					// console.log(`message received data= ${data.convId}`)
-					// console.log(`message received data= ${data.sender}`)
-					// console.log(`current chat = ${currentChat}`)
+				socket.current.on('message', (data) => { //data should be a message ?)
 					setIncomingMessage(data);
 				});
+
+				socket.current.on('ban', (data) => {
+					// setIncomingMessage(data);
+					console.log("banned hehe");
+					window.location.reload()
+				});
+
+				socket.current.on('mute', (data) => {
+					console.log("muted hehe");
+					//set mute var to true and do nothing
+				});
+				
 				setIsLoading(false)
 
 			}
@@ -133,6 +141,14 @@ function Chats(){
 			}
 		};
 		getConv();
+
+		return () => {
+			console.log("Cleanup");
+			if (socket.current)
+				socket.current.disconnect();
+		  //   cleanup(); // Call the cleanup function to stop the ongoing process or perform necessary cleanup tasks
+				// cleanup();
+		  };
 
 	}, [])
 
@@ -175,6 +191,7 @@ function Chats(){
 
 			try {
 				const res = await api.post('/getMessage', data);
+				console.log("message of conv=", res.data)
 				setMessage(res.data);
 			} catch(err) {
 
@@ -198,6 +215,14 @@ function Chats(){
 			id: null,
 		};
 		try{
+			const allowed = await api.post('/allowed', {convId: currentChat.id});
+			console.log("convid:", currentChat.id);
+			if (!allowed.data)
+			{
+				console.log("muted or banned");
+				return ;
+			}
+			console.log("not muted or banned");
 			const res = await api.post('/message', message);
 			const convMember = await api.post('/member', message);
 			message.members = convMember.data.members;
@@ -437,7 +462,7 @@ function Chats(){
 			initial={false}
 			onExitComplete={() => null}
 			>
-			{setting && <ModalSetting handleClose={closeSetting} convId={currentChat.id.toString()}/>}
+			{setting && <ModalSetting handleClose={closeSetting} convId={currentChat.id.toString()} socket={socket.current}/>}
 		</AnimatePresence>
 		</motion.div>
 		</TouchDiv>
