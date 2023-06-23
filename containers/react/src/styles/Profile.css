@@ -54,7 +54,7 @@
 
 
 
-  
+
 
 
 
@@ -80,6 +80,7 @@
 	border-radius: 50%;
 	border: thick;
 	border-color: red;
+	margin-left: 10px;
 	/* border-image: linear-gradient(90deg, #5843e4, #5a0760); */
 
 	/* margin-top: 20px; */
