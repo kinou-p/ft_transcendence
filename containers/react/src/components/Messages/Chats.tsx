@@ -83,7 +83,7 @@ interface MessageProps {
   }
 
 function Chats(){
-	
+
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [conversations, setConversation] = useState([]);
 	const [partyInvite, setPartyInvite] = useState([]);
@@ -94,7 +94,7 @@ function Chats(){
 	const [messages, setMessage] = useState<MessageProps[]>([]);
 	const [newMessages, setNewMessage] = useState("");
 	const [incomingMessage, setIncomingMessage] = useState<MessageProps>();
-	
+
 	// let socket: Socket;
 	const socket = useRef<Socket | null>(null);
 	// const socket = Socket<DefaultEventsMap, DefaultEventsMap> | null
@@ -114,8 +114,9 @@ function Chats(){
 				setPartyInvite(tmpInvite.data);
 				setUser(tmpUser.data);
 				setConversation(convs.data);
-				// console.log(`connection....`);
-				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001', { transports: ['polling'] });
+				console.log(`connection....`);
+				socket.current = io('http://localhost:4001', { transports: ['polling'] });
+				console.log(`connection done`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				socket.current.on('message', (data) => { //data should be a message ?)
 					setIncomingMessage(data);

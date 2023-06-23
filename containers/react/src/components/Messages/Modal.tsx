@@ -109,8 +109,6 @@ const Modal = ({handleClose}) => {
                 animate="visible"
                 exit="exit"
             >
-                {/* <p>New Conversation</p> */}
-
 				{selectTags.map((selectTag) => (
 				  <div key={selectTag.id}>
 				    <select

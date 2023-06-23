@@ -43,15 +43,6 @@ function Ranking(){
             <div className='scroll'>
                 {ranking.map((user, index) => (
 					<Rank user={user} index={index} key={user.username}/>
-					// return (
-						// <div className='rank_elements'>
-                        //         <div>
-						// 			<p>{index + 1}</p>
-                        //             <h4>{user.rank}: {user.nickname} <img className="profilePic" src={defaultpic}/></h4>
-                        //         </div>
-                        //         <h4 className='content'>{user.opponent}</h4>
-                        // </div>
-                        // )
                     ))}
             </div>
 			)}
