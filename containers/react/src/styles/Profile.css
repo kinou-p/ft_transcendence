@@ -54,7 +54,7 @@
 
 
 
-
+  
 
 
 
@@ -62,6 +62,7 @@
 .page {
 	text-align: center;
 	overflow-y: scroll;
+	/* height: 80vh; */
 	/* height: 50vh; */
 	/* width: 50vh; */
 	/* background-color: black; */
@@ -80,7 +81,6 @@
 	border-radius: 50%;
 	border: thick;
 	border-color: red;
-	margin-left: 10px;
 	/* border-image: linear-gradient(90deg, #5843e4, #5a0760); */
 
 	/* margin-top: 20px; */
@@ -97,11 +97,11 @@
 }
 
 .history{
-	display: inline-block;
+	display:inline-block;
 	color: white;
 	background-color:  #5843e4;
 	border-radius: 20px;
-	padding: 14px;
+	padding: 20px 500px;
 	font-size: 1.7rem;
 	text-decoration: none;
 	font-weight: bold;

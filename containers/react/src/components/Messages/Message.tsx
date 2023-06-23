@@ -6,15 +6,14 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 18:24:46 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/20 19:05:10 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 20:25:32 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import React, { HtmlHTMLAttributes } from "react";
 import { useEffect, useState, useRef } from "react";
-import api from '../../script/axiosApi';
+import api from '../../script/axiosApi.tsx';
 import styled from "styled-components"
-// import DefaultPicture from '../../assets/profile.jpg'
+import DefaultPicture from '../../assets/profile.jpg'
 // import { useRef } from "react";
 // import { useEffect } from "react";
 import '../../styles/Messages.css'
@@ -28,7 +27,6 @@ const MeStyleP = styled.p`
 	color: white;
 	margin-right: 20px;
 `
-<<<<<<< HEAD
 
 interface MessageMeProps {
 	message: Message;
@@ -44,20 +42,13 @@ function MessageMe({message, own}: MessageMeProps){
 	const [user, setUser] = useState<User>();
 	const scrollRef = useRef<HTMLDivElement>(null);
 
-	// console.log("Message eher")
 
-=======
-function MessageMe({message, own}){
-	
-	const [profilePicture, setProfilePicture] = useState('');
-	const scrollRef = useRef<HTMLDivElement>(null);
-	const DefaultPicture: string = '../../assets/profile.jpg'
->>>>>>> sadjigui
 	useEffect(() => {
 		if (scrollRef.current)
 		{
-			scrollRef.current.scrollIntoView({ behavior: "smooth",})
-		}
+			scrollRef.current.scrollIntoView({ behavior: "smooth"});
+		}})
+	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
 			//   const user = await api.get("/profile");
@@ -91,20 +82,13 @@ function MessageMe({message, own}){
 	};
 
 	if (!user || !sender || !conv)
-	{
-		// console.log("return")
 		return (<></>);
-	}
 	// console.log("result includes=", conv.banned.includes(user.username))
 	// console.log("result includes=", conv.blocked.includes(user.username))
 	if (user.blocked && user.blocked.includes(message.sender))
 		return (<></>);
-	// else if (conv.banned && conv.banned.includes(user.username))
-	// {
-		// console.log("return2")	
-		// return (<></>);
-	// }
-		// console.log("noy return")
+	else if (conv.banned && conv.banned.includes(user.username))
+		return (<></>);
 	// if (user.blocked.includes(message.sender))/
 
 	return (
