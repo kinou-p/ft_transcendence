@@ -119,7 +119,7 @@ function Chats(){
 				setUsers(tmpUsers.data);
 
 				// console.log(`connection....`);
-				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001', { transports: ['polling'] });
+				socket.current = io('http://localhost:4001', { transports: ['polling'] });
 				// console.log(`connection done`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				socket.current.on('message', (data) => { //data should be a message ?)

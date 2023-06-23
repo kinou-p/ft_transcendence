@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 15:58:14 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:33:51 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,43 +82,13 @@ function Profile () {
 		// }
 	  };
 
-	// const handleUpload = async () => {
-	// 	const formData = new FormData();
-	// 	formData.append('photo', selectedPhoto);
-	// 	try {
-	// 	  await api.post('/picture', formData);
-	// 	  console.log('File uploaded successfully');
-	// 	  window.location.reload();
-	// 	} catch (error) {
-	// 	  console.error('Error uploading file:', error);
-	// 	}
-	//   };
-
-	// const handleUpload = async (event: React.FormEvent) => {
-	// 	event.preventDefault()
-	// 	console.log("up photo")
-	// 	if (selectedPhoto) {
-	// 	console.log("selected photo")
-	// 	  const formData = new FormData();
-	// 	  formData.append('photo', selectedPhoto);
-	// 	  try {
-	// 		await api.post('/picture', formData);
-	// 		console.log('File uploaded successfully');
-	// 		window.location.reload();
-	// 	  } catch (error) {
-	// 		console.error('Error uploading file:', error);
-	// 	  }
-	// 	} else {
-	// 	  console.log('No file selected');
-	// 	}
-	//   };
-
 	useEffect(()=> {
 		const getUser = async ()=>{
 			console.log(`username= ${username}`)
 			// const pic
-			let pic
+			let pic;
 			try{
+				console.log("before request")
 				const me = await api.get("/profile")
 				if (!username)
 				{
@@ -202,7 +172,7 @@ function Profile () {
 
 function Home () {
 	const [move, setmove ] = useState(false);
-	const [user, setUser] = useState([]);
+	const [user, setUser] = useState<User>();
 
 	const [successQr, setSuccessQr] = useState(false);
 	const [successSword, setSuccessSword] = useState(false);
@@ -224,7 +194,7 @@ function Home () {
 			}
 		};
 		fetchSuccess();
-	})
+	}, []);
 
     return (
 		<motion.div className="page"
@@ -232,14 +202,13 @@ function Home () {
 		animate={{opacity: 1}}
 		exit={{opacity: -1}}>
 			<div>
-				{user.otp_verified ? (
+				{user && user.otp_verified ? (
 					<MdQrCodeScanner className='success' onClick={() => setSuccessQr(true)}/>
 					 ):("")} 
-				{user.win >= 2 ? (
+				{user && user.win >= 2 ? (
 					<GiWingedSword className="success" onClick={() => setSuccessSword(true)}/>
-					 ):("")} 
-
-				{user.win >= 5 ? (
+					 ):("")}
+				{user && user.win >= 5 ? (
 					<GiCrownedSkull className="success" onClick={() => setSuccessCrown(true)}/>
 					 ):("")} 
 			</div>
