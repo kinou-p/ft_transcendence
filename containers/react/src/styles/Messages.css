@@ -143,7 +143,7 @@ select{
 
 .input{
 	display: flex;
-	height: 50px;
+	height: 6vh;
 	background-color: white;
 	color:#060b26;
 	border: none;
