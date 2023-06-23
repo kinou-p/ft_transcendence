@@ -85,7 +85,7 @@ function QrCode () {
 				console.log("registered")
 				// history.push('/login')
 
-				const path = 'http://' + process.env.REACT_APP_BASE_URL + '/'; 
+				const path = 'http://' + process.env.REACT_APP_BASE_URL + '/';
 				window.history.pushState({}, '', path);
 				window.location.reload();
 
@@ -96,7 +96,7 @@ function QrCode () {
 				//alert ?? retry
 			}
 			// redirect('/test')
-		} 
+		}
 		catch(err){
 			 console.log(err)
 		}
@@ -105,7 +105,7 @@ function QrCode () {
 	const handleDesactivate = async () => {
 		try {
 			await api.post("/deleteOtp")
-			// const path = 'http://' + process.env.REACT_APP_BASE_URL + '/'; 
+			// const path = 'http://' + process.env.REACT_APP_BASE_URL + '/';
 			// window.history.pushState({}, '', path);
 			window.location.reload();
 		} catch(err) {
@@ -148,7 +148,7 @@ function QrCode () {
           <h1>Double Auth Validation</h1>
           <input
             onKeyDown={handleKeyPress}
-            type="text"
+            type="number"
             className="qr"
             placeholder="6 Digits Code"
             value={code}
@@ -164,8 +164,8 @@ function QrCode () {
 		<>
 		  <h1>Double Auth</h1>
 		  <input onKeyDown={handleKeyPress}
-		  		type="text" 
-				className="qr" 
+		  		type="text"
+				className="qr"
 				placeholder="6 Digits Code"
 				onChange={(e) => setCode(e.target.value)}
 		  />
