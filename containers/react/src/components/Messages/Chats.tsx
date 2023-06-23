@@ -108,15 +108,19 @@ function Chats(){
 				const convs = await api.get("/conv")
 				const tmpInvite = await api.get("/partyInvite")
 				const tmpUser = await api.get("/profile")
+				const tmpUsers = await api.get("/users");
+
 				console.log(convs);
 
 				// console.log("invite data use effect= ", tmpInvite.data);
 				setPartyInvite(tmpInvite.data);
 				setUser(tmpUser.data);
 				setConversation(convs.data);
-				console.log(`connection....`);
-				socket.current = io('http://localhost:4001', { transports: ['polling'] });
-				console.log(`connection done`);
+				setUsers(tmpUsers.data);
+
+				// console.log(`connection....`);
+				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001', { transports: ['polling'] });
+				// console.log(`connection done`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				socket.current.on('message', (data) => { //data should be a message ?)
 					setIncomingMessage(data);
@@ -281,6 +285,10 @@ function Chats(){
 
 	const [newGameModalOpen, setNewGameModalOpen] = useState(false);
 	const [newConversationModalOpen, setNewConversationModalOpen] = useState(false);
+
+    const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
+	const [users, setUsers] = useState<User[]>([]);
+
   
 	const openNewGameModal = () => {
 	  setNewGameModalOpen(true);
@@ -361,6 +369,15 @@ function Chats(){
 		setShowBlockAlert(false);
 	  };
 
+	  const handleOptionChange = (selectId: number, selectedOption: string) => {
+		console.log("selected Option=", selectedOption)
+        setSelectTag((prevTags) => 
+            prevTags.map((tag) =>
+                tag.id === selectId ? { ...tag, selectedOption } : tag
+            )
+        );
+    };
+
 //========================================================================================================
 //========================================================================================================
 //                                              HTML			                                  
@@ -425,9 +442,26 @@ function Chats(){
 					):("")}
 				</div> */}
 
-<div className="end">
-      <input className="lookForFriends" type="text" value={friend} onChange={handleFriend} />
-      <TouchDiv>
+				<div className="end">
+					{selectTags.map((selectTag) => (
+				  <div key={selectTag.id}>
+				    <select
+				      value={selectTag.selectedOption}
+					  className="lookForFriends"
+				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
+				    >
+				      <option value="">{
+					selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
+					}</option>
+				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.username)).map((item, index) => (
+				        <option key={index} value={item.username}>
+				          {item.username}
+				        </option>
+				      ))}
+				    </select>
+				  </div>
+				))}
+      	<TouchDiv>
         <motion.div onClick={handleAddFriend}>
           <MdOutlineGroupAdd />
         </motion.div>

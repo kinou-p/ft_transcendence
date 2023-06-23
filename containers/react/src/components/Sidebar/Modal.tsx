@@ -20,26 +20,6 @@ const dropIn = {
 	},
 }
 
-
-// function showBar (){
-// 	return (
-// 		 {SidebarData.map((item, index) => {	
-// 					 return (	
-// 					<motion.div
-// 					className="nav-menu"
-// 					// whileHover={{scale: 1.1}}
-// 					>
-// 				 <li key={index} className={item.cName}>	
-// 					 <Link to={item.path}>	
-// 						 {item.icon}	
-// 						 <span>{item.title}</span>	
-// 					 </Link>	
-// 				 </li>	
-// 			</motion.div>
-// 			 )
-// 		 })}	
-// 	)
-// }
 interface CloseProps {
 	handleclose: Function;
   }

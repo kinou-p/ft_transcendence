@@ -40,6 +40,13 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 	const [selectedUser, setSelectedUser] = useState("");
 	const [newName, setNewName] = useState("");
 	const [newPassword, setNewPassword] = useState("");
+	const [privateConv, setPrivateConv] = useState(false);
+	const dark = () => setPrivateConv(true);
+	const light = () => setPrivateConv(false);
+	const [mute, setMute] = useState(false);
+	const darkMute = () => setMute(false);
+	const lightMute = () => setMute(true);
+
 
 	useEffect(()=> {
 
@@ -183,15 +190,19 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 {/* First selection  */}
                 <div className="settingFirstPart">
                     <div>
-                        <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p>
+						<div>
+                    		<Link to="#" onClick={light} className={ privateConv ?  "submit" : "darkSubmit"}>Public</Link>
+							<Link to="#" onClick={dark} className={ privateConv ?  "darkSubmit" : "submit"}>Private</Link>
+						</div>
+                        {/* <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p> */}
                         <p className="checkbox">Password<input type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
                         
 						
-						{password ? (
+						{password || privateConv ? (
 							<input 
 								onChange={(e) => setNewPassword(e.target.value)}
 								onKeyDown={handlePassword} 
-								type="text"
+								type="password"
 								className="in"
 								placeholder="Password"/>
 							):
@@ -237,11 +248,14 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
                 <div>
 					<Link to="#" onClick={handleInvite} className="submit">Send</Link>
                     <Link to="#" onClick={handleBan} className="submit">Ban</Link>
-                    <Link to="#" onClick={handleMute} className="submit">Mute</Link>
+                    <Link to="#" onClick={mute ? darkMute : lightMute} className={mute ? "darkSubmit": "submit"}>Mute</Link>
                     <Link to="#" onClick={handleAdmin} className="submit">Admin</Link>
                 </div>
 
                 </div>
+					{mute ? (
+						<input type="text" className="in_howLong" placeholder="How long ?" />
+					):("")}
 
             </motion.div>
         </Backdrop>

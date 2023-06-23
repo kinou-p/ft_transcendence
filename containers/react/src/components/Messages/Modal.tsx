@@ -153,6 +153,10 @@ const Modal = ({handleClose}) => {
         			  ))}
         			</select>
       			)}
+				  {channel.private ? (
+					<input className="mdp" placeholder="password" type="text" />
+				  ):("")}
+
 
 				<div className="div_submit">
 					<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>

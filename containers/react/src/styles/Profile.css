@@ -61,12 +61,15 @@
 
 .page {
 	text-align: center;
+	overflow-y: scroll;
 	/* height: 50vh; */
 	/* width: 50vh; */
 	/* background-color: black; */
 }
 
 .profile {
+	align-items: center;
+	text-align: center;
 	flex-direction: row;
 	color: white;
 }
@@ -79,7 +82,7 @@
 	border-color: red;
 	/* border-image: linear-gradient(90deg, #5843e4, #5a0760); */
 
-	margin-top: 20px;
+	/* margin-top: 20px; */
 }
 
 .home{
@@ -106,7 +109,7 @@
 .div_history {
 	flex-direction: row;
 	align-items: center;
-	margin-top: -80px;
+	/* margin-top: -80px; */
 }
 
 .edit_name {

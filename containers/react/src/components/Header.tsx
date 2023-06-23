@@ -4,9 +4,13 @@ import {Link} from 'react-router-dom';
 import DefaultPicture from '../assets/profile.jpg'
 import { motion, AnimatePresence } from 'framer-motion'
 import Modal from './Sidebar/Modal.tsx';
+import YellowAlert from './Alert/YellowAlert.tsx';
 import '../styles/Header.css';
 
 import api from '../script/axiosApi.tsx';
+
+import { MdQrCodeScanner } from 'react-icons/md';
+import { GiWingedSword, GiCrownedSkull } from 'react-icons/gi';
 
 function Header() {
 	// const [sidebar, setSidebar] = useState(false);
@@ -14,6 +18,8 @@ function Header() {
 	const [modalOpen, setModalOpen] = useState(false);
 	const close = () => setModalOpen(false);
 	const open = () => setModalOpen(true);
+
+	const [success, setSuccess] = useState([]);
 	
 	const [profilePicture, setProfilePicture] = useState('');
 
@@ -23,6 +29,8 @@ function Header() {
 			const user = await api.get("/profile");
 			const pic = await api.post("/getPicture", {username: user.data.username})
         	setProfilePicture(pic.data);
+			// console.log("test ===", user.data)
+			setSuccess(user.data);
 			// console.log(`profile pic222= ${pic.data}`)
 		  } catch (error) {
 			console.error('Error fetching profile picture:', error);
@@ -31,10 +39,6 @@ function Header() {
 		if (localStorage.getItem('token'))
 			fetchProfilePicture();
 	  }, []);
-
-	// console.log(`profile pic= ${profilePicture}`)
-
-	// photo.toString('base64')
 
   return (
 	<div className='Header'>
@@ -45,6 +49,7 @@ function Header() {
 				</Link>
 		</motion.div>
 		<div className='end'>
+				
 			<Link to="/profile" className='menu-bars'>
 			<div>
 				

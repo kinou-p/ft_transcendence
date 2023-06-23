@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import { GrTrophy } from "react-icons/gr";
 import '../../styles/Messages.css'
 import React from "react";
+import { MdQrCodeScanner } from "react-icons/md";
+import { GiCrownedSkull, GiWingedSword } from "react-icons/gi";
 
 const dropIn = {
     hidden: {
@@ -18,10 +20,11 @@ const dropIn = {
 
 interface AlertProps {
 	handleClose: Function,
-	text: string
+	text: string,
+    icon: number
   }
 
-function YellowAlert ({handleClose, text}: AlertProps) {
+function YellowAlert ({handleClose, text, icon}: AlertProps) {
     return(
         <Backdrop onClick={handleClose}>
         <motion.div
@@ -32,8 +35,23 @@ function YellowAlert ({handleClose, text}: AlertProps) {
                 animate="visible"
                 exit="exit"
             >
-            <GrTrophy/>
-            <p>{text}</p>
+
+            {icon === 0 ? (
+                <GrTrophy/>
+            ):("")}
+            {icon === 1 ? (
+                <MdQrCodeScanner/>
+            ):("")}
+
+            {icon === 2 ? (
+                <GiCrownedSkull/>
+            ):("")}
+            
+            {icon === 3 ? (
+                <GiWingedSword/>
+            ):("")}
+
+            <h5>{text}</h5>
             </motion.div>
             {setTimeout(handleClose, 3000)}
         </Backdrop>

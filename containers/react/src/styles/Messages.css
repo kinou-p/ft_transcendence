@@ -204,6 +204,18 @@ p {
 	margin: 1%;
 }
 
+.darkSubmit{
+	display: inline-block;
+	color: white;
+	background-color:  #282155;
+	border-radius: 10px;
+	padding: 5px;
+	font-size: 1.2rem;
+	text-decoration: none;
+	font-weight:lighter;
+	margin: 1%;
+}
+
 .div_submit {
 	flex-direction: row;
 	align-items: center;
@@ -276,6 +288,12 @@ p {
 	background-color: rgba(212, 175, 55, 0.7);
 	font-size: 25px;
 	color: rgba(255, 255, 255, 1);
+	flex-wrap: wrap;
+}
+
+.yellowAlert::p {
+	overflow-wrap: break-word;
+	max-width: 1000px;
 }
 
 .modalSetting{
@@ -298,7 +316,7 @@ p {
 
 .settingSecondPart{
 	margin-top: 10%;
-	margin-left: 10%;
+	margin-left: 5%;
 
 	/* margin-left: 20%; */
 }
@@ -316,3 +334,20 @@ input.in{
 	border-radius: 12px;
 	width: 70%;
 }
+
+input.in_howLong{
+	margin-top: 14.5%;
+	margin-left: 0px;
+	background-color: black;
+	color: white;
+	border-radius: 12px;
+	width: 15%;
+}
+
+.mdp{
+	background-color : black;
+	border-radius: 8px;
+	color: white;
+	width: 20%;
+}
+

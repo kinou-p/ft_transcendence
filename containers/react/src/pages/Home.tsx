@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/20 15:27:00 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:58:14 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from "react-router-dom";
 import ModalEdit from "../components/Profile/EditName.tsx";
 import {AiOutlineHistory} from 'react-icons/ai'
+import { MdQrCodeScanner, MdOutlinePhotoLibrary } from 'react-icons/md';
+import { GiWingedSword, GiCrownedSkull } from 'react-icons/gi';
+
 // import { Link } from "react-router-dom";
 // import {UserProfile} from "../DataBase/DataUserProfile";
 // import axios from "axios";
@@ -33,6 +36,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import React, { useState, useEffect, useRef, ChangeEventHandler } from "react";
 import { useParams } from 'react-router-dom';
 import {User, Conv} from "../../interfaces.tsx"
+import YellowAlert from '../components/Alert/YellowAlert.tsx';
 	// axios.get("http://localhost/api")
 	// .then((response) => {
 	// 	response = response.json()
@@ -57,24 +61,6 @@ function Profile () {
 	// const [selectedPhoto, setSelectedPhoto] = useState(null);
 
 	const [profilePicture, setProfilePicture] = useState('');
-
-	// const handleFileChange = (event: { target: { files: React.SetStateAction<null>[]; }; }) => {
-	// //   const file = event.target.files[0];
-	//   setSelectedPhoto(event.target.files[0]);
-	// //   try{
-	// // 	api.post("/picture", {picture: URL.createObjectURL(file)})
-	// // 	}
-	// //   catch(err){
-	// // 	console.log(err);
-	// //     }
-	// };
-
-	// const handleFileChange = (event: { target: { files: React.SetStateAction<null>[] | FileList; }; }) => {
-		// const files = event.target.files;
-	// 	if (event.target.files && event.target.files.length > 0) {
-	// 		setSelectedPhoto(event.target.files[0]);
-	// 	}
-	//   };
 
 	const handleFileChange = async (event: { target: { files: any; }; }) => {
 		// const files = event.target.files;
@@ -182,18 +168,22 @@ function Profile () {
 
 			  {mine ? (
 			<div>
-				<motion.div  onClick={() => (modalOpen ? close() : open())}>
-					<Link to="#" className="edit_name">
+				<motion.div >
+					<Link to="#" className="edit_name" onClick={() => (modalOpen ? close() : open())}>
 						{modalOpen === true ?  <IoCloseCircleOutline/> : <CgEditMarkup/>}
 					</Link>
+					{modalOpen === true ? ("") : (
+						<>
+							<label htmlFor="file-input" className="edit_name"><MdOutlinePhotoLibrary/></label>
+							<input type="file" id="file-input" className="file-input" accept="image/*" onChange={handleFileChange} />
+						</>
+					)}
 				</motion.div>
 			
-				<div className="file-upload-container">
-  					<label htmlFor="file-input" className="file-label">Choose File</label>
-  					<input type="file" id="file-input" className="file-input" accept="image/*" onChange={handleFileChange} />
+				{/* <div className="file-upload-container"> */}
   					{/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
 					  {/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
-				</div>
+				{/* </div> */}
 			</div>
 				  ) : (
 						  <></>
@@ -212,13 +202,49 @@ function Profile () {
 
 function Home () {
 	const [move, setmove ] = useState(false);
+	const [user, setUser] = useState([]);
+
+	const [successQr, setSuccessQr] = useState(false);
+	const [successSword, setSuccessSword] = useState(false);
+	const [successCrown, setSuccessCrown] = useState(false);
+	const closeQr = () => setSuccessQr(false);
+	const closeSword = () => setSuccessSword(false);
+	const closeCrown = () => setSuccessCrown(false);
+
+
+	useEffect(() => {
+		const fetchSuccess = async () => {
+			try {
+				const tmpUser = await api.get("/profile");
+				setUser(tmpUser.data);
+			}
+			catch (error)
+			{
+				console.log(error);
+			}
+		};
+		fetchSuccess();
+	})
+
     return (
 		<motion.div className="page"
 		initial={{opacity: -1}}
 		animate={{opacity: 1}}
 		exit={{opacity: -1}}>
+			<div>
+				{user.otp_verified ? (
+					<MdQrCodeScanner className='success' onClick={() => setSuccessQr(true)}/>
+					 ):("")} 
+				{user.win >= 2 ? (
+					<GiWingedSword className="success" onClick={() => setSuccessSword(true)}/>
+					 ):("")} 
+
+				{user.win >= 5 ? (
+					<GiCrownedSkull className="success" onClick={() => setSuccessCrown(true)}/>
+					 ):("")} 
+			</div>
 		<div className="home">
-			<motion.div animate={{x: move ? -200: 170}}
+			<motion.div animate={{x: move ? -200: 120}}
 				transition={{type: "tween", duration: 0.5}}>
 					<Profile/>
 			</motion.div>
@@ -232,7 +258,20 @@ function Home () {
 				onClick={ () => setmove(!move)}>
 					<Link to="#" className="history"><AiOutlineHistory/>  Match History</Link>
 			</motion.div>
-		</motion.div>
+			<AnimatePresence initial={false} onExitComplete={() => null}>
+          		{successQr ? (
+			  	<YellowAlert handleClose={closeQr} text={"Success: You have the 2fa success!"} icon={1} />
+			  	) : ("")}
+
+				{successCrown ? (
+			  	<YellowAlert handleClose={closeCrown} text={"Success: 5 victory ? You won king slayer success!"} icon={2}/>
+			  	) : ("")}
+
+				{successSword ? (
+			  	<YellowAlert handleClose={closeSword} text={"Success: 2 victory ? You won the noobi warrior success!"} icon={3}/>
+			  	) : ("")}
+        </AnimatePresence>
+		</motion.div> 
     )
 }
 
