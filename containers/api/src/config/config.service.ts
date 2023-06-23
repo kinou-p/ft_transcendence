@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.service.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 14:53:49 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/12 14:51:44 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/22 21:19:44 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ export const getTypeOrmConfig = (): TypeOrmModuleOptions => ({
 	host: process.env.POSTGRES_HOST || 'postgresql',
 	port: parseInt(process.env.POSTGRES_PORT, 10) || 5432,
 	username: process.env.POSTGRES_USER || 'postgres',
-	password: process.env.POSTGRES_PASSWORD || 'pass',
+	password: process.env.POSTGRES_PASSWORD || 'postgres',
 	database: process.env.POSTGRES_DATABASE || 'postgres',
 	entities: ["dist/**/*.entity.js"],
 	// entities: [join(__dirname, '**', '*.entity.{ts,js}')]
