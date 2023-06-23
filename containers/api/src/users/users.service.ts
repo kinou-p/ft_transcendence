@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/17 01:00:08 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/21 01:31:44 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ export class UsersService {
 
 	async saveChild(user: User, match: MatchLog): Promise<User> {
 		// user.match = savedChild;
+		user.children.push(match)
 		await this.matchRepository.save(match);
 		return await this.userRepository.save(user);
 	  }

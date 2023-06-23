@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 16:44:29 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/20 03:47:52 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/20 23:53:01 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,6 @@ export default function  PartyInvite({currentInvite}: UserProps)
 		window.history.pushState({}, '', path);
 		window.location.reload();
 	};
-
-
-
 	
 	const Accept = async (request: User) => {
 		try{
@@ -118,6 +115,7 @@ export default function  PartyInvite({currentInvite}: UserProps)
 
   // Vérifier si le contenu doit être caché
   	if (clickEvent) {
+		console.log("retrun true")
     	return null; // Rendre null pour ne pas afficher le contenu
   	}
 

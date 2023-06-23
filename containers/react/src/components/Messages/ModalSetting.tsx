@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import api from "../../script/axiosApi.tsx";
 import React from "react";
 import {User} from "../../../interfaces.tsx"
+import { Socket } from "socket.io-client";
 
 
 const dropIn = {
@@ -28,10 +29,11 @@ const dropIn = {
 
 interface ModalSettingProps {
 	handleClose: Function,
-	convId: string
+	convId: string,
+	socket: Socket | null,
 }
 
-const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
+const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
     const [password, setPassword] = useState(false);
 	const [users, setUsers] = useState<User[]>([]);
 	const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
@@ -108,6 +110,7 @@ const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
 			return ;
 		try{
 			api.post("/name", {convId: convId, name: newName})
+			window.location.reload()
 		} catch(err) {
 			console.log(err);
 		}
@@ -118,51 +121,56 @@ const ModalSetting = ({handleClose, convId}: ModalSettingProps) => {
 		if (e.key !== "Enter")
 			return ;
 		try{
-			api.post("/password", {convId: convId, password: newPassword})
+			await api.post("/password", {convId: convId, password: newPassword})
 		} catch(err) {
 			console.log(err);
 		}
 		handleClose();
 	}
 
-    const handleBan = () => {
+    const handleBan = async () => {
 		// console.log("ban option= ", selectedUser)
 		try{
 			// console.log("user select=", selectedUser.length)
 			if (!selectedUser.length)
 				return ;
-			api.post("/ban", {convId: convId, username: selectedUser})
+			await api.post("/ban", {convId: convId, username: selectedUser})
+			if (socket)
+			{
+				console.log("emit to ban server")
+				socket.emit("ban", {username: selectedUser})
+			}
 		} catch(err) {
 			console.log(err);
 		}
 		handleClose();
 	};
 
-	const handleAdmin = () => {
+	const handleAdmin = async () => {
 		if (!selectedUser.length)
 			return ;
 		try{
-			api.post("/admin", {convId: convId, username: selectedUser})
+			await api.post("/admin", {convId: convId, username: selectedUser})
 		} catch(err) {
 			console.log(err);
 		}
 		handleClose();
 	};
 
-	const handleMute = () => {
+	const handleMute = async () => {
 		if (!selectedUser.length)
 			return ;
 		try{
-			api.post("/mute", {convId: convId, username: selectedUser})
+			await api.post("/mute", {convId: convId, username: selectedUser})
 		} catch(err) {
 			console.log(err);
 		}
 		handleClose();
 	};
 
-	const handleInvite = () => {
+	const handleInvite = async () => {
 		try{
-			api.post("/invite", {convId: convId, username: selectedUser})
+			await api.post("/invite", {convId: convId, username: selectedUser})
 		} catch(err) {
 			console.log(err);
 		}

@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/19 19:48:52 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/21 01:19:01 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,10 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/win')
   async addWin(@Request() req, @Body() data: any) {
+	console.log("WIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIN: ", req.user.username)
 	const user = await this.userService.findOne(req.user.username);
+	console.log("User", user)
+	// const user2 = await this.userService.findOne(data.opName);
 	user.win++;
 	const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
 	const newRank = user.rank + this.kFactor * (1 - Esp);
@@ -234,14 +237,16 @@ export class AppController {
 	newMatch.opScore = data.opScore;
 	newMatch.opponent = data.opName;
 	newMatch.parent = user;
-
+	console.log(`newMatch WIIIN = ${newMatch}`);
 	await this.userService.saveChild(user, newMatch);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/loss')
   async addLoss(@Request() req, @Body() data: any) {
+	console.log("LOOOOOOOOOOOOOOOSE: ", req.user.username)
 	const user = await this.userService.findOne(req.user.username);
+	console.log("User", user)
 	user.loss++;
 
 	const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
@@ -256,7 +261,7 @@ export class AppController {
 	newMatch.opScore = data.opScore;
 	newMatch.opponent = data.opName;
 	newMatch.parent = user;
-
+	console.log(`newMatch Loose= ${newMatch}`);
 	await this.userService.saveChild(user, newMatch);
   }
 
@@ -292,10 +297,10 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/partyInvite')
-  async getPartyInvite(@Body() data: any)
+  async getPartyInvite(@Request() req, @Body() data: any)
   {
 		//find data.username and add invite to list
-		const user = await this.userService.findOne(data.username);
+		const user = await this.userService.findOne(req.user.username);
 		user.partyInvite = user.partyInvite || [];
 		// this.userService.save(user);
 		// user.partyInvite.push(data);
@@ -308,8 +313,13 @@ export class AppController {
   async deleteInvite(@Request() req, @Body() data: any)
   {
 	console.log("delete invite user= ", data.username)
-	const user = await this.userService.findOne(data.username);
-	user.partyInvite = user.partyInvite.filter(item => Object.values(item)[1] !== req.user.username);
+	const user = await this.userService.findOne(req.user.username);
+	
+	
+	// user.partyInvite = user.partyInvite.filter(item => Object.values(item)[1] !== req.user.username);
+	console.log("user.partyInvite before", user.partyInvite)
+	user.partyInvite = user.partyInvite.filter((item) => Object.values(item)[1] !== data.username);
+	console.log("user.partyInvite after", user.partyInvite)
 	this.userService.save(user);
   }
 

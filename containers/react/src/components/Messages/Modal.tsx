@@ -100,11 +100,11 @@ const Modal = ({handleClose}) => {
     // let new_name;
 
     return (
-        <Backdrop>
+        <Backdrop onClick={handleClose}>
             <motion.div
                 onClick={(e) => e.stopPropagation()}
-                className="modalSetting"
-                variant={dropIn}
+                className="modal"
+                // variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"

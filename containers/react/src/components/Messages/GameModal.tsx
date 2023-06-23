@@ -29,6 +29,7 @@ interface ModalGame {
 
 const GameModal = ({ handleClose }: ModalGame) => {
   const [users, setUsers] = useState([]);
+//   const [user, setUser] = useState();
   const [selectedUser, setSelectedUser] = useState('');
 //   const [convs, setConvs] = useState([]);
   const [channel, setChannel] = useState('');
@@ -39,8 +40,10 @@ const GameModal = ({ handleClose }: ModalGame) => {
     const fetchData = async () => {
       try {
         const tmpUsers = await api.get("/users");
+		// const tmpUser = await api.get("/profile");
         // const tmpConvs = await api.get("/convs");
         setUsers(tmpUsers.data);
+	    // setUser(tmpUser.data);
         // setConvs(tmpConvs.data);
       } catch (err) {
         console.log(err);
@@ -53,20 +56,20 @@ const GameModal = ({ handleClose }: ModalGame) => {
     setSelectedUser(event.target.value);
   };
 
-  const joinChannel = async () => {
-    try {
-      await api.post("/join", { convId: channel });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+//   const joinChannel = async () => {
+//     try {
+//       await api.post("/join", { convId: channel });
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
 
-  const handleCheckButtonClick = () => {
-    // Perform your check action here
-    console.log("Checking user:", selectedUser);
-  };
+//   const handleCheckButtonClick = () => {
+//     // Perform your check action here
+//     console.log("Checking user:", selectedUser);
+//   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
 	// let path = `play?`;
 	let path = `http://` + process.env.REACT_APP_BASE_URL + `/pong/play?`;
 	
@@ -92,6 +95,8 @@ const GameModal = ({ handleClose }: ModalGame) => {
 	// Remove the trailing '&' character
 	// path = path.slice(0, -1);
 	// console.log(path)
+
+	// await api.post("/partyInvite", {username: selectedUser, gameId})
 
 	// console.log("path= ", path)
 	// history(path, { replace: true });

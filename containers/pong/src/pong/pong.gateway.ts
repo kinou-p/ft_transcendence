@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:18:38 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/19 21:38:55 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/21 00:59:39 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,13 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		// console.log(`Client disconnected: ${client.id}`);
 		console.log(`Normal disconnected: ${client.id}`);
 		// this.waitingClients.delete(client);
-		this.waitingClients.forEach((waitingClient) => {
-			if (waitingClient.client === client) {
-			  this.waitingClients.delete(waitingClient);
-			}})
-		delete this.clients[client.id];
-		console.log(`Total connected clients: ${Object.keys(this.clients).length}`);
-	}
+		// this.waitingClients.forEach((waitingClient) => {
+		// 	if (waitingClient.client === client) {
+		// 	  this.waitingClients.delete(waitingClient);
+		// 	}})
+		// delete this.clients[client.id];
 
-
-	@SubscribeMessage('pong:disconnect')
-	disconnectClient(client: Socket, payload: any): void {
-		console.log("disconnect forced client= ", client.id)
-		
-		for (const key in this.clients) {
-			if (this.clients.hasOwnProperty(key) && this.clients[key] === client) 
-				delete this.clients[key];
-		}
-
-		  // Delete the socket from the 'waitingClients' set
-		  this.waitingClients.forEach((item) => {
+		this.waitingClients.forEach((item) => {
 			if (item.client === client)
 				this.waitingClients.delete(item);
 		  });
@@ -82,7 +69,6 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			const index = sockets.indexOf(client);
 			if (index !== -1)
 			{
-
 				if (index === 0)
 				{
 					console.log("emit boy1")
@@ -95,19 +81,46 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 					sockets[0].emit("pong:win")
 					// sockets[1].emit("/win")
 				}
-				// let playersIds = 
-				// const playersIds = this.games.get(gameId).map(socket => socket.id);
-				// // if (playersIds[0] === payload.id)
-				// // {
-				// if (this.clients[playersIds[1]])
-				// 	this.clients[playersIds[1]].emit('pong:win');
-				// if (this.clients[playersIds[0]])	
-				// 	this.clients[playersIds[0]].emit('pong:win');
-				// }
-				// if (playersIds[1] === payload.id)
-				// {
-				// }
-				//send victory to the other one
+				this.games.delete(gameId);
+				delete this.clients[client.id];
+			}
+		})
+
+		console.log(`Total connected clients: ${Object.keys(this.clients).length}`);
+	}
+
+
+	@SubscribeMessage('pong:disconnect')
+	disconnectClient(client: Socket, payload: any): void {
+		console.log("disconnect forced client= ", client.id)
+		
+		for (const key in this.clients) {
+			if (this.clients.hasOwnProperty(key) && this.clients[key] === client) 
+				delete this.clients[key];
+		}
+		  // Delete the socket from the 'waitingClients' set
+		  this.waitingClients.forEach((item) => {
+			if (item.client === client)
+				this.waitingClients.delete(item);
+		  });
+
+		  // Delete the socket from the 'games' map
+		  this.games.forEach((sockets, gameId) => {
+			const index = sockets.indexOf(client);
+			if (index !== -1)
+			{
+				if (index === 0)
+				{
+					console.log("emit boy1")
+					sockets[1].emit("pong:win")
+					// sockets[0].emit("/win")
+				}
+				else
+				{
+					console.log("emit boy2")
+					sockets[0].emit("pong:win")
+					// sockets[1].emit("/win")
+				}
 				this.games.delete(gameId);
 				delete this.clients[client.id];
 			}
