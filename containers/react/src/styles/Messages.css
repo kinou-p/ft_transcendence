@@ -19,7 +19,8 @@ select{
 	border: 0!important;
 	margin: 5px;
 	font-size: 18px;
-	border-radius: 6px;
+	padding: 5px;
+	border-radius: 1000px;
 }
 
 .modal{
@@ -54,6 +55,7 @@ select{
 	height: 74vh;
 	width: 30%;
 	overflow: scroll;
+	border-radius: 0px 0px 0px 10px;
 	/* width: 2rem; */
 	/* height: 4rem; */
 }
@@ -131,10 +133,11 @@ select{
 }
 
 .messages{
-	background-color: rgb(26, 26, 26);
+	/* background-color: rgb(26, 26, 26); */
 	/* height: calc(100% - 118px); */
 	width: 70%;
 	/* height: 300px; */
+	border-radius: 0px 0px 10px 0px;
 	overflow: scroll;
 }
 
