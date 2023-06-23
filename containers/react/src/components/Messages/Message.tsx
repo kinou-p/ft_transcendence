@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.tsx                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 18:24:46 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/20 12:47:33 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 19:33:40 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,13 @@ function MessageMe({message, own}: MessageMeProps){
 	const [user, setUser] = useState<User>();
 	const scrollRef = useRef<HTMLDivElement>(null);
 
+
 	useEffect(() => {
 		if (scrollRef.current)
 		{
-			scrollRef.current.scrollIntoView({ behavior: "smooth",})
-		}
+			scrollRef.current.scrollIntoView({ behavior: "smooth"});
+		}})
+	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
 			//   const user = await api.get("/profile");

@@ -1,6 +1,6 @@
 .home{
 	background-color: rgb(0, 0, 0);
-	height: 90vh;
+	height: 70vh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -202,6 +202,7 @@ p {
 	text-decoration: none;
 	font-weight:lighter;
 	margin: 1%;
+	height: 25px;
 }
 
 .darkSubmit{
@@ -307,11 +308,17 @@ p {
 	/* flex-direction: column; */
 	/* align-items: center; */
 	background-color: #3e3c61;
+	overflow: scroll;
 }
 
 .settingFirstPart{
 	margin-top: 10%;
-	margin-left: 15%;
+	margin-left: 20%;
+}
+
+.settingFirstPart2{
+	margin-top: 10%;
+	margin-left: 30%;
 }
 
 .settingSecondPart{
@@ -324,6 +331,7 @@ p {
 .checkbox{
 	display:flex;
 	flex-direction:row;
+	margin-left: 60px;
 }
 
 input.in{
@@ -331,17 +339,25 @@ input.in{
 	margin-left: 0px;
 	background-color: black;
 	color: white;
-	border-radius: 12px;
+	border-radius: 4px;
 	width: 70%;
+	height: 100%;
+	font-weight:100;
+	font-size: 20px;
+	padding: 7px;
 }
 
 input.in_howLong{
-	margin-top: 14.5%;
+	margin-top: 13%;
 	margin-left: 0px;
 	background-color: black;
 	color: white;
-	border-radius: 12px;
-	width: 15%;
+	border-radius: 4px;
+	width: 10%;
+	height: 10%;
+	font-weight:100;
+	font-size: 20px;
+	padding: 7px;
 }
 
 .mdp{
@@ -349,5 +365,11 @@ input.in_howLong{
 	border-radius: 8px;
 	color: white;
 	width: 20%;
+}
+
+.case{
+	height: auto;
+	width: auto;
+	margin-left: 10px; 
 }
 

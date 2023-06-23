@@ -103,25 +103,26 @@ const Modal = ({handleClose}) => {
         <Backdrop>
             <motion.div
                 onClick={(e) => e.stopPropagation()}
-                className="modal"
+                className="modalSetting"
                 variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
             >
                 {/* <p>New Conversation</p> */}
+				<div className="settingFirstPart2">
 
 				{selectTags.map((selectTag) => (
-				  <div key={selectTag.id}>
+					<div key={selectTag.id}>
 				    <select
 				      value={selectTag.selectedOption}
 				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
-				    >
+					  >
 				      <option value="">{
-				        selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
-				      }</option>
+						  selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
+						}</option>
 				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
-				        <option key={index} value={item.username}>
+						  <option key={index} value={item.username}>
 				          {item.username}
 				        </option>
 				      ))}
@@ -136,28 +137,30 @@ const Modal = ({handleClose}) => {
 						
 					<Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
 				</div>
+				</div>
 
 
+				<div className="settingSecondPart">
 
 				{convs.length > 0 && (
-        			<select
-        			  value={channel}
-        			  onChange={(event) => setChannel(event.target.value)}
-
+					<select
+					value={channel}
+					onChange={(event) => setChannel(event.target.value)}
+					
         			>
         			  <option value="">Select an option</option>
         			  {convs.map((conv) => (
-        			    !(!conv.group || conv.private || (conv.banned && conv.banned.includes(user.username)) || (conv.members && conv.members.includes(user.username))) && (
-        			      <option key={conv.id} value={conv.id}>
+						  !(!conv.group || conv.private || (conv.banned && conv.banned.includes(user.username)) || (conv.members && conv.members.includes(user.username))) && (
+							  <option key={conv.id} value={conv.id}>
         			        {conv.name}
         			      </option>
         			    )
-        			  ))}
+						))}
         			</select>
       			)}
 				  {channel.private ? (
-					<input className="mdp" placeholder="password" type="text" />
-				  ):("")}
+					  <input className="mdp" placeholder="password" type="text" />
+					  ):("")}
 
 
 				<div className="div_submit">
@@ -166,6 +169,7 @@ const Modal = ({handleClose}) => {
 
 
 
+				</div>
             </motion.div>
         </Backdrop>
     )

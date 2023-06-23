@@ -1,18 +1,14 @@
 .playButton {
 	background-image: linear-gradient(90deg, #5843e4, #5a0760);
-	display: flex;
-	flex-wrap: wrap;
-	overflow: hidden;
 	border-radius: 5vh;
 	color: white;
-	/* display: block; */
+	display: block;
 	margin: auto;
 	margin-top: 30vh;
-	padding: 2vh 4vw;
+	padding: 2vh 5vw;
 	height: 10vh;
 	width: 20vw;
-	font-size: 250%;
-	text-align: center;
+	font-size: 300%;
   }
 
   

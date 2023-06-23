@@ -62,6 +62,7 @@
 .page {
 	text-align: center;
 	overflow-y: scroll;
+	/* height: 80vh; */
 	/* height: 50vh; */
 	/* width: 50vh; */
 	/* background-color: black; */
@@ -96,11 +97,11 @@
 }
 
 .history{
-	display: inline-block;
+	display:inline-block;
 	color: white;
 	background-color:  #5843e4;
 	border-radius: 20px;
-	padding: 14px;
+	padding: 20px 500px;
 	font-size: 1.7rem;
 	text-decoration: none;
 	font-weight: bold;
