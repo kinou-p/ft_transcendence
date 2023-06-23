@@ -83,7 +83,7 @@ function WinLoss() {
 // 		{isLoading ? (
 // 			<h1>Loading...</h1>
 // 		  ) : (
-// 			<h1>{user.username}</h1>
+// 			<h1>{user.username}</h1>	
 // 		  )}
 //   	</div>
 
@@ -94,7 +94,7 @@ function WinLoss() {
 			// <span>Loading...</span>
 		  ) : (
 			  <div className='scroll'>
-				 <h2 className='title'>Match history Win/Loss</h2>
+				 <h2 className='title'>Match history {user.win}/{user.loss}</h2>
                 {history.map((c: Matchlog, index) => {
                     return (
                         <div key={index} className='elements'>

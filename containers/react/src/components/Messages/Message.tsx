@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 18:24:46 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 20:25:32 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 23:34:20 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ function MessageMe({message, own}: MessageMeProps){
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
+				console.log("useEffect message")
 			//   const user = await api.get("/profile");
 				const tmpSender = await api.post("/user", {username: message.sender})
 				const tmpConv = await api.post("/convId", {convId: message.convId})
@@ -81,16 +82,37 @@ function MessageMe({message, own}: MessageMeProps){
 		window.location.reload();
 	};
 
+	// const isAllowed = async () => {
+	// 	const ret = await api.post("/allowed", {convId: message.convId});
+	// 	return ret.data;
+	// }
+
 	if (!user || !sender || !conv)
 		return (<></>);
 	// console.log("result includes=", conv.banned.includes(user.username))
 	// console.log("result includes=", conv.blocked.includes(user.username))
+	// const conv2: Conv = getConv();
+	// if (!conv)
+	// isAllowed().then((ret: number) => {
+	// 	if (!ret)
+	// 	{
+	// 		console.log("return not allowed");
+	// 		return ;
+	// 	}
+	// 	// Use the resolved currentConv here
+	//   });
+
 	if (user.blocked && user.blocked.includes(message.sender))
 		return (<></>);
 	else if (conv.banned && conv.banned.includes(user.username))
 		return (<></>);
+	else if (conv.muted && conv.muted.includes(user.username))
+	{
+		// console.log("muted00")
+		return (<></>);
+	}
 	// if (user.blocked.includes(message.sender))/
-
+	console.log("no return message good");
 	return (
 		<div className={own ? "meMessage" : "youMessage"} ref={scrollRef}>
 			<div>

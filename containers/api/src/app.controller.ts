@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 19:15:56 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 23:24:16 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,9 @@ export class AppController {
 	// let user = req.user
 	// user.nickname = data.nickname
 	console.log(`user= ${req.user.username}`)
+	const taken = await this.userService.findNickname(data.nickname)
+	if (taken)
+		return (0);
 	let user = await this.userService.findOne(req.user.username)
 	user.nickname = data.nickname;
 	// return await this.userService.getFriends(req.user.username);
@@ -479,8 +482,6 @@ export class AppController {
 	return await this.chatService.createConv(data);
 	// res.json(messages);
   }
-
-
 
   @UseGuards(JwtAuthGuard)
   @Get('/conv')

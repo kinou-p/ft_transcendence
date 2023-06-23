@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/21 01:31:44 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 22:27:16 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ export class UsersService {
 	
 	async findOne(username: string): Promise<User> {
 		return await this.userRepository.findOneBy({username: username});
+	}
+
+	async findNickname(username: string): Promise<User> {
+		return await this.userRepository.findOneBy({nickname: username});
 	}
 
 	async save(user: User): Promise<User> {
@@ -105,18 +109,21 @@ export class UsersService {
 	}
 
 	async addFriend(user: User, username: string) {
-		if (!(await this.findOne(username)))
+		const user2 = await this.findOne(username)
+		if (!user)
 			return (0);
 			// user.friendRequest = user.friendRequest || [];
 		user.friends = user.friends || [];
 		if (user.friends.find(item => item === username))
-		{		
+		{
 			user.friendRequest = user.friendRequest.filter((item) => item !== username);
 			this.save(user);
 			return (1);
 		}
 		user.friends.push(username);
 		user.friendRequest = user.friendRequest.filter((item) => item !== username);
+		user2.friends.push(user.username);
+		this.save(user2);
 		this.save(user);
 		return (1);
 	}

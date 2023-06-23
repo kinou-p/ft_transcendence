@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 17:33:51 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 22:11:28 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,12 +181,23 @@ function Home () {
 	const closeSword = () => setSuccessSword(false);
 	const closeCrown = () => setSuccessCrown(false);
 
+	const { username } = useParams();
 
 	useEffect(() => {
 		const fetchSuccess = async () => {
 			try {
-				const tmpUser = await api.get("/profile");
-				setUser(tmpUser.data);
+				if (!username)
+				{
+					const tmpUser = await api.get("/profile");
+					setUser(tmpUser.data);
+				}
+				else 
+				{
+					const tmpUser = await api.post("/user", {username: username});
+					setUser(tmpUser.data);
+				}
+				// const tmpUser = await api.get("/profile");
+				// setUser(tmpUser.data);
 			}
 			catch (error)
 			{

@@ -7,6 +7,7 @@ import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import api from "../../script/axiosApi.tsx";
 import React from "react";
+import {User, Conv} from "../../../interfaces.tsx"
 
 const dropIn = {
     hidden:{y:"-100vh",
@@ -23,13 +24,17 @@ const dropIn = {
             opacity: 0,},
 };
 
-const Modal = ({handleClose}) => {
+interface ModalProps {
+	handleClose: Function,
+  }
+
+const Modal = ({handleClose}: ModalProps) => {
     // const [multi, setMulti] = useState(false);
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
-    const [selectedOptionArray, setSelectedOptionArray] = useState([]);
-	const [users, setUsers] = useState([]);
-	const [user, setUser] = useState();
-	const [convs, setConvs] = useState([]);
+    const [selectedOptionArray, setSelectedOptionArray] = useState<string[]>([]);
+	const [users, setUsers] = useState<User[]>([]);
+	const [user, setUser] = useState<User>();
+	const [convs, setConvs] = useState<Conv[]>([]);
 
 	const [channel, setChannel] = useState('');
 
@@ -52,7 +57,7 @@ const Modal = ({handleClose}) => {
 		getConv();
 	}, []);
 
-    const handleOptionChange = (selectId, selectedOption) => {
+    const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("selected Option=", selectedOption)
         setSelectTag((prevTags) => 
             prevTags.map((tag) =>
@@ -99,11 +104,11 @@ const Modal = ({handleClose}) => {
     // let new_name;
 
     return (
-        <Backdrop>
+        <Backdrop onClick={handleClose}>
             <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="modalSetting"
-                variant={dropIn}
+                // variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
@@ -120,9 +125,9 @@ const Modal = ({handleClose}) => {
 				      <option value="">{
 						  selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
 						}</option>
-				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
+				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.nickname)).map((item, index) => (
 						  <option key={index} value={item.username}>
-				          {item.username}
+				          {item.nickname}
 				        </option>
 				      ))}
 				    </select>
@@ -134,7 +139,7 @@ const Modal = ({handleClose}) => {
 				<div className="div_submit">
 					<Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
 						
-					<Link to="#" className="submit" onClick={handleClose}>Cancel</Link>
+					<Link to="#" className="submit" onClick={() => handleClose}>Cancel</Link>
 				</div>
 				</div>
 
@@ -149,7 +154,7 @@ const Modal = ({handleClose}) => {
         			>
         			  <option value="">Select an option</option>
         			  {convs.map((conv) => (
-						  !(!conv.group || conv.private || (conv.banned && conv.banned.includes(user.username)) || (conv.members && conv.members.includes(user.username))) && (
+						  !(!conv.group || conv.private || (conv.banned && user && conv.banned.includes(user.username)) || (conv.members && user && conv.members.includes(user.username))) && (
 							  <option key={conv.id} value={conv.id}>
         			        {conv.name}
         			      </option>
@@ -157,9 +162,9 @@ const Modal = ({handleClose}) => {
 						))}
         			</select>
       			)}
-				  {channel.private ? (
-					  <input className="mdp" placeholder="password" type="text" />
-					  ):("")}
+				  {/* {channel.private ? (
+					  <input className="mdp" placeholder="passdddddword" type="text" />
+					  ):("")} */}
 
 
 				<div className="div_submit">
