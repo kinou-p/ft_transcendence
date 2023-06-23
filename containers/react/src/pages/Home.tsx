@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Home.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/20 15:27:00 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 22:46:23 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ function Profile () {
 					{isLoading || !user ? (
         				<h1>Loading...</h1>
       				) : (
-        				<h1>{user.nickname}</h1>
+        				<h1 className='user_name'>{user.nickname}</h1>
       				)}
 	  		</span>
 
@@ -242,7 +242,7 @@ function Home () {
 			}
 		};
 		fetchSuccess();
-	})
+	},[])
 
     return (
 		<motion.div className="page"

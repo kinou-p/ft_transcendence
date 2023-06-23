@@ -1,12 +1,13 @@
 import {motion} from "framer-motion"
 // import Backdrop from "../Sidebar/Backdrop"
 import {Link} from 'react-router-dom';
-import { UserProfile } from "../../DataBase/DataUserProfile";
+// import { UserProfile } from "../../DataBase/DataUserProfile";
 import {useState} from 'react';
 import "../../styles/Profile.css"
 
 import api from '../../script/axiosApi.tsx';
 import React from "react";
+import RedAlert from "../Alert/RedAlert.tsx";
 
 const dropIn = {
 	hidden: {
@@ -21,14 +22,17 @@ const dropIn = {
 }
 
 // const changeName = ({handleclose, name}) => {
-// 	return (
-// 		UserProfile.UserName = name
+	// 	return (
+		// 		UserProfile.UserName = name
 // 	)
 // }
 
 const ModalEdit = ( handleClose ) => {
 	// let new_name = "";
 	const [nickname, setNickname] = useState("");
+	const [closeModal, setModalClose] = useState(false);
+	const [err, setErr] = useState(false);
+	const close = () => setErr(false);
 	
 	const handler = e =>
 	{
@@ -46,13 +50,29 @@ const ModalEdit = ( handleClose ) => {
 		};
 		postNickname();
 	}
-
+	
 	const handlePostNickname = async () => 
 	{
 		console.log("nickname=" ,nickname)
 		try{
-			await api.post("/nickname", {nickname: nickname})
-			window.location.reload();
+			const ret = await api.post("/nickname", {nickname: nickname});
+			// console.log("cest ici = ",ret);
+			// if (!ret)
+			console.log("test ret =",ret.data);
+			if(ret.data)
+			{
+				console.log ("ici error = ", ret.data);
+				// window.location.reload();
+			}
+			else if (!ret.data)
+			{
+				console.log ("nickname already set = ", ret.data);
+
+				setErr(true);
+				setModalClose(true);
+			}
+			
+			
 			// setUser(tmpUser.data);
 			// setIsLoading(false)
 		}
@@ -73,17 +93,22 @@ const ModalEdit = ( handleClose ) => {
 						animate="visible"
 						exit="exit">
 				<h2>Type your new name</h2>
-				<input className="text" maxLength="10" type="text" value={nickname} onChange={handler} handleClose/>
+				<input className="text" minLength={2} maxLength={10} type="text" value={nickname} onChange={handler}/>
 				<div>
-					<div className="button" onClick={ () => handlePostNickname()}>
+					<div className="button" onClick={handlePostNickname}> 
 						change
 						{/* <Link className="button" to={""}>change</Link> */}
 					</div>
+				{
+					err ? (
+						<RedAlert handleClose={close} text="Nickname already taken"/>
+					) : ("")
+				}
 				</div>
 			</motion.div>
 			
+			
+			)
+		}
 		
-	)
-}
-
-export default ModalEdit
+		export default ModalEdit

@@ -27,6 +27,7 @@ import PartyInvite from "./PartyInvite.tsx";
 
 // import {User, Conv, Message} from "../../../interfaces.tsx"
 import {User, Conv} from "../../../interfaces.tsx"
+import { IoLogoOctocat } from "react-icons/io5";
 
 const TouchDiv = styled.div`
 	margin-left: 10px;
@@ -388,12 +389,13 @@ function Chats(){
 		<div className="chat">
 		
 			<div className='navbar'>
-				<img src={DefaultPic} alt="profile" className="pic"/>
+				{/* <img src={DefaultPic} alt="profile" className="pic"/> */}
+				<IoLogoOctocat className="catchat"/>
 				<span>
 					{isLoading || !user ? (
         				<h4>Loading...</h4>
       				) : (
-        				<h4>{user.nickname}</h4>
+        				<h2>Chat</h2>
       				)}
 	  			</span>
 				{/* <div className="end">
@@ -462,7 +464,7 @@ function Chats(){
 				))}
       	<TouchDiv>
         <motion.div onClick={handleAddFriend}>
-          <MdOutlineGroupAdd />
+          <MdOutlineGroupAdd className="catchat"/>
         </motion.div>
         <AnimatePresence initial={false} onExitComplete={() => null}>
 			{showAddFriendAlert && addFriend && (
@@ -475,7 +477,7 @@ function Chats(){
       </TouchDiv>
       <TouchDiv>
         <motion.div onClick={handleBlockFriend}>
-          <ImBlocked />
+          <ImBlocked  className="block"/>
         </motion.div>
         <AnimatePresence initial={false} onExitComplete={() => null}>
           {showBlockAlert && block && (
