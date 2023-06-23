@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+import React, { HtmlHTMLAttributes } from "react";
 import { useEffect, useState, useRef } from "react";
-import api from '../../script/axiosApi.tsx';
+import api from '../../script/axiosApi';
 import styled from "styled-components"
-import DefaultPicture from '../../assets/profile.jpg'
+// import DefaultPicture from '../../assets/profile.jpg'
 // import { useRef } from "react";
 // import { useEffect } from "react";
 import '../../styles/Messages.css'
@@ -27,6 +28,7 @@ const MeStyleP = styled.p`
 	color: white;
 	margin-right: 20px;
 `
+<<<<<<< HEAD
 
 interface MessageMeProps {
 	message: Message;
@@ -44,6 +46,13 @@ function MessageMe({message, own}: MessageMeProps){
 
 	// console.log("Message eher")
 
+=======
+function MessageMe({message, own}){
+	
+	const [profilePicture, setProfilePicture] = useState('');
+	const scrollRef = useRef<HTMLDivElement>(null);
+	const DefaultPicture: string = '../../assets/profile.jpg'
+>>>>>>> sadjigui
 	useEffect(() => {
 		if (scrollRef.current)
 		{
