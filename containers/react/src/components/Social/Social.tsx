@@ -7,6 +7,7 @@ import styled from "styled-components";
 import Friend  from './Friend.tsx';
 import FriendRequest  from './FriendRequest.tsx';
 
+import {IoMdPeople} from 'react-icons/io'
 import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import {User} from "../../../interfaces.tsx"
@@ -25,7 +26,7 @@ const TouchDiv = styled.div`
 	margin-top: 21px;
 	cursor: pointer;
 	justify-content: space-around;
-	
+
 	&:hover {
 		color: #F4F3EF;
 	}
@@ -42,7 +43,7 @@ function Social (){
 	useEffect(()=> {
 		const getFriend = async ()=>{
 			try{
-				const tmpFriends = await api.get("/friends")	
+				const tmpFriends = await api.get("/friends")
 				const tmpUser = await api.get("/profile")
 				const tmpInv = await api.get("/inviteRequest")
 				const pic = await api.post("/getPicture", {username: tmpUser.data.username})
@@ -88,26 +89,15 @@ function Social (){
         <div>
 			<div className='navbar'>
 				{/* <img src={DefaultPic} alt="profile" className="pic"/> */}
-				{profilePicture ? (
-					<img className="pic" src={`data:image/jpeg;base64,${profilePicture}`} />
- 				) : (
- 					<img className="pic" src={DefaultPicture} alt="Default Profile Picture" />
- 				)}
+				<IoMdPeople className="catchat"/>
 				<span>
 					{isLoading || !user ? (
         				<h4>Loading...</h4>
       				) : (
-        				<h4>{user.nickname}</h4>
+        				<h2>Social</h2>
       				)}
 	  			</span>
-				<div className="end">
-					<TouchDiv>
-						<MdOutlineGroupAdd/>
-					</TouchDiv>
-					<TouchDiv>
-						<ImBlocked/>
-					</TouchDiv>
-				</div>
+
 			</div>
 
 {/* map with fiend request */}
@@ -119,6 +109,7 @@ function Social (){
 			{friends.map(c=> (
 				<Friend currentUser={c}/>
 			))}
+
 		</div>
     )
 }

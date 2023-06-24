@@ -15,7 +15,7 @@ const UserChat = styled.div `
 	gap: 5px;
 	color: white;
 	cursor: pointer;
-
+	margin-top: 10px;
 	&:hover{
 		background-color: #3e3c61;
 	}
@@ -37,7 +37,7 @@ export default function  Friend({currentUser}: UserProps)
 	const [request, setRequest] = useState<User>(); //user who invite
 	const [clickEvent, setClickEvent] = useState(false);
 	// const [user, setUser] = useState(null);
-	
+
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
@@ -54,12 +54,12 @@ export default function  Friend({currentUser}: UserProps)
 				console.error('Error fetching profile picture:', error);
 			}
 		  };
-		
+
 		  fetchProfilePicture();
 	}, [clickEvent])
 
 	const handleButtonClick = (user: User) => {
-		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`; 
+		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`;
 		// history(path, { replace: true });
 		// window.location.replace(path);
 		window.history.pushState({}, '', path);
@@ -101,13 +101,14 @@ export default function  Friend({currentUser}: UserProps)
 			 <img className="pic-user" src={DefaultPicture} alt="Default Profile Picture" />
 		 )}
 		{request ? (
-		<div className="infoSideBar">
+			<div className="end">
 			<span onClick={() => handleButtonClick(currentUser)}>{currentUser.nickname}</span>
-			 <RxCheckCircled onClick={() => Accept(request)} color={'green'}/>
-			 <RxCircleBackslash onClick={() => Refuse(request)} color={'red'}/>
+			<div className="end">
+			 <RxCheckCircled className="friendRequest" onClick={() => Accept(request)} color={'green'}/>
+			 <RxCircleBackslash className="friendRequest" onClick={() => Refuse(request)} color={'red'}/>
+			 </div>
 		</div>
 			) : ( "" )}
 		</UserChat>
 	)
 }
-	
