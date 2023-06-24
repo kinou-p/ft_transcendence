@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   users.service.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/21 01:31:44 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 00:28:33 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ import { Repository } from 'typeorm';
 
 import { User } from '../model/user.entity';
 import { MatchLog } from '../model/user.entity';
+
 
 
 @Injectable()
@@ -35,6 +36,13 @@ export class UsersService {
 	
 	async findAll(): Promise<User[]> {
 		return await this.userRepository.find();
+	}
+
+	async findNickname(username: string): Promise<User> {
+		console.log("nick in find =", username)
+		const ret= await this.userRepository.findOneBy({nickname: username});
+		console.log("ret noick=", ret )
+		return ret;
 	}
 	
 	async findOne(username: string): Promise<User> {

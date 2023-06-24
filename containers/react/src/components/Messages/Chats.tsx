@@ -17,7 +17,11 @@ import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import { GrAdd } from 'react-icons/gr';
 import { RiListSettingsLine } from 'react-icons/ri'
+<<<<<<< Updated upstream
 import { HiChatBubbleLeft } from 'react-icons/hi2'
+=======
+import { LuCat } from 'react-icons/lu'
+>>>>>>> Stashed changes
 
 // import { Rank } from "../../DataBase/DataRank";
 import GreenAlert from "../Alert/GreenAlert.tsx";
@@ -28,7 +32,7 @@ import PartyInvite from "./PartyInvite.tsx";
 
 // import {User, Conv, Message} from "../../../interfaces.tsx"
 import {User, Conv} from "../../../interfaces.tsx"
-import { IoLogoOctocat } from "react-icons/io5";
+import { IoChatbox, IoLogoOctocat } from "react-icons/io5";
 
 const TouchDiv = styled.div`
 	margin-left: 10px;

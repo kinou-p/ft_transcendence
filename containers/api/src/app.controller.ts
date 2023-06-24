@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   app.controller.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 19:15:56 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 16:01:35 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,13 +177,17 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/nickname')
   async setNickname(@Request() req, @Body() data: any) {
-	// let user = req.user
-	// user.nickname = data.nickname
-	console.log(`user= ${req.user.username}`)
-	let user = await this.userService.findOne(req.user.username)
-	user.nickname = data.nickname;
-	// return await this.userService.getFriends(req.user.username);
-	return await this.userService.save(user);
+    // let user = req.user
+    // user.nickname = data.nickname
+    // console.log(user= ${req.user.username})
+    const taken = await this.userService.findNickname(data.nickname)
+	console.log("taken =", taken)
+	if (taken)
+        return (0);
+    let user = await this.userService.findOne(req.user.username)
+    user.nickname = data.nickname;
+    // return await this.userService.getFriends(req.user.username);
+    return await this.userService.save(user);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -355,7 +359,6 @@ export class AppController {
 // import { Prisma } from "@prisma/client";
 // import { Request, Response, NextFunction } from "express";
 // import { prisma } from "../server";
-
 
 
 @Redirect('http://' + process.env.BASE_URL + '/token', 302)
