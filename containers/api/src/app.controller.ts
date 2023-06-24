@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 20:00:09 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/25 00:10:18 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,12 @@ export class AppController {
 	const user = await this.userService.findOne(req.user.username)
 	if (!user)
 		return (0);
+	if (user.friends.find(item => item === data.username))
+	{
+		user.friendRequest = user.friendRequest.filter((item) => item !== data.username);
+		this.userService.save(user);
+		return (1);
+	}
 	//create personnal conv for user
 	//await this.userService.addFriend(user, data.username);
 
@@ -115,13 +121,13 @@ export class AppController {
 		messages: null,
 		group: false,
 		private: false,
-
 	};
 	conv.members.push(req.user.username);
 	conv.members.push(data.username);
 	await this.chatService.createConv(conv);
 
 	return await this.userService.addFriend(user, data.username);
+	
   }
 
   @UseGuards(JwtAuthGuard)

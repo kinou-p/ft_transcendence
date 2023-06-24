@@ -124,6 +124,8 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 	const maxScore = 5;
 	
 	let lastUpdateTime = performance.now();
+	let lastPower = 0;
+
 
 	const maxAngle = 50;
 	let maxBounceAngle = (maxAngle * Math.PI) / 180;
@@ -182,7 +184,7 @@ socket.on('pong:gameId', async (data) => {
 	  opRank = response.data
 	  console.log(`rank= ${opRank}`);
 	  console.log(`myname= ${myName}`);
-  
+
 	  const info = {
 		id: myId,
 		name: myName,
@@ -491,7 +493,7 @@ socket.on('pong:hisPoint', (data) => {
 				// 	id: myId,
 				// 	option: option,
 				// };
-				
+				// await api.post("status", {status: 1});
 				await api.post("deleteInvite", {username: gameParam.username})
 		}
 		catch (err){
@@ -759,6 +761,10 @@ async function draw(timestamp: number)
 		}
 		else if (event.code === "KeyW")
 		{
+			let date = new Date();
+			console.log("last time =", date.getTime() - lastPower)
+			if (date.getTime() - lastPower < 15000)//10000 + 5000
+				return ;
 			if (!superpowerModifier)
 				return ;
 			paddleY = 0;
@@ -770,13 +776,9 @@ async function draw(timestamp: number)
 				paddleY = canvas.height / 2 - paddleHeight / 2;
 				console.log('Cinq secondes se sont écoulées.');
 			  }, 5000);
-
-			//   setTimeout(() => {
-			// 	// code à exécuter après 5 secondes
-			// 	paddleHeight = canvas.height * 0.25;
-			// 	paddleY = canvas.height / 2 - paddleHeight / 2;
-			// 	console.log('Cinq secondes se sont écoulées.');
-			//   }, 5000);
+			date = new Date();
+			lastPower = date.getTime();
+			// console.log("date= ", date.getTime())
 		}
 	});
 

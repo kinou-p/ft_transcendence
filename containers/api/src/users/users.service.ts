@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 19:29:33 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 23:30:52 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ export class UsersService {
 		user.friendRequest = user.friendRequest || [];
 		if (user.friendRequest.find(item => item === username))
 			return (1);
+		user.friends = user.friends || [];
 		if (user.friends.find(item => item === username))
 			return (1);
 		user.friendRequest.push(username);
@@ -104,17 +105,16 @@ export class UsersService {
 
 		if (user)
 		{
+			// const ret = await this.matchRepository.query("SELECT * FROM \"MatchLog\"");
 
-			// const ret = await this.matchRepository.query("SELECT * FROM \"MatchLog\" WHERE id = ($1);", [user.id]);
-			const ret = await this.matchRepository.query("SELECT * FROM \"MatchLog\"");
-			console.log("all match= ", ret);
+			console.log("user id=0 ", user.id);
+			// const matchLog = await this.userRepository.query("SELECT * FROM \"MatchLog\" WHERE \"parentId\" = ANY ($1);", [[user.id]]);
+
+			return await this.userRepository.query("SELECT * FROM \"MatchLog\" WHERE \"parentId\" = ANY ($1);", [[user.id]]);
+
+
+			// console.log("all match2= ", matchLog);
 		}
-		//   const children = user.children;
-		//   console.log(user); 
-		//   console.log(user.children); // or perform any operations with the children
-		//   return children;
-			
-		// }
 	}
 
 	async addFriend(user: User, username: string) {

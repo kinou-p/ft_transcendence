@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Home.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 22:11:28 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 23:26:45 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,12 @@ function Home () {
 					 ):("")}
 			</div>
 		<div className="home">
-			<motion.div animate={{x: move ? -200: 120}}
+			<motion.div 
+				//   style={{
+				// 	backdropFilter: move ? "blur(10px)" : "none",
+				// 	WebkitBackdropFilter: move ? "blur(10px)" : "none"
+				//   }}
+				animate={{x: move ? '-50%' : '30%'}}
 				transition={{type: "tween", duration: 0.5}}>
 					<Profile/>
 			</motion.div>

@@ -62,8 +62,20 @@ function WinLoss() {
 		const getUser = async ()=>{
 			try{
 				// const tmpUser = await api.get("/profile")
-				const tmpUser = await api.post("/user", {username: username})
-				const tmpHistory = await api.post("/history", {username: username})
+				console.log("username win loss=", username)
+				let tmpUser;
+				let tmpHistory;
+
+				if (username)
+				{
+					tmpUser = await api.post("/user", {username: username});
+					tmpHistory = await api.post("/history", {username: username})
+				}
+				else
+				{
+					tmpUser = await api.get("/profile");
+					tmpHistory = await api.post("/history", {username: tmpUser.data.username})
+				}
 				setHistory(tmpHistory.data);
 				setUser(tmpUser.data);
 				setIsLoading(false)

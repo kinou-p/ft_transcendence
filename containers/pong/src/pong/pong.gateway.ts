@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:18:38 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 17:20:24 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 23:37:39 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,13 +282,13 @@ addPrivateParty(client: Socket, payload: any): void {
 	@SubscribeMessage('pong:forced')
 	forcedMessage(client: Socket, payload: any): void
 	{
-		console.log(`from: ${client.id}`);
-		console.log(payload);
+		// console.log(`from: ${client.id}`);
+		// console.log(payload);
 
 		const game = this.games.get(payload.gameId);
 		const playersIds = game.map(socket => socket.id);
 
-		console.log(`id of 0= ${playersIds[0]}`);
+		// console.log(`id of 0= ${playersIds[0]}`);
 
 		if (playersIds[0] === payload.id)
 		{
@@ -298,19 +298,19 @@ addPrivateParty(client: Socket, payload: any): void {
 		{
 				this.clients[playersIds[0]].emit('pong:info', payload);
 		}
-		console.log("END OF HANDLE");
+		// console.log("END OF HANDLE");
 	}
 
 	@SubscribeMessage('pong:paddle')
 	handlePaddle(client: Socket, payload: any): void
 	{
-		console.log(`from: ${client.id}`);
-		console.log(payload);
+		// console.log(`from: ${client.id}`);
+		// console.log(payload);
 
 		const game = this.games.get(payload.gameId);
 		const playersIds = game.map(socket => socket.id);
 
-		console.log(`id of 0= ${playersIds[0]}`);
+		// console.log(`id of 0= ${playersIds[0]}`);
 
 		if (playersIds[0] === payload.id)
 		{
@@ -320,7 +320,7 @@ addPrivateParty(client: Socket, payload: any): void {
 		{
 			this.clients[playersIds[0]].emit('pong:paddle', payload);
 		}
-		console.log("END OF HANDLE");
+		// console.log("END OF HANDLE");
 	}
 
 	@SubscribeMessage('pong:point')
@@ -363,9 +363,7 @@ addPrivateParty(client: Socket, payload: any): void {
 	{
 		const game = this.games.get(payload.gameId);
 		const playersIds = game.map(socket => socket.id);
-		
 		console.log(`name of client= ${payload.name}`);
-
 		if (playersIds[0] === payload.id) 
 		{
 			this.clients[playersIds[1]].emit('pong:name', payload);
