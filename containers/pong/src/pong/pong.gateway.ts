@@ -6,9 +6,11 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:18:38 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 15:19:12 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 00:43:19 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//0.0001
 
 import { SubscribeMessage, WebSocketGateway, OnGatewayInit, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
@@ -337,6 +339,24 @@ addPrivateParty(client: Socket, payload: any): void {
 		}
 	}
 
+	@SubscribeMessage('pong:myPoint')
+	handleMyPoint(client: Socket, payload: any): void
+	{
+		const game = this.games.get(payload.gameId);
+		const playersIds = game.map(socket => socket.id);
+		console.log(`id of 0 mypoint= ${playersIds[0]}`);
+
+		if (playersIds[0] === payload.id)
+		{
+			this.clients[playersIds[1]].emit('pong:hisPoint', payload);
+			
+		}
+		else if (playersIds[1] === payload.id)
+		{
+			this.clients[playersIds[0]].emit('pong:hisPoint', payload);
+		}
+	}
+
 	@SubscribeMessage('pong:name')
 	getName(client: Socket, payload: any): void
 	{
@@ -345,7 +365,7 @@ addPrivateParty(client: Socket, payload: any): void {
 		
 		console.log(`name of client= ${payload.name}`);
 
-		if (playersIds[0] === payload.id)
+		if (playersIds[0] === payload.id) 
 		{
 			this.clients[playersIds[1]].emit('pong:name', payload.name);
 		}

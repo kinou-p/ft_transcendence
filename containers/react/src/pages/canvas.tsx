@@ -61,7 +61,7 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 	if(!ctx)
 		return ;
 	
-	const socket = io('http://localhost:4000', { transports: ['polling'] });
+	const socket = io('http://' + process.env.REACT_APP_SOCKET_URL + ':4000', { transports: ['polling'] });
 	// useEffect(() => {
 		// 	console.log("useeffect?????????????????")
 	// 	return () => {
@@ -251,10 +251,25 @@ socket.on('pong:point', (data) => {
 		// console.log("up point");
 	myScore = data.point;
 	// }
-	vX = 0;
+	vX = 0.0001;
 	vY = 0;
 	ballX = canvas.width / 2;
 	ballY = canvas.height / 2;
+});
+
+socket.on('pong:hisPoint', (data) => {
+	// hisScore += 1;
+	console.log("myPointawdawdawdawd point");
+	// if (vX != 0)
+	// {
+		// console.log("up point");
+	hisScore = data.point;
+	// }
+	vX = 0.0001;
+	vY = 0;
+	ballX = canvas.width / 2;
+	ballY = canvas.height / 2;
+	// send_forced_info();
 });
 
 //========================================================================================================
@@ -323,6 +338,25 @@ socket.on('pong:point', (data) => {
 			point: hisScore,
 		}
 		socket.emit('pong:point', info);
+	}
+
+	function send_my_point()
+	{
+		if (!gameId || !canvas)
+			return ;
+		// console.log("send point");
+		const info = {
+			id: myId,
+			gameId: gameId,
+			point: myScore,
+		}
+		socket.emit('pong:myPoint', info);
+		myScore++;
+		vX = 0.0001;
+		vY = 0;
+		ballX = canvas.width / 2;
+		ballY = canvas.height / 2;
+		send_forced_info();
 	}
 
 	function send_paddle_info()
@@ -458,8 +492,11 @@ socket.on('pong:point', (data) => {
 async function draw(timestamp: number)
 {
 	console.log("turning, running= ", running);
-	if (!running)	
+	if (!running)
+	{
+		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong")
 		return ;
+	}
 	if (!gameId || !canvas )
 	{
 		// console.log("nogameid score= ", myScore);
@@ -593,16 +630,17 @@ async function draw(timestamp: number)
 			}
 			ballX = canvas.width / 2;
 			ballY = canvas.height / 2;
-			vX = 0;
+			vX = 0.0001;
 			vY = 0;
 			hisScore += 1;
 			send_point();
 			// send_forced_info();
 		}
-		if (ballX > canvas.width)
+		if (ballX > (canvas.width * 1.2) && ballX - vX > canvas.width)
 		{
+			console.log("ball out win point pls")
+			send_my_point();
 			// if (ballX > canvas.width * 2)
-				// socket.emit
 			// console.log("win point")
 			// if (ballY <= paddleY + paddleHeight + ballRadius && ballY >= paddleY - ballRadius)
 			// {
