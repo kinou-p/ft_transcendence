@@ -233,8 +233,8 @@ p {
 	background-color: rgba(0, 0, 0, 0.3);
 	border-radius: 4px;
 	width: 11rem;
-	height: 1.5rem;
-	margin-top: 1rem;
+	height: 2rem;
+	margin-top: 1.3rem;
 }
 
 .greenAlert{
@@ -382,6 +382,13 @@ input.in_howLong{
 }
 
 .block{
+	font-size: 23px;
+	margin-left: 12px;
+	margin-top: 0.2rem;
+}
+
+.inline{
+
 	font-size: 25px;
 	margin-left: 12px;
 }
