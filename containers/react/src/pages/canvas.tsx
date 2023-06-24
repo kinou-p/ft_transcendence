@@ -756,9 +756,8 @@ async function draw(timestamp: number)
 					vX -= 0.0001;
 			}
 			send_forced_info();
-			// console.log(`vx = ${vX}`);
 		}
-		else if (event.code === "KeyR")
+		else if (event.code === "KeyW")
 		{
 			if (!superpowerModifier)
 				return ;
@@ -771,6 +770,13 @@ async function draw(timestamp: number)
 				paddleY = canvas.height / 2 - paddleHeight / 2;
 				console.log('Cinq secondes se sont écoulées.');
 			  }, 5000);
+
+			//   setTimeout(() => {
+			// 	// code à exécuter après 5 secondes
+			// 	paddleHeight = canvas.height * 0.25;
+			// 	paddleY = canvas.height / 2 - paddleHeight / 2;
+			// 	console.log('Cinq secondes se sont écoulées.');
+			//   }, 5000);
 		}
 	});
 

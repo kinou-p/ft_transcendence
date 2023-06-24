@@ -82,7 +82,7 @@ export class User {
 
 }
 
-@Entity()
+@Entity({name: 'MatchLog' })
 export class MatchLog {
   @PrimaryGeneratedColumn()
   id: number;
