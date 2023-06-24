@@ -6,11 +6,7 @@
 /*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/06/24 14:31:22 by sadjigui         ###   ########.fr       */
-=======
 /*   Updated: 2023/06/23 17:33:51 by apommier         ###   ########.fr       */
->>>>>>> origin/ereali
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +78,7 @@ function Profile () {
 			  } catch (error) {
 				console.error('Error uploading file:', error);
 			  }
-			} 
+			}
 		// }
 	  };
 
@@ -153,7 +149,7 @@ function Profile () {
 						</>
 					)}
 				</motion.div>
-			
+
 				{/* <div className="file-upload-container"> */}
   					{/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
 					  {/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
@@ -208,13 +204,13 @@ function Home () {
 			<div>
 				{user && user.otp_verified ? (
 					<MdQrCodeScanner className='success' onClick={() => setSuccessQr(true)}/>
-					 ):("")} 
+					 ):("")}
 				{user && user.win >= 2 ? (
 					<GiWingedSword className="success" onClick={() => setSuccessSword(true)}/>
 					 ):("")}
 				{user && user.win >= 5 ? (
 					<GiCrownedSkull className="success" onClick={() => setSuccessCrown(true)}/>
-					 ):("")} 
+					 ):("")}
 			</div>
 		<div className="home">
 			<motion.div animate={{x: move ? -200: 120}}
@@ -244,7 +240,7 @@ function Home () {
 			  	<YellowAlert handleClose={closeSword} text={"Success: 2 victory ? You won the noobi warrior success!"} icon={3}/>
 			  	) : ("")}
         </AnimatePresence>
-		</motion.div> 
+		</motion.div>
     )
 }
 
