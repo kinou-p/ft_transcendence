@@ -652,7 +652,7 @@ async function draw(timestamp: number)
 			send_point();
 			// send_forced_info();
 		}
-		if (ballX > (canvas.width * 1.2) && ballX - vX > canvas.width)
+		if (ballX > (canvas.width * 1.2) && ballX - (vX * 2) > canvas.width)
 		{
 			console.log("ball out win point pls")
 			send_my_point();

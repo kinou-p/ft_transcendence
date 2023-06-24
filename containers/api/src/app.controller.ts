@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 23:24:16 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 20:00:09 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,12 +369,10 @@ export class AppController {
 	  console.log(`user in auth/login= ${user}`);
 	  console.log(`user in auth/login= ${user.username}`);
 	  const data = await this.authService.login(user);
-	  console.log(`all data in api = ${data}`)
-
+	  console.log(`all data in api = ${data}`);
 	  const myJSON = JSON.stringify(data);
-	  console.log(`all data json version= ${myJSON}`)
-
-	  console.log(`data in api = ${(await data).access_token}`)
+	  console.log(`all data json version= ${myJSON}`);
+	  console.log(`data in api = ${(await data).access_token}`);
 	//   console.log(`data i = ${(await data).access_token}`)
 	  const token = (await data).access_token;
 	//   console
