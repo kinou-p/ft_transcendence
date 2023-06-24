@@ -3,12 +3,15 @@ import { useState, useEffect } from 'react'
 import queryString from 'query-string';
 import api from "./axiosApi.tsx";
 import axios from 'axios';
+import React from 'react';
+
+import {Matchlog, User} from "../../interfaces.tsx"
 
 function SuccessToken() {
 	const location = useLocation();
 	const { data } = queryString.parse(location.search);
 	const [code, setCode] = useState('');
-	const [user, setUser] = useState(false);
+	const [user, setUser] = useState<User>();
   
 	useEffect(() => {
 	  if (!data) {
@@ -37,7 +40,7 @@ function SuccessToken() {
 	  getUser();
 	}, [data]);
   
-	const handleKeyPress = async (e)=>{
+	const handleKeyPress = async (e: { key: string; })=>{
 		// console.log(`e in press= ${e.key}`)
 		if (e.key !== "Enter")
 			return ;
@@ -90,7 +93,8 @@ function SuccessToken() {
 	  // Render a loading indicator or return null while user is being fetched
 	  return <h1>Loading...</h1>;
 	}
-  
+	if (!data)
+		return ;
 	const cleanData = data.slice(1, -1); // Declare cleanData here as well
   
 	if (!user.otp_verified) {

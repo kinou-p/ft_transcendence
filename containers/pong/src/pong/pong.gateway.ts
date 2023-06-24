@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:18:38 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/21 00:59:39 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:19:12 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	handleDisconnect(client: Socket)
 	{
-		// console.log(`Client disconnected: ${client.id}`);
 		console.log(`Normal disconnected: ${client.id}`);
-		// this.waitingClients.delete(client);
-		// this.waitingClients.forEach((waitingClient) => {
-		// 	if (waitingClient.client === client) {
-		// 	  this.waitingClients.delete(waitingClient);
-		// 	}})
-		// delete this.clients[client.id];
 
 		this.waitingClients.forEach((item) => {
 			if (item.client === client)

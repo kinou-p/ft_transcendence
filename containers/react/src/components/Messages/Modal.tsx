@@ -21,7 +21,6 @@ const dropIn = {
             }},
     exit:{y: "100vh",
             opacity: 0,},
-
 };
 
 const Modal = ({handleClose}) => {
@@ -100,11 +99,11 @@ const Modal = ({handleClose}) => {
     // let new_name;
 
     return (
-        <Backdrop onClick={handleClose}>
+        <Backdrop>
             <motion.div
                 onClick={(e) => e.stopPropagation()}
-                className="modal"
-                // variant={dropIn}
+                className="modalSetting"
+                variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"

@@ -61,7 +61,7 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 	if(!ctx)
 		return ;
 	
-	const socket = io('http://' + process.env.REACT_APP_BASE_URL + ':4000', { transports: ['polling'] });
+	const socket = io('http://localhost:4000', { transports: ['polling'] });
 	// useEffect(() => {
 		// 	console.log("useeffect?????????????????")
 	// 	return () => {
@@ -576,11 +576,6 @@ async function draw(timestamp: number)
 				ballY = ballRadius + 2
 			// send_info();
 		}
-		// else if (ballX + ballRadius + 2 >= canvas.width) //touch right wall
-		// {
-		// 	vX = -vX;
-		// 	// send_info();
-		// }
 	}
 
 	function is_out()
@@ -634,19 +629,6 @@ async function draw(timestamp: number)
 //                                 Key/Mouse/Finger Listener
 //========================================================================================================
 //========================================================================================================
-
-// interface sizeProps {
-// 	clientWidth: number,
-// 	clientHeight: number
-// }
-
-	// document.addEventListener('resize', event => {
-	// 	// event.height
-	// 	// event.width
-	// 	const { clientWidth, clientHeight } = canvas.parentElement;
-	// 	// const { clientWidth, clientHeight } = canvas.parentElement!;
-	// 	console.log(`resize detected widht= ${clientWidth} height= ${clientHeight}`)
-	// });
 
     document.addEventListener('mousemove', event => {
         const mouseY = event.clientY;

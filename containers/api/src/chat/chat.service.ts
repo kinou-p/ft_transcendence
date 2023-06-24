@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/20 16:47:02 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 19:37:41 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,14 +119,22 @@ async verifyPassword(convId: number, password: string) {
 	// conv.password = password
 }
 
-async muteUser(convId: number, username: string) {
+async muteUser(convId: number, username: string, time: string) {
 	const conv = await this.findConv(convId);
+
+	console.log("MUTE USER");
 
 	conv.muted = conv.muted || [];
 	if (conv.muted.find(item => item === username))
 		return (1);
 	conv.muted.push(username);
 	this.save(conv);
+
+	setTimeout(() => {
+		conv.muted = conv.muted.filter((item) => item !== username)
+		this.save(conv);
+	  }, 5000);
+	  console.log("END MUTE USER");
 }
 
 async setAdmin(convId: number, username: string) {
@@ -149,12 +157,14 @@ async isAdmin(convId: number, username: string) {
 	return (0);
 }
 
-async setPrivate(convId: number) {
+async setPrivate(convId: number, bool: boolean) {
 	const conv = await this.findConv(convId);
-	if (conv.private === true)
-		conv.private = false;
-	else
-		conv.private = true;
+	console.log("bool= ", bool);
+	conv.private = bool;
+	// if (conv.private === true)
+	// 	conv.private = false;
+	// else
+	// 	conv.private = true;
 	this.save(conv);
 }
 

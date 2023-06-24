@@ -39,8 +39,10 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 	const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
 	const [selectedUser, setSelectedUser] = useState("");
 	const [newName, setNewName] = useState("");
+	const [time, setTime] = useState("");
 	const [newPassword, setNewPassword] = useState("");
-	const [privateConv, setPrivateConv] = useState(false);
+	const [privateConv, setPrivateConv] = useState<Boolean>();
+	const [loading, setLoading] = useState<Boolean>(true);
 	const dark = () => setPrivateConv(true);
 	const light = () => setPrivateConv(false);
 	const [mute, setMute] = useState(false);
@@ -53,15 +55,46 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 		console.log("convid =", convId)
 		const getUsers = async ()=>{
 			try {
+				const currentConv = await api.post("/convId", {convId: convId});
+				
+				// console.log("conv private =================== ", )
+				if (currentConv.data.private)
+					setPrivateConv(true);
 				const tmpUsers = await api.get("/users");
 				console.log("users=", tmpUsers.data);
 				setUsers(tmpUsers.data);
+				setLoading(false);
 			} catch(err){
 				console.log(err)
 			}
 		}
 		getUsers();
 	}, []);
+
+	useEffect(() => {
+		// Function to run when myVariable changes
+		const handleVariableChange = () => {
+		  console.log('Variable changed:', privateConv);
+		  if (privateConv === undefined)
+		  {
+			console.log("return")
+			return ;
+		  }
+		  try {
+			if (privateConv)
+				api.post("/private", {convId: convId})
+			else
+				api.post("/public", {convId: convId})
+		  } catch (err){
+			console.log(err);
+		  }
+		};
+		if (!loading)
+			handleVariableChange();
+		// return () => {
+		//   handleVariableChange();
+		// };
+	  }, [privateConv]);
 
     // const [multi, setMulti] = useState(false);
     // const [selectedOptionArray, setSelectedOptionArray] = useState([]);
@@ -80,30 +113,30 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 
 	const handleCheckPass = (e: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
 		setPassword(e.target.checked);
-		console.log("password??", e.target.checked)
+		console.log("password??", e.target.checked);
 	}
 
-	const handleCheckPriv = (e: { target: { checked: any; }; }) => {
-		// setPassword(e.target.checked);
-		if (e.target.checked)
-		{
-			console.log("chack true", e.target.checked)
-			try{
-				api.post("/private", {convId: convId})
-			} catch(err) {
-				console.log(err);
-			}
-		}
-		else
-		{
-			console.log("chack false", e.target.checked)
-			try{
-				api.post("/private", {convId: convId})
-			} catch(err) {
-				console.log(err);
-			}
-		}
-	}
+	// const handleCheckPriv = (e: { target: { checked: any; }; }) => {
+	// 	// setPassword(e.target.checked);
+	// 	if (e.target.checked)
+	// 	{
+	// 		console.log("chack true", e.target.checked)
+	// 		try{
+	// 			api.post("/private", {convId: convId})
+	// 		} catch(err) {
+	// 			console.log(err);
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		console.log("chack false", e.target.checked)
+	// 		try{
+	// 			api.post("/private", {convId: convId})
+	// 		} catch(err) {
+	// 			console.log(err);
+	// 		}
+	// 	}
+	// }
 
 	const handleName = async (e: { key: string; })=>{
 		if (e.key !== "Enter")
@@ -157,11 +190,15 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 		handleClose();
 	};
 
-	const handleMute = async () => {
-		if (!selectedUser.length)
+	const handleMute = async (e: { key: string; }) => {
+		console.log(`e in press= ${e.key}`)
+		if (e.key != "Enter")
 			return ;
+
+		// console.log("value mute = ", e.target.value);
+		console.log("value mute = ", time);
 		try{
-			await api.post("/mute", {convId: convId, username: selectedUser})
+			await api.post("/mute", {convId: convId, username: selectedUser, time: time})
 		} catch(err) {
 			console.log(err);
 		}
@@ -176,6 +213,17 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 		}
 		handleClose();
 	};
+
+	const handleKeyPress = async (e: { key: string; })=> {
+		if (e.key !== "Enter")
+			return ;
+		try{
+
+		} 
+		catch(err){
+			
+		}
+	}
 
     return (
         <Backdrop onClick={handleClose}>
@@ -198,7 +246,7 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
                         <p className="checkbox">Password<input type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
                         
 						
-						{password || privateConv ? (
+						{password ? (
 							<input 
 								onChange={(e) => setNewPassword(e.target.value)}
 								onKeyDown={handlePassword} 
@@ -207,7 +255,6 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 								placeholder="Password"/>
 							):
 							("")}
-
 
                     </div>
                     <div className="forName">
@@ -254,7 +301,14 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 
                 </div>
 					{mute ? (
-						<input type="text" className="in_howLong" placeholder="How long ?" />
+						<input 
+							onKeyDown={handleMute} 
+							type="number" 
+							className="in_howLong" 
+							placeholder="How long ?"
+							value={time}
+            				onChange={(e) => setTime(e.target.value)}
+						/>
 					):("")}
 
             </motion.div>

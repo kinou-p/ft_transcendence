@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/21 01:19:01 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 19:15:56 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -560,7 +560,7 @@ export class AppController {
   async verifyPassword(@Body() data: any) {
 	  return await this.chatService.verifyPassword(data.convId, data.password)
 	}
-	
+
   @UseGuards(JwtAuthGuard)
   @Post('/invite')
   async inviteUser(@Body() data: any) {
@@ -588,7 +588,7 @@ export class AppController {
   async muteUser(@Body() data: any) {
 	if (!data.username)
 		return ;
-	return await this.chatService.muteUser(data.convId, data.username)
+	return await this.chatService.muteUser(data.convId, data.username, data.time)
   }
   
   @UseGuards(JwtAuthGuard)
@@ -598,11 +598,16 @@ export class AppController {
 	return await this.chatService.isAdmin(data.convId, req.user.username)
   }
   
-  
   @UseGuards(JwtAuthGuard)
   @Post('/private')
   async setPrivate(@Body() data: any) {
-	return await this.chatService.setPrivate(data.convId)
+	return await this.chatService.setPrivate(data.convId, true)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/public')
+  async setPublic(@Body() data: any) {
+	return await this.chatService.setPrivate(data.convId, false)
   }
 
   @UseGuards(JwtAuthGuard)

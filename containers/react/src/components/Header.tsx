@@ -40,10 +40,6 @@ function Header() {
 			fetchProfilePicture();
 	  }, []);
 
-	// console.log(`profile pic= ${profilePicture}`)
-
-	// photo.toString('base64')
-
   return (
 	<div className='Header'>
 		<motion.div

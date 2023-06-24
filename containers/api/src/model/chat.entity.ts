@@ -6,12 +6,12 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:20 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/17 01:31:29 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:18:19 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } from 'typeorm';
-	
+
    @Entity()
 	export class Conv{
 	@PrimaryGeneratedColumn()

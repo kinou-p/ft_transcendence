@@ -6,7 +6,7 @@
 /*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 18:24:46 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 21:14:59 by sadjigui         ###   ########.fr       */
+/*   Updated: 2023/06/24 15:10:21 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ function MessageMe({message, own}: MessageMeProps){
 	const [user, setUser] = useState<User>();
 	const scrollRef = useRef<HTMLDivElement>(null);
 
-	// console.log("Message eher")
 
 	useEffect(() => {
 		if (scrollRef.current)
@@ -83,20 +82,13 @@ function MessageMe({message, own}: MessageMeProps){
 	};
 
 	if (!user || !sender || !conv)
-	{
-		// console.log("return")
 		return (<></>);
-	}
 	// console.log("result includes=", conv.banned.includes(user.username))
 	// console.log("result includes=", conv.blocked.includes(user.username))
 	if (user.blocked && user.blocked.includes(message.sender))
 		return (<></>);
-	// else if (conv.banned && conv.banned.includes(user.username))
-	// {
-		// console.log("return2")	
-		// return (<></>);
-	// }
-		// console.log("noy return")
+	else if (conv.banned && conv.banned.includes(user.username))
+		return (<></>);
 	// if (user.blocked.includes(message.sender))/
 
 	return (

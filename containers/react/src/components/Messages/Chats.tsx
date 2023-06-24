@@ -84,7 +84,7 @@ interface MessageProps {
   }
 
 function Chats(){
-	
+
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [conversations, setConversation] = useState([]);
 	const [partyInvite, setPartyInvite] = useState([]);
@@ -95,7 +95,7 @@ function Chats(){
 	const [messages, setMessage] = useState<MessageProps[]>([]);
 	const [newMessages, setNewMessage] = useState("");
 	const [incomingMessage, setIncomingMessage] = useState<MessageProps>();
-	
+
 	// let socket: Socket;
 	const socket = useRef<Socket | null>(null);
 	// const socket = Socket<DefaultEventsMap, DefaultEventsMap> | null
@@ -120,7 +120,8 @@ function Chats(){
 				setUsers(tmpUsers.data);
 
 				// console.log(`connection....`);
-				socket.current = io('http://' + process.env.REACT_APP_BASE_URL + ':4001', { transports: ['polling'] });
+				socket.current = io('http://localhost:4001', { transports: ['polling'] });
+				// console.log(`connection done`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				socket.current.on('message', (data) => { //data should be a message ?)
 					setIncomingMessage(data);
@@ -287,7 +288,7 @@ function Chats(){
 	const [newConversationModalOpen, setNewConversationModalOpen] = useState(false);
 
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
-	const [users, setUsers] = useState([]);
+	const [users, setUsers] = useState<User[]>([]);
 
   
 	const openNewGameModal = () => {
@@ -369,7 +370,7 @@ function Chats(){
 		setShowBlockAlert(false);
 	  };
 
-	  const handleOptionChange = (selectId, selectedOption) => {
+	  const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("selected Option=", selectedOption)
         setSelectTag((prevTags) => 
             prevTags.map((tag) =>
@@ -454,7 +455,7 @@ function Chats(){
 				      <option value="">{
 					selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
 					}</option>
-				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.name)).map((item, index) => (
+				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.username)).map((item, index) => (
 				        <option key={index} value={item.username}>
 				          {item.username}
 				        </option>

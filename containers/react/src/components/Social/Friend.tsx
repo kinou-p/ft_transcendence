@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:18:58 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/20 13:41:44 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:12:07 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,8 @@ export default function  Friend({currentUser}: UserProps)
 				console.error('Error fetching profile picture:', error);
 			}
 		  };
-		
 		  fetchProfilePicture();
-	})
+	}, []);
 
 	function getStatus(friend: User)
 	{
