@@ -11,6 +11,10 @@
 	font-size: 300%;
   }
 
+  .inside_checkbox{
+	height : 70%;
+	width:  70%;
+  }
   
   .field {
 	background-color: rgb(249, 249, 249);
@@ -64,6 +68,18 @@
 	  font-size: 50%;
   }
 }
+
+.responsive{
+	display: flex;
+	flex-direction: column;
+}
+
+/* @media screen and (max-width: 350px){
+	.responsive{
+		display:list-item;
+		flex-direction: column;
+	}
+  } */
 
 #myCanvas {
 	background-color: rgb(124, 47, 47);

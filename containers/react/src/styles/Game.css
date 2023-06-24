@@ -3,6 +3,7 @@
 	margin: 50px;
 }
 
+
 .rank_elements {
 	border-width:1px;
 	border-style:solid;
@@ -26,3 +27,13 @@
 	width: 30px;
 	border-radius: 50%;
 }
+
+@media screen and (max-width: 755px){
+	.game{
+		display: grid;
+		height: 20vh;
+	}
+	.scroll{
+		height: 20vh;
+	}
+  }

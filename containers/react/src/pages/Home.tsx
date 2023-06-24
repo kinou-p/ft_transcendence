@@ -6,7 +6,7 @@
 /*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 22:46:23 by sadjigui         ###   ########.fr       */
+/*   Updated: 2023/06/24 14:31:22 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 // import { GrClose } from 'react-icons/gr'
 import { Link } from "react-router-dom";
 import ModalEdit from "../components/Profile/EditName.tsx";
-import {AiOutlineHistory} from 'react-icons/ai'
+import {AiOutlineCloseCircle, AiOutlineHistory} from 'react-icons/ai'
 import { MdQrCodeScanner, MdOutlinePhotoLibrary } from 'react-icons/md';
 import { GiWingedSword, GiCrownedSkull } from 'react-icons/gi';
 
@@ -274,7 +274,7 @@ function Home () {
 				className="div_history"
 			// className="history"
 				onClick={ () => setmove(!move)}>
-					<Link to="#" className="history"><AiOutlineHistory/>  Match History</Link>
+					<Link to="#" className="history"> {move ? (<AiOutlineCloseCircle/>):(<AiOutlineHistory/>)}  Match History</Link>
 			</motion.div>
 			<AnimatePresence initial={false} onExitComplete={() => null}>
           		{successQr ? (
