@@ -156,7 +156,7 @@ function QrCode () {
           />
         </>
       ) : (
-        <button onClick={handleDesactivate}>Desactivate 2FA</button>
+        <button className="desactivate" onClick={handleDesactivate}>Desactivate 2FA</button>
       )}
     </>
 
