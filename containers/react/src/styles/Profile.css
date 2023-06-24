@@ -154,6 +154,13 @@
 	text-decoration: none;
 	font-weight: bold;
 }
+
+.user_name{
+	/* background-image: linear-gradient(90deg, #5843e4, #5a0760); */
+	background: -webkit-linear-gradient(60deg, #5843e4, #5a0760);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 /* canvas {
 	margin-top: 20px;
     border: solid 0px #ccc;

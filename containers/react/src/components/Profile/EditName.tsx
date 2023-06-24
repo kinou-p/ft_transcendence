@@ -1,12 +1,13 @@
-import {motion} from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 // import Backdrop from "../Sidebar/Backdrop"
-import {Link} from 'react-router-dom';
-import { UserProfile } from "../../DataBase/DataUserProfile";
-import {useState} from 'react';
+import { Link } from 'react-router-dom';
+// import { UserProfile } from "../../DataBase/DataUserProfile";
+import { useState } from 'react';
 import "../../styles/Profile.css"
 
 import api from '../../script/axiosApi.tsx';
 import React from "react";
+import RedAlert from "../Alert/RedAlert.tsx";
 
 const dropIn = {
 	hidden: {
@@ -26,37 +27,55 @@ const dropIn = {
 // 	)
 // }
 
-const ModalEdit = ( handleClose ) => {
+const ModalEdit = (handleClose) => {
 	// let new_name = "";
 	const [nickname, setNickname] = useState("");
-	
-	const handler = e =>
-	{
+	const [errTaken, setErrTaken] = useState(false);
+	const closeTaken = () => setErrTaken(false);
+	const [errTooShort, setErrTooShort] = useState(false);
+	const closeTooShort = () => setErrTooShort(false);
+
+	const handler = e => {
 		setNickname(e.target.value);
 		console.log("testeeeee")
-		const postNickname = async ()=>{
-			try{
-				await api.post("/nickname", {nickname: nickname})
-				// setUser(tmpUser.data);
-				// setIsLoading(false)
-			}
-			catch(err){
-				console.log(err);
-			}
+		const postNickname = async () => {
+			// try{
+			// 	await api.post("/nickname", {nickname: nickname})
+			// 	// setUser(tmpUser.data);
+			// 	// setIsLoading(false)
+			// }
+			// catch(err){
+			// 	console.log(err);
+			// }
 		};
 		postNickname();
 	}
 
-	const handlePostNickname = async () => 
-	{
-		console.log("nickname=" ,nickname)
-		try{
-			await api.post("/nickname", {nickname: nickname})
-			window.location.reload();
+	const handlePostNickname = async () => {
+		console.log("nickname=", nickname)
+		try {
+			const ret = await api.post("/nickname", { nickname: nickname });
+			// console.log("cest ici = ",ret);
+			// if (!ret)
+			console.log("test ret =", ret.data);
+			if (nickname.length < 3) {
+				setErrTooShort(true);
+			}
+			else if (ret.data) {
+				console.log("ici error = ", ret.data);
+				window.location.reload();
+			}
+			else {
+				console.log("nickname already set = ", ret.data);
+
+				setErrTaken(true);
+			}
+
+
 			// setUser(tmpUser.data);
 			// setIsLoading(false)
 		}
-		catch(err){
+		catch (err) {
 			console.log(err);
 		}
 	}
@@ -66,23 +85,34 @@ const ModalEdit = ( handleClose ) => {
 	// 	//do nothing
 	// }
 	return (
-			<motion.div 
-						className="modal"
-						variants={dropIn}
-						initial="hidden"
-						animate="visible"
-						exit="exit">
-				<h2>Type your new name</h2>
-				<input className="text" maxLength="10" type="text" value={nickname} onChange={handler} handleClose/>
-				<div>
-					<div className="button" onClick={ () => handlePostNickname()}>
-						change
-						{/* <Link className="button" to={""}>change</Link> */}
-					</div>
+		<motion.div
+			className="modal"
+			variants={dropIn}
+			initial="hidden"
+			animate="visible"
+			exit="exit">
+			<h2>Type your new name</h2>
+			<input className="text" minLength={2} maxLength={10} type="text" value={nickname} onChange={handler} />
+			<div>
+				<div className="button" onClick={handlePostNickname}>
+					change
+					{/* <Link className="button" to={""}>change</Link> */}
 				</div>
-			</motion.div>
-			
-		
+				<AnimatePresence initial={false} onExitComplete={() => null}>
+				{
+					errTaken ? (
+						<RedAlert handleClose={closeTaken} text="Error: Nickname already taken" />
+					) : ("")
+				}
+				{
+					errTooShort ? (
+						<RedAlert handleClose={closeTooShort} text="Error: Nickname it too short" />
+					) : ("")
+				}
+
+				</AnimatePresence>
+			</div>
+		</motion.div>
 	)
 }
 

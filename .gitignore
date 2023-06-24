@@ -1,4 +1,5 @@
-#.env
+.env
+containers/react/.env
 backend/node_modules/
 containers/backend/dist/
 

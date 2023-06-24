@@ -32,11 +32,11 @@ function RedAlert ({handleClose, text}: AlertProps) {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-            >
+                >
             <BiErrorCircle/>
             <p>{text}</p>
             </motion.div>
-            {setTimeout(handleClose, 1500)}
+                {setTimeout(handleClose, 1500)}
         </Backdrop>
     )
 }

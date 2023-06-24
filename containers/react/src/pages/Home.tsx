@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Home.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
 /*   Updated: 2023/06/23 22:11:28 by apommier         ###   ########.fr       */
@@ -20,7 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 // import { GrClose } from 'react-icons/gr'
 import { Link } from "react-router-dom";
 import ModalEdit from "../components/Profile/EditName.tsx";
-import {AiOutlineHistory} from 'react-icons/ai'
+import {AiOutlineCloseCircle, AiOutlineHistory} from 'react-icons/ai'
 import { MdQrCodeScanner, MdOutlinePhotoLibrary } from 'react-icons/md';
 import { GiWingedSword, GiCrownedSkull } from 'react-icons/gi';
 
@@ -78,7 +78,7 @@ function Profile () {
 			  } catch (error) {
 				console.error('Error uploading file:', error);
 			  }
-			} 
+			}
 		// }
 	  };
 
@@ -130,7 +130,7 @@ function Profile () {
 					{isLoading || !user ? (
         				<h1>Loading...</h1>
       				) : (
-        				<h1>{user.nickname}</h1>
+        				<h1 className='user_name'>{user.nickname}</h1>
       				)}
 	  		</span>
 
@@ -149,7 +149,7 @@ function Profile () {
 						</>
 					)}
 				</motion.div>
-			
+
 				{/* <div className="file-upload-container"> */}
   					{/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
 					  {/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
@@ -215,13 +215,13 @@ function Home () {
 			<div>
 				{user && user.otp_verified ? (
 					<MdQrCodeScanner className='success' onClick={() => setSuccessQr(true)}/>
-					 ):("")} 
+					 ):("")}
 				{user && user.win >= 2 ? (
 					<GiWingedSword className="success" onClick={() => setSuccessSword(true)}/>
 					 ):("")}
 				{user && user.win >= 5 ? (
 					<GiCrownedSkull className="success" onClick={() => setSuccessCrown(true)}/>
-					 ):("")} 
+					 ):("")}
 			</div>
 		<div className="home">
 			<motion.div animate={{x: move ? -200: 120}}
@@ -236,7 +236,7 @@ function Home () {
 				className="div_history"
 			// className="history"
 				onClick={ () => setmove(!move)}>
-					<Link to="#" className="history"><AiOutlineHistory/>  Match History</Link>
+					<Link to="#" className="history"> {move ? (<AiOutlineCloseCircle/>):(<AiOutlineHistory/>)}  Match History</Link>
 			</motion.div>
 			<AnimatePresence initial={false} onExitComplete={() => null}>
           		{successQr ? (
@@ -251,7 +251,7 @@ function Home () {
 			  	<YellowAlert handleClose={closeSword} text={"Success: 2 victory ? You won the noobi warrior success!"} icon={3}/>
 			  	) : ("")}
         </AnimatePresence>
-		</motion.div> 
+		</motion.div>
     )
 }
 

@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 18:24:46 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 15:36:48 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 16:00:48 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ interface MessageMeProps {
   }
 
 function MessageMe({message, own}: MessageMeProps){
-	
+
 	const [profilePicture, setProfilePicture] = useState('');
 	const [sender, setSender] = useState<User>();
 	const [conv, setConv] = useState<Conv>();
-	
+
 	const [user, setUser] = useState<User>();
 	const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -130,7 +130,7 @@ function MessageMe({message, own}: MessageMeProps){
 				<MeStyleP>{message.text}</MeStyleP>
 			</div>
 		</div>
-		
+
 	)
 }
 

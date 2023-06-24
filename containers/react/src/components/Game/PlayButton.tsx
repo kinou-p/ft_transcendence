@@ -40,9 +40,9 @@ function PlayButton() {
 			<button onClick={handleButtonClick} className="playButton">Play</button>
 			{/* !buttonClicked && <button onClick={handleButtonClick}>Draw on Canvas</button> */}
 			<div className='checkbox'>
-				<p><input type="checkbox" value="superpower"/> Super Power </p>
-				<p><input type="checkbox" value="obstacle"/> Obstacle </p>
-				<p><input type="checkbox" value="speed"/> Faster and Faster </p>
+				<p><input className="inside_checkbox" type="checkbox" value="superpower"/> Super Power </p>
+				<p><input className="inside_checkbox" type="checkbox" value="obstacle"/> Obstacle </p>
+				<p><input className="inside_checkbox" type="checkbox" value="speed"/> Faster and Faster </p>
 			</div>
 		</div>
 		);
