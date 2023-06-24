@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:18:38 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 00:43:19 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 17:20:24 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,8 +167,9 @@ addMatchmaking(client: Socket, payload: any): void {
       player.join(gameId);
       console.log(`Player ${player.id} joined game ${gameId}`);
     });
+	payload.gameId = gameId;
     players.forEach((player) => {
-      player.emit('pong:gameId', gameId);
+      player.emit('pong:gameId', payload);
     });
   }
 
@@ -202,8 +203,8 @@ joinPrivateParty(client: Socket, payload: any): void {
 	{
 		game.push(client);
 		const playersIds = game.map(socket => socket.id);
-		this.clients[playersIds[0]].emit('pong:gameId', payload.gameId);
-		this.clients[playersIds[1]].emit('pong:gameId', payload.gameId);
+		this.clients[playersIds[0]].emit('pong:gameId', payload);
+		this.clients[playersIds[1]].emit('pong:gameId', payload);
 	}
 	else
 	{
@@ -367,11 +368,11 @@ addPrivateParty(client: Socket, payload: any): void {
 
 		if (playersIds[0] === payload.id) 
 		{
-			this.clients[playersIds[1]].emit('pong:name', payload.name);
+			this.clients[playersIds[1]].emit('pong:name', payload);
 		}
 		if (playersIds[1] === payload.id)
 		{
-			this.clients[playersIds[0]].emit('pong:name', payload.name);
+			this.clients[playersIds[0]].emit('pong:name', payload);
 		}
 	}
 

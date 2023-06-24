@@ -21,18 +21,15 @@ function Ranking(){
 				// setFriends(tmpFriends.data);
 				// return tmpUser;
 				// console.log(`user= ${tmpUser.data.username}`);
-				setIsLoading(false)
-
+				setIsLoading(false);
 			}
 			catch(err){
 				console.log(err);
 			}
 		};
 		getRanking();
-
-	}, [])
-
-	console.log(`ranking after= ${ranking}`)
+	}, []);
+	console.log(`ranking after= ${ranking}`);
 
 	return (
 		<div>

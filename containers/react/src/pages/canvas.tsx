@@ -170,7 +170,9 @@ socket.on('pong:privateId', async (data) => {
 
 socket.on('pong:gameId', async (data) => {
 	console.log("gameId received");
-	gameId = data;
+	gameId = data.gameId;
+	console.log("gameid = ", gameId);
+	console.log("data gameid = ", data);
   
 	try {
 	  let response = await api.get('/profile');
@@ -190,6 +192,16 @@ socket.on('pong:gameId', async (data) => {
   
 	  console.log("emit to name");
 	  socket.emit('pong:name', info);
+	  if (data.id === myId)
+	  {
+		console.log("myId= true")
+	  	vX = 0.0001;
+	  }
+	  else
+	  {
+		console.log("myId= false")
+	  	vX = -0.0001;
+	  }
 	} catch (error) {
 	  console.log(error);
 	  // Handle error here
@@ -198,7 +210,11 @@ socket.on('pong:gameId', async (data) => {
   });
 
 socket.on('pong:name', (data) => {
-	opName = data;
+	opName = data.name;
+	// if (data.myId === myId)
+	// 	vX = 0.0001;
+	// else
+	// 	vX = -0.0001;
 	console.log(`opponent Name= ${opName}`)
 });
 
@@ -221,7 +237,6 @@ socket.on('pong:info', (data) => {
 	vX = -data.vX;
 	vY = data.vY;
 });
-
 
 socket.on('pong:paddle', (data) => {
 	console.log("paddle info receive")
@@ -251,7 +266,7 @@ socket.on('pong:point', (data) => {
 		// console.log("up point");
 	myScore = data.point;
 	// }
-	vX = 0.0001;
+	vX = -0.0001;
 	vY = 0;
 	ballX = canvas.width / 2;
 	ballY = canvas.height / 2;
@@ -265,7 +280,7 @@ socket.on('pong:hisPoint', (data) => {
 		// console.log("up point");
 	hisScore = data.point;
 	// }
-	vX = 0.0001;
+	vX = -0.0001;
 	vY = 0;
 	ballX = canvas.width / 2;
 	ballY = canvas.height / 2;
@@ -338,6 +353,7 @@ socket.on('pong:hisPoint', (data) => {
 			point: hisScore,
 		}
 		socket.emit('pong:point', info);
+		vX = 0.0001;
 	}
 
 	function send_my_point()
@@ -740,9 +756,8 @@ async function draw(timestamp: number)
 					vX -= 0.0001;
 			}
 			send_forced_info();
-			// console.log(`vx = ${vX}`);
 		}
-		else if (event.code === "KeyR")
+		else if (event.code === "KeyW")
 		{
 			if (!superpowerModifier)
 				return ;
@@ -755,6 +770,13 @@ async function draw(timestamp: number)
 				paddleY = canvas.height / 2 - paddleHeight / 2;
 				console.log('Cinq secondes se sont écoulées.');
 			  }, 5000);
+
+			//   setTimeout(() => {
+			// 	// code à exécuter après 5 secondes
+			// 	paddleHeight = canvas.height * 0.25;
+			// 	paddleY = canvas.height / 2 - paddleHeight / 2;
+			// 	console.log('Cinq secondes se sont écoulées.');
+			//   }, 5000);
 		}
 	});
 

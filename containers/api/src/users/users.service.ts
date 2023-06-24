@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 22:27:16 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 19:29:33 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,10 @@ export class UsersService {
 		user.friendRequest = user.friendRequest || [];
 		if (user.friendRequest.find(item => item === username))
 			return (1);
+		if (user.friends.find(item => item === username))
+			return (1);
 		user.friendRequest.push(username);
-		this.save(user);
+		this.save(user);	
 		return (1);
 	}
 
@@ -99,13 +101,20 @@ export class UsersService {
 
 	async getHistory(username: string) {
 		const user = await this.findOne(username);
-		
-		if (user) {
-		  const children = user.children;
-		  console.log(user); 
-		  console.log(user.children); // or perform any operations with the children
-		  return children;
+
+		if (user)
+		{
+
+			// const ret = await this.matchRepository.query("SELECT * FROM \"MatchLog\" WHERE id = ($1);", [user.id]);
+			const ret = await this.matchRepository.query("SELECT * FROM \"MatchLog\"");
+			console.log("all match= ", ret);
 		}
+		//   const children = user.children;
+		//   console.log(user); 
+		//   console.log(user.children); // or perform any operations with the children
+		//   return children;
+			
+		// }
 	}
 
 	async addFriend(user: User, username: string) {
@@ -122,6 +131,7 @@ export class UsersService {
 		}
 		user.friends.push(username);
 		user.friendRequest = user.friendRequest.filter((item) => item !== username);
+		user2.friends = user2.friends || [];
 		user2.friends.push(user.username);
 		this.save(user2);
 		this.save(user);
