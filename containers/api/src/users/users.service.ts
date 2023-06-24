@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 22:27:16 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/24 17:38:24 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ export class UsersService {
 		}
 		user.friends.push(username);
 		user.friendRequest = user.friendRequest.filter((item) => item !== username);
+		user2.friends = user2.friends || [];
 		user2.friends.push(user.username);
 		this.save(user2);
 		this.save(user);
