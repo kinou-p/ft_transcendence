@@ -17,11 +17,7 @@ import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import { GrAdd } from 'react-icons/gr';
 import { RiListSettingsLine } from 'react-icons/ri'
-<<<<<<< Updated upstream
-import { HiChatBubbleLeft } from 'react-icons/hi2'
-=======
-import { LuCat } from 'react-icons/lu'
->>>>>>> Stashed changes
+// import { HiChatBubbleLeft } from 'react-icons/hi2'
 
 // import { Rank } from "../../DataBase/DataRank";
 import GreenAlert from "../Alert/GreenAlert.tsx";
@@ -89,7 +85,7 @@ interface MessageProps {
   }
 
 function Chats(){
-
+	
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [conversations, setConversation] = useState([]);
 	const [partyInvite, setPartyInvite] = useState([]);
@@ -125,7 +121,7 @@ function Chats(){
 				setUsers(tmpUsers.data);
 
 				// console.log(`connection....`);
-				socket.current = io('http://localhost:4001', { transports: ['polling'] });
+				socket.current = io('http://' + process.env.REACT_APP_SOCKET_URL + ':4001', { transports: ['polling'] });
 				// console.log(`connection done`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				socket.current.on('message', (data) => { //data should be a message ?)
@@ -211,11 +207,12 @@ function Chats(){
 		getMessage();
 	}, [currentChat]);
 
-	const handleSubmit = async (e: { preventDefault: () => void; })=>{
+	const handleSubmit = async (e: { key?: any; preventDefault: any; })=>{
 		e.preventDefault();
 		// console.log(`e= ${e.key}`)
 		// console.log(`name= ${user.username}`)
 		// let message;
+		console.log("in handle");
 		if (!user || !currentChat)
 			return ;
 		const message = {
@@ -248,33 +245,11 @@ function Chats(){
 		}
 	}
 
-	const handleKeyPress = async (e: { key: string; })=> {
+	const handleKeyPress = async (e: { key?: any; preventDefault: () => void; })=> {
 		// console.log(`e in press= ${e.key}`)
 		if (e.key !== "Enter")
 			return ;
-		// console.log(`name= ${user.username}`)
-		if (!user || !currentChat)
-			return ;
-		const message = {
-			sender: user.username,
-			text: newMessages,
-			convId: currentChat.id,
-			members: null,
-			id: null,
-		};
-		try{
-			const res = await api.post('/message', message);
-			const convMember = await api.post('/member', message);
-			message.members = convMember.data.members;
-			message.id = res.data.id
-			setMessage([...messages, res.data]);
-			setNewMessage("");
-			if (socket.current)
-				socket.current.emit('sendMessage', message);
-		} 
-		catch(err){
-			 console.log(err)
-		}
+		handleSubmit(e);
 	}
 
 
@@ -329,6 +304,7 @@ function Chats(){
 	
 	  const handleAddFriend = async () => {
 		try{
+			console.log("friend= ", friend);
 			const res = await api.post("/invite", {username: friend})
 			// if (res.data === 1)
 			// console.log("res in friend= ", res)
@@ -377,6 +353,7 @@ function Chats(){
 
 	  const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("selected Option=", selectedOption)
+		setFriend(selectedOption);
         setSelectTag((prevTags) => 
             prevTags.map((tag) =>
                 tag.id === selectId ? { ...tag, selectedOption } : tag
@@ -551,7 +528,7 @@ function Chats(){
 							onClick={() => setCurrentChat(c)}>
 							<UserChat>
 							{/* <img className="pic-user" src={DefaultPic} alt="User" /> */}
-							<HiChatBubbleLeft className="catchat"/>
+							{/* <HiChatBubbleLeft className="catchat"/> */}
 							<div className="infoSideBar">
 								<span>{c.name}</span>
 								{/* <SideP>Desc?</SideP> */}
@@ -579,7 +556,7 @@ function Chats(){
 								placeholder="What do you want to say"
 								onChange={(e) => setNewMessage(e.target.value)}
 								value={newMessages}
-								/>
+							/>
 							<div className="send">
 								<TbSend onClick={handleSubmit}></TbSend>
 							</div>

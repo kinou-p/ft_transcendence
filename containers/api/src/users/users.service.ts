@@ -6,7 +6,7 @@
 /*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 00:28:33 by sadjigui         ###   ########.fr       */
+/*   Updated: 2023/06/24 19:45:28 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,19 @@ export class UsersService {
 		return await this.userRepository.find();
 	}
 
-	async findNickname(username: string): Promise<User> {
-		console.log("nick in find =", username)
-		const ret= await this.userRepository.findOneBy({nickname: username});
-		console.log("ret noick=", ret )
-		return ret;
-	}
+	// async findNickname(username: string): Promise<User> {
+	// 	console.log("nick in find =", username)
+	// 	const ret= await this.userRepository.findOneBy({nickname: username});
+	// 	console.log("ret noick=", ret )
+	// 	return ret;
+	// }
 	
 	async findOne(username: string): Promise<User> {
 		return await this.userRepository.findOneBy({username: username});
+	}
+
+	async findNickname(username: string): Promise<User> {
+		return await this.userRepository.findOneBy({nickname: username});
 	}
 
 	async save(user: User): Promise<User> {
@@ -79,8 +83,10 @@ export class UsersService {
 		user.friendRequest = user.friendRequest || [];
 		if (user.friendRequest.find(item => item === username))
 			return (1);
+		if (user.friends.find(item => item === username))
+			return (1);
 		user.friendRequest.push(username);
-		this.save(user);
+		this.save(user);	
 		return (1);
 	}
 
@@ -103,28 +109,39 @@ export class UsersService {
 
 	async getHistory(username: string) {
 		const user = await this.findOne(username);
-		
-		if (user) {
-		  const children = user.children;
-		  console.log(user); 
-		  console.log(user.children); // or perform any operations with the children
-		  return children;
+
+		if (user)
+		{
+
+			// const ret = await this.matchRepository.query("SELECT * FROM \"MatchLog\" WHERE id = ($1);", [user.id]);
+			const ret = await this.matchRepository.query("SELECT * FROM \"MatchLog\"");
+			console.log("all match= ", ret);
 		}
+		//   const children = user.children;
+		//   console.log(user); 
+		//   console.log(user.children); // or perform any operations with the children
+		//   return children;
+			
+		// }
 	}
 
 	async addFriend(user: User, username: string) {
-		if (!(await this.findOne(username)))
+		const user2 = await this.findOne(username)
+		if (!user)
 			return (0);
 			// user.friendRequest = user.friendRequest || [];
 		user.friends = user.friends || [];
 		if (user.friends.find(item => item === username))
-		{		
+		{
 			user.friendRequest = user.friendRequest.filter((item) => item !== username);
 			this.save(user);
 			return (1);
 		}
 		user.friends.push(username);
 		user.friendRequest = user.friendRequest.filter((item) => item !== username);
+		user2.friends = user2.friends || [];
+		user2.friends.push(user.username);
+		this.save(user2);
 		this.save(user);
 		return (1);
 	}
