@@ -24,11 +24,7 @@ services:
     # depends_on:
     #   - nginx
     ports:
-<<<<<<< HEAD
-      - 8081:8081
-=======
       - 8001:8001
->>>>>>> origin/ereali
     volumes:
     - ./containers/react:/app
       # - ./containers/react:/app
