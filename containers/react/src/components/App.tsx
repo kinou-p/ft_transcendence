@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {Routes, Route, Navigate} from 'react-router-dom';
-import HomeLogin from "../pages/Home.js";
+import HomeLogin from "../pages/LoginButton.tsx";
 
 import Home from "../pages/Home.tsx";
 
@@ -20,8 +20,34 @@ import Game from "../pages/Game.tsx";
 import Social from "./Social/Social.tsx";
 import Logout from "./Profile/Logout.tsx";
 
+
+
 function AnimatedRoute () {
 	// const location = useLocation();
+
+	useEffect(() => {
+		const handleBeforeUnload = (event: { preventDefault: () => void; returnValue: string; }) => {
+			event.preventDefault(); // Cancel the default event behavior if needed
+			event.returnValue = ''; // Chrome requires a return value to display a custom message
+			if (!localStorage.getItem('token'))
+				return ;
+			try {
+				
+			} catch(err) {
+				console.log(err);
+			}
+
+		  // Perform your desired actions before the user leaves the page
+		  // For example, you can show a confirmation dialog or save user data
+		};
+	
+		window.addEventListener('beforeunload', handleBeforeUnload);
+	
+		return () => {
+		  window.removeEventListener('beforeunload', handleBeforeUnload);
+		};
+	  }, []);
+
 	const location = useLocation();
 	if (!localStorage.getItem('token'))
 	{
@@ -37,7 +63,7 @@ function AnimatedRoute () {
 		</AnimatePresence>
 		)
 	}
-	
+
 	return (
 		<AnimatePresence>
 			<Routes location={location} key={location.pathname}>

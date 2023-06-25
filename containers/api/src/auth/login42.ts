@@ -16,9 +16,9 @@ export class loginClass {
 		let token = null;
 		let userId = null;
 		let userName = null;
-		// let  = null;
 
-		
+		console.log("process.env.REDIRECT_URI=", process.env.REDIRECT_URI)
+
 		const params = new URLSearchParams(url.split('?')[1]);
 		const code = params.get('code');
 

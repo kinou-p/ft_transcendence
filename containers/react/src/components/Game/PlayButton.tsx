@@ -18,12 +18,12 @@ function PlayButton() {
 		if (superpowerCheckbox && superpowerCheckbox.checked) {
 		  path += 'superpower=true&';
 		}
-	  
-		const obstacleCheckbox = document.querySelector<HTMLInputElement>('input[value="obstacle"]');
-		if (obstacleCheckbox && obstacleCheckbox.checked) {
-		  path += 'obstacle=true&';
-		}
-	  
+
+		// const obstacleCheckbox = document.querySelector<HTMLInputElement>('input[value="obstacle"]');
+		// if (obstacleCheckbox && obstacleCheckbox.checked) {
+		//   path += 'obstacle=true&';
+		// }
+
 		const speedCheckbox = document.querySelector<HTMLInputElement>('input[value="speed"]');
 		if (speedCheckbox && speedCheckbox.checked) {
 		  path += 'speed=true&';
@@ -40,8 +40,8 @@ function PlayButton() {
 			<button onClick={handleButtonClick} className="playButton">Play</button>
 			{/* !buttonClicked && <button onClick={handleButtonClick}>Draw on Canvas</button> */}
 			<div className='checkbox'>
-				<p><input className="inside_checkbox" type="checkbox" value="superpower"/> Super Power </p>
-				<p><input className="inside_checkbox" type="checkbox" value="obstacle"/> Obstacle </p>
+				<p><input className="inside_checkbox" type="checkbox" value="superpower"/> Super Power</p>
+				{/* <p><input className="inside_checkbox" type="checkbox" value="obstacle"/> Obstacle </p> */}
 				<p><input className="inside_checkbox" type="checkbox" value="speed"/> Faster and Faster </p>
 			</div>
 		</div>
