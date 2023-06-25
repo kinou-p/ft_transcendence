@@ -59,7 +59,7 @@ const Modal = ({handleClose}: ModalProps) => {
 
     const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("selected Option=", selectedOption)
-        setSelectTag((prevTags) => 
+        setSelectTag((prevTags) =>
             prevTags.map((tag) =>
                 tag.id === selectId ? { ...tag, selectedOption } : tag
             )
@@ -123,7 +123,7 @@ const Modal = ({handleClose}: ModalProps) => {
 				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
 					  >
 				      <option value="">{
-						  selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
+						  selectTag.selectedOption ? selectTag.selectedOption : "Select a user"
 						}</option>
 				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.nickname)).map((item, index) => (
 						  <option key={index} value={item.username}>
@@ -137,9 +137,7 @@ const Modal = ({handleClose}: ModalProps) => {
             	    <GrAdd onClick={addNewSelectedTag}/>
             	</div>
 				<div className="div_submit">
-					<Link to='#' className="submit" onClick={ saveSelectedOptions}>Submit</Link>
-						
-					<Link to="#" className="submit" onClick={() => handleClose}>Cancel</Link>
+					<Link to='#' className="submit" onClick={saveSelectedOptions}>Submit</Link>
 				</div>
 				</div>
 
@@ -150,9 +148,9 @@ const Modal = ({handleClose}: ModalProps) => {
 					<select
 					value={channel}
 					onChange={(event) => setChannel(event.target.value)}
-					
+
         			>
-        			  <option value="">Select an option</option>
+        			  <option value="">Select a channel</option>
         			  {convs.map((conv) => (
 						  !(!conv.group || conv.private || (conv.banned && user && conv.banned.includes(user.username)) || (conv.members && user && conv.members.includes(user.username))) && (
 							  <option key={conv.id} value={conv.id}>

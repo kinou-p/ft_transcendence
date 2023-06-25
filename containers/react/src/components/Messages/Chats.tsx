@@ -36,7 +36,7 @@ const TouchDiv = styled.div`
 	margin-top: 21px;
 	cursor: pointer;
 	justify-content: space-around;
-	
+
 	&:hover {
 		color: #F4F3EF;
 	}
@@ -71,7 +71,7 @@ const SideP = styled.p`
 
 //========================================================================================================
 //========================================================================================================
-//                                              Logical part			                                  
+//                                              Logical part
 //========================================================================================================
 //========================================================================================================
 
@@ -84,7 +84,7 @@ interface MessageProps {
   }
 
 function Chats(){
-	
+
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [conversations, setConversation] = useState([]);
 	const [partyInvite, setPartyInvite] = useState([]);
@@ -100,7 +100,7 @@ function Chats(){
 	const socket = useRef<Socket | null>(null);
 	// const socket = Socket<DefaultEventsMap, DefaultEventsMap> | null
 	// socket = useRef( useRef<SocketIOClient.Socket | null>(null));
-	
+
 
 	useEffect(()=> {
 
@@ -137,7 +137,7 @@ function Chats(){
 					console.log("muted hehe");
 					//set mute var to true and do nothing
 				});
-				
+
 				setIsLoading(false)
 
 			}
@@ -159,7 +159,7 @@ function Chats(){
 	}, [])
 
 	useEffect(()=> {
-		
+
 		const updateChat = async ()=> {
 			// if (currentChat)
 			// 	console.log(currentChat.id)
@@ -188,7 +188,7 @@ function Chats(){
 
 	}, [incomingMessage, currentChat])
 
-	useEffect(()=> { 
+	useEffect(()=> {
 		const getMessage = async ()=>
 		{
 			if (!currentChat)
@@ -238,7 +238,7 @@ function Chats(){
 			setNewMessage("");
 			if (socket.current)
 				socket.current.emit('sendMessage', message);
-		} 
+		}
 		catch(err){
 			 console.log(err)
 		}
@@ -252,7 +252,7 @@ function Chats(){
 	}
 
 
-	
+
 	const [friend, setFriend] = useState("");
 	// const [modalOpen, setModalOpen] = useState(false);
 	const [addFriend, setAddFriend] = useState(false);
@@ -269,19 +269,19 @@ function Chats(){
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
 	const [users, setUsers] = useState<User[]>([]);
 
-  
+
 	const openNewGameModal = () => {
 	  setNewGameModalOpen(true);
 	};
-  
+
 	const closeNewGameModal = () => {
 	  setNewGameModalOpen(false);
 	};
-  
+
 	const openNewConversationModal = () => {
 	  setNewConversationModalOpen(true);
 	};
-  
+
 	const closeNewConversationModal = () => {
 	  setNewConversationModalOpen(false);
 	};
@@ -300,7 +300,7 @@ function Chats(){
 	const handleFriend = (event: { target: { value: React.SetStateAction<string>; }; }) => {
 		setFriend(event.target.value);
 	  };
-	
+
 	  const handleAddFriend = async () => {
 		try{
 			console.log("friend= ", friend);
@@ -321,7 +321,7 @@ function Chats(){
 			console.log(err)
 		}
 	  };
-	
+
 	  const handleBlockFriend = async () => {
 		try{
 			const res = await api.post("/block", {username: friend})
@@ -339,12 +339,12 @@ function Chats(){
 			console.log(err)
 		}
 	  };
-	
+
 	  const closeAddFriend = () => {
 		setAddFriend(false);
 		setShowAddFriendAlert(false);
 	  };
-	
+
 	  const closeBlock = () => {
 		setBlock(false);
 		setShowBlockAlert(false);
@@ -353,7 +353,7 @@ function Chats(){
 	  const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("selected Option=", selectedOption)
 		setFriend(selectedOption);
-        setSelectTag((prevTags) => 
+        setSelectTag((prevTags) =>
             prevTags.map((tag) =>
                 tag.id === selectId ? { ...tag, selectedOption } : tag
             )
@@ -362,14 +362,14 @@ function Chats(){
 
 //========================================================================================================
 //========================================================================================================
-//                                              HTML			                                  
+//                                              HTML
 //========================================================================================================
 //========================================================================================================
 
 
 	return (
 		<div className="chat">
-		
+
 			<div className='navbar'>
 				{/* <img src={DefaultPic} alt="profile" className="pic"/> */}
 				<IoLogoOctocat className="catchat"/>
@@ -395,7 +395,7 @@ function Chats(){
 						</AnimatePresence>
 					</TouchDiv>
 					<TouchDiv>
-						<motion.div 
+						<motion.div
 						onClick={() => (block ? setBlock(false) : setBlock(true))}
 						>
 						<ImBlocked/>
@@ -410,7 +410,7 @@ function Chats(){
 					{currentChat ? (
 
 						<TouchDiv>
-						<motion.div 
+						<motion.div
 						onClick={() => (setting ? setSetting(false) : setSetting(true))}
 						>
 						<RiListSettingsLine/>
@@ -434,7 +434,7 @@ function Chats(){
 				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
 				    >
 				      <option value="">{
-					selectTag.selectedOption ? selectTag.selectedOption : "Select an option"
+					selectTag.selectedOption ? selectTag.selectedOption : "Select a user"
 					}</option>
 				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.username)).map((item, index) => (
 				        <option key={index} value={item.username}>
@@ -472,7 +472,7 @@ function Chats(){
       </TouchDiv>
 	  {currentChat && isAdmin ? (
 		<TouchDiv>
-		<motion.div 
+		<motion.div
 		onClick={() => (setting ? setSetting(false) : setSetting(true))}
 		>
 		<RiListSettingsLine/>
@@ -533,7 +533,7 @@ function Chats(){
 							</div>
 							</UserChat>
 						</div>
-				
+
 						)})}
 				</div>
 
@@ -569,7 +569,7 @@ function Chats(){
 			</div>
 		</div>
 		// </div>
-	);	
+	);
 }
 
 export default Chats
