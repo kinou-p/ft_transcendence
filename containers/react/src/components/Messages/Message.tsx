@@ -23,9 +23,9 @@ import React from "react";
 const MeStyleP = styled.p`
 	background-color: #5843e4;
 	padding 10px 20px;
-	border-radius 10px 0px 10px 10px;
+	border-radius 10px;
 	color: white;
-	margin-right: 20px;
+	margin: 10px;
 `
 
 interface MessageMeProps {

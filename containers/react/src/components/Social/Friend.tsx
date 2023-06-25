@@ -46,7 +46,7 @@ interface UserProps {
 export default function  Friend({currentUser}: UserProps)
 {
 	const [profilePicture, setProfilePicture] = useState('');
-	
+
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
@@ -70,9 +70,9 @@ export default function  Friend({currentUser}: UserProps)
 
 		if (status === 0)
 			statusColor = 'grey';
-		else if (status === 1) 
+		else if (status === 1)
 			statusColor = 'green';
-		else if (status === 2) 
+		else if (status === 2)
 			statusColor = 'blue';
 		return statusColor;
 	}
@@ -99,18 +99,18 @@ export default function  Friend({currentUser}: UserProps)
 		 ) : (
 			 <img className="pic-user" src={DefaultPicture} alt="Default Profile Picture" />
 		 )}
-		<div className="infoSideBar">
+		<div className="end">
 			<span onClick={() => handleButtonClick(currentUser)}>{currentUser.nickname}</span>
-			 <RxCircle color={getStatus(currentUser)} />
-			 <button onClick={() => handleSpectate(currentUser)} >Invite</button>
-			 {getStatus(currentUser) !== 'blue' ? (
-				<></>
-			  ) : (
-				<button onClick={() => handleSpectate(currentUser)} >Spectate</button>
-			  )}
-		</div>
+			<div className="end">
+			 <RxCircle className="friendRequest" color={getStatus(currentUser)} />
+			  </div>
+		 </div>
 		</UserChat>
 	)
 }
-	
-
+// spectate visible
+// {getStatus(currentUser) !== 'blue' ? (
+// 	<></>
+// ) : (
+// 	<button className="friendRequest" onClick={() => handleSpectate(currentUser)} >Spectate</button>
+// )}
