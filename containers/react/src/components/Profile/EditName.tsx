@@ -54,21 +54,24 @@ const ModalEdit = (handleClose) => {
 	const handlePostNickname = async () => {
 		console.log("nickname=", nickname)
 		try {
-			const ret = await api.post("/nickname", { nickname: nickname });
 			// console.log("cest ici = ",ret);
 			// if (!ret)
-			console.log("test ret =", ret.data);
-			if (nickname.length < 3) {
+			// console.log("test ret =", ret.data);
+			if (nickname.length > 3) {
+				const ret = await api.post("/nickname", { nickname: nickname });
+				if (ret.data) {
+					console.log("ici error = ", ret.data);
+					window.location.reload();
+				}
+				else {
+					console.log("nickname already set = ", ret.data);
+	
+					setErrTaken(true);
+				}
+			}
+			else if (nickname.length < 3)
+			{
 				setErrTooShort(true);
-			}
-			else if (ret.data) {
-				console.log("ici error = ", ret.data);
-				window.location.reload();
-			}
-			else {
-				console.log("nickname already set = ", ret.data);
-
-				setErrTaken(true);
 			}
 
 

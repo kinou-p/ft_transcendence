@@ -243,7 +243,7 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 							<Link to="#" onClick={dark} className={ privateConv ?  "darkSubmit" : "submit"}>Private</Link>
 						</div>
                         {/* <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p> */}
-                        <p className="checkbox">Password<input type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
+                        <p className="checkbox">Password<input className="inside_ckeckbox" type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
                         
 						
 						{password ? (
@@ -305,7 +305,7 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 							onKeyDown={handleMute} 
 							type="number" 
 							className="in_howLong" 
-							placeholder="How long ?"
+							placeholder="Time"
 							value={time}
             				onChange={(e) => setTime(e.target.value)}
 						/>

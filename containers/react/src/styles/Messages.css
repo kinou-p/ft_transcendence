@@ -233,9 +233,9 @@ p {
 	backdrop-filter: sepia(90%);
 	background-color: rgba(0, 0, 0, 0.3);
 	border-radius: 4px;
-	width: 11rem;
-	height: 1.5rem;
-	margin-top: 1rem;
+	width: 15rem;
+	height: 2rem;
+	margin-top: 1.3rem;
 }
 
 .greenAlert{
@@ -385,4 +385,11 @@ input.in_howLong{
 .block{
 	font-size: 25px;
 	margin-left: 12px;
+	margin-top: 0.2rem;
+}
+
+.inside_ckeckbox{
+	height: 25px;
+	margin-left: -50px;
+
 }

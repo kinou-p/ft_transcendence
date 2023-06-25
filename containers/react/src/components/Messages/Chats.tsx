@@ -17,6 +17,7 @@ import { ImBlocked } from 'react-icons/im';
 import { MdOutlineGroupAdd } from 'react-icons/md';
 import { GrAdd } from 'react-icons/gr';
 import { RiListSettingsLine } from 'react-icons/ri'
+import { HiChatBubbleLeft } from 'react-icons/hi2'
 
 // import { Rank } from "../../DataBase/DataRank";
 import GreenAlert from "../Alert/GreenAlert.tsx";
@@ -475,7 +476,7 @@ function Chats(){
 		<motion.div
 		onClick={() => (setting ? setSetting(false) : setSetting(true))}
 		>
-		<RiListSettingsLine/>
+		<RiListSettingsLine className="block"/>
 		<AnimatePresence
 			initial={false}
 			onExitComplete={() => null}
@@ -526,7 +527,8 @@ function Chats(){
 						<div key={index}
 							onClick={() => setCurrentChat(c)}>
 							<UserChat>
-							<img className="pic-user" src={DefaultPic} alt="User" />
+							{/* <img className="pic-user" src={DefaultPic} alt="User" /> */}
+							<HiChatBubbleLeft className="catchat"/>
 							<div className="infoSideBar">
 								<span>{c.name}</span>
 								{/* <SideP>Desc?</SideP> */}
