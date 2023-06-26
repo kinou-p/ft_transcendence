@@ -277,6 +277,7 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 						<input
 							onChange={(e) => setNewName(e.target.value)}
 							onKeyDown={handleName}
+							maxLength={25}
 							type="text"
 							className="in"
 							placeholder="New Name"
