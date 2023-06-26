@@ -87,14 +87,14 @@ function Social (){
 
     return (
         <div>
-			<div className='navbar'>
+			<div className='navbarSocial'>
 				{/* <img src={DefaultPic} alt="profile" className="pic"/> */}
 				<IoMdPeople className="catchat"/>
 				<span>
 					{isLoading || !user ? (
         				<h4>Loading...</h4>
       				) : (
-        				<h2>Social</h2>
+        				<h2>Friends</h2>
       				)}
 	  			</span>
 
