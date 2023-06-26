@@ -23,8 +23,9 @@ interface AlertProps {
   }
 
 function GreenAlert ({handleClose, text}: AlertProps){
-        
+        {setTimeout(handleClose, 1500)}
         return(
+            
             <Backdrop onClick={handleClose}>
         <motion.div
                 onClick={(e) => e.stopPropagation()}
@@ -37,7 +38,6 @@ function GreenAlert ({handleClose, text}: AlertProps){
                 <AiOutlineCheckCircle/>
                <p>{text}</p>
             </motion.div>
-               {setTimeout(handleClose, 1500)}
         </Backdrop>
     )
 }

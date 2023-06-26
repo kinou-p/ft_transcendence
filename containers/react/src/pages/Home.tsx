@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Home.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 23:26:45 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 04:03:16 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // import { React, useState } from "react";
 import '../styles/Profile.css'
 // import '../styles/App.css'
+import RedAlert from "../components/Alert/RedAlert.tsx";
+
 import DefaultPicture from "../assets/profile.jpg";
 import WinLoss from "../components/Profile/Win_Loss.tsx";
 import { motion, AnimatePresence } from 'framer-motion'
@@ -52,7 +54,10 @@ function Profile () {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const [mine, setMine] = useState<boolean>(false);
+	const [error, setError] = useState<boolean>(false);
+	// const [visible, setVisible] = useState<boolean>(false);
 	const close = () => setModalOpen(false);
+	const closeError = () => setError(false);
 	const open = () => setModalOpen(true);
 
 	const { username } = useParams();
@@ -76,6 +81,7 @@ function Profile () {
 				console.log('File uploaded successfully');
 				window.location.reload();
 			  } catch (error) {
+				setError(true);
 				console.error('Error uploading file:', error);
 			  }
 			}
@@ -146,6 +152,14 @@ function Profile () {
 						<>
 							<label htmlFor="file-input" className="edit_name"><MdOutlinePhotoLibrary/></label>
 							<input type="file" id="file-input" className="file-input" accept="image/*" onChange={handleFileChange} />
+							<AnimatePresence initial={false} onExitComplete={() => null}>
+							{error ? (
+								<RedAlert handleClose={closeError} text={'Error : upload failed'} />
+							): ("")}
+
+							</AnimatePresence>
+
+
 						</>
 					)}
 				</motion.div>
@@ -191,7 +205,7 @@ function Home () {
 					const tmpUser = await api.get("/profile");
 					setUser(tmpUser.data);
 				}
-				else 
+				else
 				{
 					const tmpUser = await api.post("/user", {username: username});
 					setUser(tmpUser.data);
@@ -224,12 +238,12 @@ function Home () {
 					 ):("")}
 			</div>
 		<div className="home">
-			<motion.div 
+			<motion.div
 				//   style={{
 				// 	backdropFilter: move ? "blur(10px)" : "none",
 				// 	WebkitBackdropFilter: move ? "blur(10px)" : "none"
 				//   }}
-				animate={{x: move ? '-50%' : '30%'}}
+				animate={{x: move ? '-50%' : '25%'}}
 				transition={{type: "tween", duration: 0.5}}>
 					<Profile/>
 			</motion.div>

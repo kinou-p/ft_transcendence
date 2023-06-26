@@ -34,7 +34,7 @@ export class User {
 
 	@Column({ nullable: true })
 	nickname: string;
-	
+
 	@Column({ nullable: true })
 	username: string;
 
@@ -46,22 +46,25 @@ export class User {
 
 	@Column({ default: 0 })
 	win: number;
-	
+
 	@Column({ default: 0 })
 	loss: number;
-	
+
+	@Column({ default: 0 })
+	sessionNumber: number;
+
 	@Column({ default: 0 })
 	rank: number;
 
 	@Column({ default: 0 }) //0 = offline | 1 = connected | 2 = in game
 	status: number;
-	
+
 	@Column({ default: 0 })
 	userId: number;
 
 	// @Column({ default: 0 })
 	// doubleAuth: number;
-	
+
 	@Column('text', { array: true, nullable: true })
 	friendRequest: string[];
 

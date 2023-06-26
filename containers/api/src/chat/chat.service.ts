@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 04:02:50 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 04:11:00 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,15 @@ async banUser(convId: number, username: string) {
 
 	conv.banned = conv.banned || [];
 	if (conv.banned.find(item => item === username))
-			return (1);
+	{
+		conv.banned = conv.banned.filter((item) => item !== username);
+		this.save(conv);
+		return (2);
+	}
 	conv.members = conv.members.filter((item) => item !== username);
 	conv.banned.push(username);
 	this.save(conv);
+	return (1);
 }
 
 async inviteUser(convId: number, username: string) {

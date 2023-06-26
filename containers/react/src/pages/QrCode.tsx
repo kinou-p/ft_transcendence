@@ -6,7 +6,8 @@ import "../styles/App.css";
 import api from '../script/axiosApi.tsx';
 
 import QRCodeStyling from "qr-code-styling";
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import RedAlert from "../components/Alert/RedAlert.tsx";
 
 
 
@@ -36,6 +37,8 @@ function QrCode () {
 	const [secret, setSecret] = useState(false);
 	const [code, setCode] = useState('');
 	const [activated, setActivated] = useState(false);
+	const [err, setErr] = useState(false);
+	const closeErr = () => setErr(false);
 
 	// const history = useHistory();
 
@@ -80,6 +83,10 @@ function QrCode () {
 			const res = await api.post("/verifyOtp", {token: code})
 			console.log("res= ", res.data)
 			console.log("res= ", res)
+			if (!res.data)
+			{
+				setErr(true);
+			}
 			if (res.data === 1)
 			{
 				console.log("registered")
@@ -158,6 +165,11 @@ function QrCode () {
       ) : (
         <button className="desactivate" onClick={handleDesactivate}>Desactivate 2FA</button>
       )}
+	  <AnimatePresence
+			initial={false}
+			onExitComplete={() => null}>
+				{err ? (<RedAlert handleClose={closeErr} text="Error: Bad intput. Try again"/>):("")}
+			</AnimatePresence>
     </>
 
 		{/* {!localStorage.getItem('token') && (

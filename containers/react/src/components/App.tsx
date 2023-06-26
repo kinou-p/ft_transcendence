@@ -40,9 +40,9 @@ function AnimatedRoute () {
 		  // Perform your desired actions before the user leaves the page
 		  // For example, you can show a confirmation dialog or save user data
 		};
-	
+
 		window.addEventListener('beforeunload', handleBeforeUnload);
-	
+
 		return () => {
 		  window.removeEventListener('beforeunload', handleBeforeUnload);
 		};
@@ -73,7 +73,7 @@ function AnimatedRoute () {
 				<Route path="/profile" element={<Home/>}/>
 				<Route path="/profile/:username" element={<Home/>}/>
 				<Route path="/qr" element={<QrCode/>}/>
-				
+
 				<Route path="/2fa" element={<DoubleAuth/>}/>
 				<Route path="/Social" element={<Social/>}/>
 
