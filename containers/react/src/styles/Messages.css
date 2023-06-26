@@ -266,7 +266,7 @@ p {
 	color: rgba(255, 255, 255, 1);
 }
 
-.redAlert{
+/* .redAlert{
 	width: clamp(50%, 500px, 90%);
 	height: min(50%, 100px);
 
@@ -275,23 +275,30 @@ p {
 	border-radius: 12px;
 	flex-direction: row;
 	align-items: center;
+	text-align: center;
+	background-color: rgba(133, 6, 6, 0.7);
+	font-size: 25px;
+	color: rgba(255, 255, 255, 1);
+} */
+
+.redAlert{
+	width: clamp(50%, 500px, 90%);
+	height: min(50%, 100px);
+
+	margin: auto;
+	padding: 1rem;
+	border-radius: 12px;
+	flex-direction: row;
+	text-align: center;
+	/* align-items: center; */
 	background-color: rgba(133, 6, 6, 0.7);
 	font-size: 25px;
 	color: rgba(255, 255, 255, 1);
 }
 
-.redAlert{
-	width: clamp(50%, 500px, 90%);
-	height: min(50%, 100px);
-
-	margin: auto;
-	padding: 1rem;
-	border-radius: 12px;
-	flex-direction: row;
-	align-items: center;
-	background-color: rgba(133, 6, 6, 0.7);
-	font-size: 25px;
-	color: rgba(255, 255, 255, 1);
+.text_alert{
+	text-align: center;
+	justify-content: center;
 }
 
 .yellowAlert{
@@ -303,15 +310,11 @@ p {
 	border-radius: 12px;
 	flex-direction: row;
 	align-items: center;
+	text-align: center;
 	background-color: rgba(212, 175, 55, 0.7);
 	font-size: 25px;
 	color: rgba(255, 255, 255, 1);
 	flex-wrap: wrap;
-}
-
-.yellowAlert::p {
-	overflow-wrap: break-word;
-	max-width: 1000px;
 }
 
 .modalSetting{

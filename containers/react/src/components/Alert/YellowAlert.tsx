@@ -8,27 +8,27 @@ import { GiCrownedSkull, GiWingedSword } from "react-icons/gi";
 
 const dropIn = {
     hidden: {
-		y: "-100vh",
-	},
-	visible: {
-		y: "0",
-	},
-	exit: {
-		y: "-100vh",
-	},
+        y: "-100vh",
+    },
+    visible: {
+        y: "0",
+    },
+    exit: {
+        y: "-100vh",
+    },
 };
 
 interface AlertProps {
-	handleClose: Function,
-	text: string,
+    handleClose: Function,
+    text: string,
     icon: number
-  }
+}
 
-function YellowAlert ({handleClose, text, icon}: AlertProps) {
-    {setTimeout(handleClose, 3000)}
-    return(
+function YellowAlert({ handleClose, text, icon }: AlertProps) {
+    { setTimeout(handleClose, 3000) }
+    return (
         <Backdrop onClick={handleClose}>
-        <motion.div
+            <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="yellowAlert"
                 // variant={dropIn}
@@ -37,22 +37,24 @@ function YellowAlert ({handleClose, text, icon}: AlertProps) {
                 exit="exit"
             >
 
-            {icon === 0 ? (
-                <GrTrophy/>
-            ):("")}
-            {icon === 1 ? (
-                <MdQrCodeScanner/>
-            ):("")}
+                {icon === 0 ? (
+                    <GrTrophy />
+                ) : ("")}
+                {icon === 1 ? (
+                    <MdQrCodeScanner />
+                ) : ("")}
 
-            {icon === 2 ? (
-                <GiCrownedSkull/>
-            ):("")}
-            
-            {icon === 3 ? (
-                <GiWingedSword/>
-            ):("")}
+                {icon === 2 ? (
+                    <GiCrownedSkull />
+                ) : ("")}
 
-            <h5>{text}</h5>
+                {icon === 3 ? (
+                    <GiWingedSword />
+                ) : ("")}
+
+                <div className="text_alert">
+                    <h5>{text}</h5>
+                </div>
             </motion.div>
         </Backdrop>
     )
