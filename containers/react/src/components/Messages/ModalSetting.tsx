@@ -7,24 +7,30 @@ import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import api from "../../script/axiosApi.tsx";
 import React from "react";
-import {User} from "../../../interfaces.tsx"
+import { User } from "../../../interfaces.tsx"
 import { Socket } from "socket.io-client";
 import GreenAlert from "../Alert/GreenAlert.tsx";
 
 
 const dropIn = {
-    hidden:{y:"-100vh",
-            opacity: 0,},
-    visible:{y: "0",
-            opacity: 0,
-            transotion:{
-                duration:0.1,
-                type:"spring",
-                damping: 100,
-                stiffness: 500,
-            }},
-    exit:{y: "100vh",
-            opacity: 0,},
+	hidden: {
+		y: "-100vh",
+		opacity: 0,
+	},
+	visible: {
+		y: "0",
+		opacity: 0,
+		transotion: {
+			duration: 0.1,
+			type: "spring",
+			damping: 100,
+			stiffness: 500,
+		}
+	},
+	exit: {
+		y: "100vh",
+		opacity: 0,
+	},
 
 };
 
@@ -34,10 +40,10 @@ interface ModalSettingProps {
 	socket: Socket | null,
 }
 
-const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
-    const [password, setPassword] = useState(false);
+const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
+	const [password, setPassword] = useState(false);
 	const [users, setUsers] = useState<User[]>([]);
-	const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
+	const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: '' }]);
 	const [selectedUser, setSelectedUser] = useState("");
 	const [newName, setNewName] = useState("");
 	const [time, setTime] = useState("");
@@ -51,13 +57,13 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 	const lightMute = () => setMute(true);
 
 
-	useEffect(()=> {
+	useEffect(() => {
 
 		console.log("convid =", convId)
-		const getUsers = async ()=>{
+		const getUsers = async () => {
 			try {
-				const currentConv = await api.post("/convId", {convId: convId});
-				
+				const currentConv = await api.post("/convId", { convId: convId });
+
 				// console.log("conv private =================== ", )
 				if (currentConv.data.private)
 					setPrivateConv(true);
@@ -65,7 +71,7 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 				console.log("users=", tmpUsers.data);
 				setUsers(tmpUsers.data);
 				setLoading(false);
-			} catch(err){
+			} catch (err) {
 				console.log(err)
 			}
 		}
@@ -75,42 +81,41 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 	useEffect(() => {
 		// Function to run when myVariable changes
 		const handleVariableChange = () => {
-		  console.log('Variable changed:', privateConv);
-		  if (privateConv === undefined)
-		  {
-			console.log("return")
-			return ;
-		  }
-		  try {
-			if (privateConv)
-				api.post("/private", {convId: convId})
-			else
-				api.post("/public", {convId: convId})
-		  } catch (err){
-			console.log(err);
-		  }
+			console.log('Variable changed:', privateConv);
+			if (privateConv === undefined) {
+				console.log("return")
+				return;
+			}
+			try {
+				if (privateConv)
+					api.post("/private", { convId: convId })
+				else
+					api.post("/public", { convId: convId })
+			} catch (err) {
+				console.log(err);
+			}
 		};
 		if (!loading)
 			handleVariableChange();
 		// return () => {
 		//   handleVariableChange();
 		// };
-	  }, [privateConv]);
+	}, [privateConv]);
 
-    // const [multi, setMulti] = useState(false);
-    // const [selectedOptionArray, setSelectedOptionArray] = useState([]);
+	// const [multi, setMulti] = useState(false);
+	// const [selectedOptionArray, setSelectedOptionArray] = useState([]);
 
 
-    const handleOptionChange = (selectId: number, selectedOption: string) => {
+	const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("tag= ", selectTags)
 		console.log("option= ", selectedOption)
-        setSelectTag((prevTags) => 
-		prevTags.map((tag) =>
-		tag.id === selectId ? { ...tag, selectedOption } : tag
-		)
-        );
+		setSelectTag((prevTags) =>
+			prevTags.map((tag) =>
+				tag.id === selectId ? { ...tag, selectedOption } : tag
+			)
+		);
 		setSelectedUser(selectedOption)
-    };
+	};
 
 	const handleCheckPass = (e: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
 		setPassword(e.target.checked);
@@ -139,24 +144,24 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 	// 	}
 	// }
 
-	const handleName = async (e: { key: string; })=>{
+	const handleName = async (e: { key: string; }) => {
 		if (e.key !== "Enter")
-			return ;
-		try{
-			api.post("/name", {convId: convId, name: newName})
+			return;
+		try {
+			api.post("/name", { convId: convId, name: newName })
 			window.location.reload()
-		} catch(err) {
+		} catch (err) {
 			console.log(err);
 		}
 		handleClose();
 	}
 
-	const handlePassword = async (e: { key: string; })=>{
+	const handlePassword = async (e: { key: string; }) => {
 		if (e.key !== "Enter")
-			return ;
-		try{
-			await api.post("/password", {convId: convId, password: newPassword})
-		} catch(err) {
+			return;
+		try {
+			await api.post("/password", { convId: convId, password: newPassword })
+		} catch (err) {
 			console.log(err);
 		}
 		handleClose();
@@ -164,22 +169,21 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 
 	const [unban, setUnban] = useState(false);
 	const closeUnban = () => setUnban(false);
-    const handleBan = async () => {
+	const handleBan = async () => {
 		// console.log("ban option= ", selectedUser)
-		try{
+		try {
 			// console.log("user select=", selectedUser.length)
 			if (!selectedUser.length)
-				return ;
-			const res = await api.post("/ban", {convId: convId, username: selectedUser})
+				return;
+			const res = await api.post("/ban", { convId: convId, username: selectedUser })
 			if (res.data === 2)
 				setUnban(true);
 
-			if (socket)
-			{
+			if (socket) {
 				console.log("emit to ban server")
-				socket.emit("ban", {username: selectedUser})
+				socket.emit("ban", { username: selectedUser })
 			}
-		} catch(err) {
+		} catch (err) {
 			console.log(err);
 		}
 		handleClose();
@@ -187,145 +191,153 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 
 	const handleAdmin = async () => {
 		if (!selectedUser.length)
-			return ;
-		try{
-			await api.post("/admin", {convId: convId, username: selectedUser})
-		} catch(err) {
+			return;
+		try {
+			await api.post("/admin", { convId: convId, username: selectedUser })
+		} catch (err) {
 			console.log(err);
 		}
 		handleClose();
 	};
 
+	const [muteAlert, setMuteAlert] = useState(false);
+	const closeMuteAlert = () => setMuteAlert(false);
+
 	const handleMute = async (e: { key: string; }) => {
 		console.log(`e in press= ${e.key}`)
 		if (e.key != "Enter")
-			return ;
+			return;
 
 		// console.log("value mute = ", e.target.value);
 		console.log("value mute = ", time);
-		try{
-			await api.post("/mute", {convId: convId, username: selectedUser, time: time})
-		} catch(err) {
+		try {
+			const ret = await api.post("/mute", { convId: convId, username: selectedUser, time: time })
+			if (ret.data)
+				setMuteAlert(true);
+		} catch (err) {
 			console.log(err);
 		}
 		handleClose();
 	};
 
 	const handleInvite = async () => {
-		try{
+		try {
 			console.log("post invite bitch");
-			await api.post("/inviteConv", {convId: convId, username: selectedUser});
-		} catch(err) {
+			await api.post("/inviteConv", { convId: convId, username: selectedUser });
+		} catch (err) {
 			console.log(err);
 		}
 		handleClose();
 	};
 
-	const handleKeyPress = async (e: { key: string; })=> {
+	const handleKeyPress = async (e: { key: string; }) => {
 		if (e.key !== "Enter")
-			return ;
-		try{
+			return;
+		try {
 
-		} 
-		catch(err){
-			
+		}
+		catch (err) {
+
 		}
 	}
 
-    return (
-        <Backdrop onClick={handleClose}>
-            <motion.div
-                onClick={(e) => e.stopPropagation()}
-                className="modalSetting"
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-            >
+	return (
+		<Backdrop onClick={handleClose}>
+			<motion.div
+				onClick={(e) => e.stopPropagation()}
+				className="modalSetting"
+				initial="hidden"
+				animate="visible"
+				exit="exit"
+			>
 
-{/* First selection  */}
-                <div className="settingFirstPart">
-                    <div>
+				{/* First selection  */}
+				<div className="settingFirstPart">
+					<div>
 						<div>
-                    		<Link to="#" onClick={light} className={ privateConv ?  "submit" : "darkSubmit"}>Public</Link>
-							<Link to="#" onClick={dark} className={ privateConv ?  "darkSubmit" : "submit"}>Private</Link>
+							<Link to="#" onClick={light} className={privateConv ? "submit" : "darkSubmit"}>Public</Link>
+							<Link to="#" onClick={dark} className={privateConv ? "darkSubmit" : "submit"}>Private</Link>
 						</div>
-                        {/* <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p> */}
-                        <p className="checkbox">Password<input className="inside_ckeckbox" type="checkbox" value="password" checked={password} onChange={handleCheckPass}/> </p>
-                        
-						
+						{/* <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p> */}
+						<p className="checkbox">Password<input className="inside_ckeckbox" type="checkbox" value="password" checked={password} onChange={handleCheckPass} /> </p>
+
+
 						{password ? (
-							<input 
+							<input
 								onChange={(e) => setNewPassword(e.target.value)}
-								onKeyDown={handlePassword} 
+								onKeyDown={handlePassword}
 								type="password"
 								className="in"
-								placeholder="Password"/>
-							):
+								placeholder="Password" />
+						) :
 							("")}
 
-                    </div>
-                    <div className="forName">
-                        <input 
+					</div>
+					<div className="forName">
+						<input
 							onChange={(e) => setNewName(e.target.value)}
-							onKeyDown={handleName} 
-							type="text" 
-							className="in" 
+							onKeyDown={handleName}
+							type="text"
+							className="in"
 							placeholder="New Name"
 						/>
-                    </div>
-                </div>
+					</div>
+				</div>
 
-{/* Second selection  */}
-                
-                <div className="settingSecondPart">
+				{/* Second selection  */}
 
-
-				{selectTags.map((selectTag) => (
-				  <div key={selectTag.id}>
-				    <select
-				      value={selectTag.selectedOption}
-				      onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
-				    >
-				      <option value="">
-				        {selectTag.selectedOption ? selectTag.selectedOption : "Select an option"}
-				      </option>
-				      {users.map((item, index) => (
-				        <option key={index} value={item.username}>
-				          {item.username}
-				        </option>
-				      ))}
-				    </select>
-				  </div>
-				))}
+				<div className="settingSecondPart">
 
 
-                <div>
-					<Link to="#" onClick={handleInvite} className="submit">Invite</Link>
-                    <Link to="#" onClick={handleBan} className="submit">Ban</Link>
-                    <Link to="#" onClick={mute ? darkMute : lightMute} className={mute ? "darkSubmit": "submit"}>Mute</Link>
-                    <Link to="#" onClick={handleAdmin} className="submit">Admin</Link>
-                </div>
+					{selectTags.map((selectTag) => (
+						<div key={selectTag.id}>
+							<select
+								value={selectTag.selectedOption}
+								onChange={(a) => handleOptionChange(selectTag.id, a.target.value)}
+							>
+								<option value="">
+									{selectTag.selectedOption ? selectTag.selectedOption : "Select an option"}
+								</option>
+								{users.map((item, index) => (
+									<option key={index} value={item.username}>
+										{item.username}
+									</option>
+								))}
+							</select>
+						</div>
+					))}
 
-                </div>
-					{mute ? (
-						<input 
-							onKeyDown={handleMute} 
-							type="number" 
-							className="in_howLong" 
-							placeholder="Time"
-							value={time}
-            				onChange={(e) => setTime(e.target.value)}
-						/>
+
+					<div>
+						<Link to="#" onClick={handleInvite} className="submit">Invite</Link>
+						<Link to="#" onClick={handleBan} className="submit">Ban</Link>
+						<Link to="#" onClick={mute ? darkMute : lightMute} className={mute ? "darkSubmit" : "submit"}>Mute</Link>
+						<Link to="#" onClick={handleAdmin} className="submit">Admin</Link>
+					</div>
+
+				</div>
+				{mute ? (
+					<input
+						onKeyDown={handleMute}
+						type="number"
+						className="in_howLong"
+						placeholder="Time"
+						value={time}
+						onChange={(e) => setTime(e.target.value)}
+					/>
+				) : ("")}
+				<AnimatePresence initial={false} onExitComplete={() => null}>
+					{unban ? (
+						<GreenAlert handleClose={closeUnban} text={selectedUser + ": was unbanned"} />
+					) : ("")}
+					{muteAlert ? (
+						<GreenAlert handleClose={closeMuteAlert} text="Mute"/>
 					):("")}
-					<AnimatePresence initial={false} onExitComplete={() => null}>
-			{unban ? (
-				<GreenAlert handleClose={closeUnban} text={selectedUser+": was unbanned"} />
-			): ("")}
-        </AnimatePresence>
+				</AnimatePresence>
 
-            </motion.div>
-        </Backdrop>
-    )
+			</motion.div>
+		</Backdrop>
+	)
 }
 
 export default ModalSetting
