@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import api from '../script/axiosApi.tsx';
 import io from 'socket.io-client';
 
@@ -8,6 +9,22 @@ interface GameProps {
 }
 
 function DrawCanvas(option: number, gameParam: GameProps) {
+
+
+	useEffect(() => {
+		const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
+			try {
+				await api.post("/status", {status: 1});
+			} catch (err) {
+				console.log(err);
+			}
+		};
+
+		window.addEventListener('beforeunload', handleBeforeUnload);
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		};
+	}, []);
 
 	console.log(`option= ${option}`);
 	const superpowerModifier = option & 1;  // Retrieves the superpower modifier
@@ -38,7 +55,7 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 	}
 	
 	console.log("start function");
-	const canvas = document.getElementById('myCanvas') as HTMLCanvasElement | null;;
+	const canvas = document.getElementById('myCanvas') as HTMLCanvasElement | null;
 	if (!canvas)
 		return ;
 
@@ -433,6 +450,20 @@ socket.on('pong:hisPoint', (data) => {
 			console.log(err)
 		}
 	}
+	else 
+	{
+		const data = {
+			myScore: myScore,
+			opScore: 5,
+			opName: opName,
+			opRank: opRank,
+		};
+		await api.post('/loss', data);
+		// await api.post('/status', {status: 1});
+	}
+
+
+	//here
 	socket.emit('pong:disconnect', {id: myId});
 	window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
   };

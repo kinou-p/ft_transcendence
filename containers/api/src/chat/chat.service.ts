@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 06:56:08 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 10:17:36 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,16 @@ async setPassword(convId: number, password: string) {
 	this.save(conv);
 }
 
-async verifyPassword(convId: number, password: string) {
+async verifyPassword(convId: number, password: string, username: string) {
 	const conv = await this.findConv(convId);
-	return await bcrypt.compare(password, conv.password);
+	const ret = await bcrypt.compare(password, conv.password);
+	if (ret === true)
+	{
+		conv.members = conv.members || [];
+		conv.members.push(username);
+		this.save(conv);
+	}
+	return ret;
 }
 
 async muteUser(convId: number, username: string, time: string) {

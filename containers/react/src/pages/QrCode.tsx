@@ -52,9 +52,6 @@ function QrCode () {
 				const otpData = await api.post("/otp");
 				setUrl(otpData.data.otpauth_url);
 				setSecret(otpData.data.base32_secret);
-				// const tmpUser = await api.get("/profile")
-				// console.log("test")
-				// console.table(convs);
 			}
 			catch(err){
 				console.log(err);
@@ -70,34 +67,22 @@ function QrCode () {
 
 
 	const handleKeyPress = async (e: { key: string; })=>{
-		// console.log(`e in press= ${e.key}`)
 		if (e.key !== "Enter")
 			return ;
 		try{
-			console.log("code= ", code)
 			const res = await api.post("/verifyOtp", {token: code})
-			console.log("res= ", res.data)
-			console.log("res= ", res)
 			if (!res.data)
 			{
 				setErr(true);
 			}
 			if (res.data === 1)
 			{
-				console.log("registered")
-				// history.push('/login')
-
 				const path = 'http://' + process.env.REACT_APP_BASE_URL + '/';
 				window.history.pushState({}, '', path);
 				window.location.reload();
-
 			}
 			else
-			{
 				console.log("bad code")
-				//alert ?? retry
-			}
-			// redirect('/test')
 		}
 		catch(err){
 			 console.log(err)
@@ -107,8 +92,6 @@ function QrCode () {
 	const handleDesactivate = async () => {
 		try {
 			await api.post("/deleteOtp")
-			// const path = 'http://' + process.env.REACT_APP_BASE_URL + '/';
-			// window.history.pushState({}, '', path);
 			window.location.reload();
 		} catch(err) {
 			console.log(err);
@@ -116,18 +99,6 @@ function QrCode () {
     };
 
     return (
-		// <motion.div className="page"
-		// initial={{opacity: -1}}
-		// animate={{opacity: 1}}
-		// exit={{opacity: -1}}>
-        //     <h1>QRcode</h1>
-        //     <h3>{secret}</h3>
-        //     <div ref={ref} />
-        //     <input type="text" className="qr" placeholder="Type The Code"/>
-        //     {}
-
-		// </motion.div>
-
 		<motion.div
 		className="page"
 		initial={{ opacity: -1 }}
@@ -140,7 +111,6 @@ function QrCode () {
 			<h3>{secret}</h3>
 			<h1>Or Scan The QRCode</h1>
 			<div ref={ref} />
-			{/* <div>{ref}</div> */}
 		  </>
 		)}
 
@@ -166,22 +136,6 @@ function QrCode () {
 				{err ? (<RedAlert handleClose={closeErr} text="Error: Bad intput. Try again"/>):("")}
 			</AnimatePresence>
     </>
-
-		{/* {!localStorage.getItem('token') && (
-		<>
-		  <h1>Double Auth</h1>
-		  <input onKeyDown={handleKeyPress}
-		  		type="text"
-				className="qr"
-				placeholder="6 Digits Code"
-				onChange={(e) => setCode(e.target.value)}
-		  />
-		</>
-		) : (<button onClick={ handleDesactivate }>Desactivate 2FA</button>)}
-		 */}
-		{/* {!activated && (
-		  <button onClick={() => setActivated(true)}>Activate</button>
-		)} */}
 	  </motion.div>
     )
 }

@@ -29,7 +29,6 @@ interface ModalProps {
   }
 
 const Modal = ({handleClose}: ModalProps) => {
-    // const [multi, setMulti] = useState(false);
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
     const [selectedOptionArray, setSelectedOptionArray] = useState<string[]>([]);
 	const [users, setUsers] = useState<User[]>([]);
@@ -39,7 +38,6 @@ const Modal = ({handleClose}: ModalProps) => {
 	const [channel, setChannel] = useState('');
 
 	useEffect(()=> {
-
 		const getConv = async ()=>{
 			try {
 				const tmpUsers = await api.get("/users");
@@ -50,7 +48,7 @@ const Modal = ({handleClose}: ModalProps) => {
 				setUsers(tmpUsers.data);
 				setUser(tmpUser.data);
 				setConvs(tmpConvs.data);
-			} catch(err){
+			} catch(err) {
 				console.log(err)
 			}
 		}
@@ -76,6 +74,7 @@ const Modal = ({handleClose}: ModalProps) => {
 		try {
 			console.log("channel= ", channel)
 			await api.post("/join", {convId: channel})
+			window.location.reload();
 		} catch(err) {
 			console.log(err);
 		}
@@ -108,13 +107,11 @@ const Modal = ({handleClose}: ModalProps) => {
             <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="modalSetting"
-                // variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
             >
-                {/* <p>New Conversation</p> */}
-				<div className="settingFirstPart2">
+			  <div className="settingFirstPart2">
 
 				{selectTags.map((selectTag) => (
 					<div key={selectTag.id}>
@@ -159,19 +156,14 @@ const Modal = ({handleClose}: ModalProps) => {
         			    )
 						))}
         			</select>
+					// {/* {channel.private ? (
+                    //   <input className="mdp" placeholder="passdddddword" type="text" />
+                    //   ):("")} */}
       			)}
-				  {/* {channel.private ? (
-					  <input className="mdp" placeholder="passdddddword" type="text" />
-					  ):("")} */}
-
-
 				<div className="div_submit">
 					<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>
 				</div>
-
-
-
-				</div>
+			  </div>
             </motion.div>
         </Backdrop>
     )
