@@ -11,7 +11,6 @@ import { MatchLog, User } from '../model/user.entity';
 	TypeOrmModule.forRoot(getTypeOrmConfig()),
 	TypeOrmModule.forFeature([User]),
 	TypeOrmModule.forFeature([MatchLog]),
-	// TypeOrmModule.forFeature([UserRepository]),
   ],
   providers:[UsersService],
   exports: [UsersService],

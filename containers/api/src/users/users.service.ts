@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   users.service.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 02:23:16 by sadjigui         ###   ########.fr       */
+/*   Updated: 2023/06/26 06:34:42 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ export class UsersService {
 
 	async getFriends(username: string) {
 		const user = await this.findOne(username)
-		let friendsTab = user.friends
+		let friendsTab = user.friends || [];
 		console.log(friendsTab)
 		// friendsTab = ['apommier', 'syd']
 		const friends = await this.userRepository.query("SELECT * FROM \"User\" WHERE username = ANY ($1);", [friendsTab]);

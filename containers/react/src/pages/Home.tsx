@@ -3,51 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   Home.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 04:03:16 by sadjigui         ###   ########.fr       */
+/*   Updated: 2023/06/26 06:58:05 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// import { React, useState } from "react";
 import '../styles/Profile.css'
-// import '../styles/App.css'
 import RedAlert from "../components/Alert/RedAlert.tsx";
-
 import DefaultPicture from "../assets/profile.jpg";
 import WinLoss from "../components/Profile/Win_Loss.tsx";
 import { motion, AnimatePresence } from 'framer-motion'
-// import { AiFillEdit } from 'react-icons/ai'
-// import { GrClose } from 'react-icons/gr'
 import { Link } from "react-router-dom";
 import ModalEdit from "../components/Profile/EditName.tsx";
 import {AiOutlineCloseCircle, AiOutlineHistory} from 'react-icons/ai'
 import { MdQrCodeScanner, MdOutlinePhotoLibrary } from 'react-icons/md';
 import { GiWingedSword, GiCrownedSkull } from 'react-icons/gi';
-
-// import { Link } from "react-router-dom";
-// import {UserProfile} from "../DataBase/DataUserProfile";
-// import axios from "axios";
 import api from '../script/axiosApi.tsx';
 import { CgEditMarkup } from 'react-icons/cg'
 import { IoCloseCircleOutline } from "react-icons/io5";
-
-// import * as React from 'react';
-// import { useState, useEffect, useParams} from "react";
-import React, { useState, useEffect, useRef, ChangeEventHandler } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
-import {User, Conv} from "../../interfaces.tsx"
+import {User} from "../../interfaces.tsx"
 import YellowAlert from '../components/Alert/YellowAlert.tsx';
-	// axios.get("http://localhost/api")
-	// .then((response) => {
-	// 	response = response.json()
-	// 	response.then((result) => {
-	// 		console.log(result)
-	// 		console.log("ceci est un test")
-	// 	})
-	// })
-
 
 function Profile () {
 	const [user, setUser] = useState<User>();
@@ -55,21 +34,12 @@ function Profile () {
 	const [modalOpen, setModalOpen] = useState<boolean>(false);
 	const [mine, setMine] = useState<boolean>(false);
 	const [error, setError] = useState<boolean>(false);
-	// const [visible, setVisible] = useState<boolean>(false);
 	const close = () => setModalOpen(false);
 	const closeError = () => setError(false);
 	const open = () => setModalOpen(true);
-
 	const { username } = useParams();
-
-	// const [selectedPhoto, setSelectedPhoto] = useState();
-	// const [selectedPhoto, setSelectedPhoto] = useState(null);
-
 	const [profilePicture, setProfilePicture] = useState('');
-
 	const handleFileChange = async (event: { target: { files: any; }; }) => {
-		// const files = event.target.files;
-		// if (files && files.length > 0) {
 		  const photo = (event.target.files[0]);
 		  console.log("file selected")
 		  if (photo) {
@@ -85,13 +55,11 @@ function Profile () {
 				console.error('Error uploading file:', error);
 			  }
 			}
-		// }
 	  };
 
 	useEffect(()=> {
 		const getUser = async ()=>{
 			console.log(`username= ${username}`)
-			// const pic
 			let pic;
 			try{
 				console.log("before request")
@@ -102,7 +70,6 @@ function Profile () {
 					setUser(me.data);
 					console.log(`mine= true = ${mine}`)
 					pic = await api.post("/getPicture", {username: me.data.username}) //good one?
-					// username = me.data.username
 				}
 				else
 				{
@@ -111,9 +78,7 @@ function Profile () {
 					pic = await api.post("/getPicture", {username: username}) //good one?
 
 				}
-				// const pic = await api.get("/picture")//pic du user
 				setProfilePicture(pic.data);
-				// console.log(`user= ${tmpUser.data.username}`)
 				setIsLoading(false)
 			}
 			catch(err){
@@ -125,8 +90,6 @@ function Profile () {
 
 	return (
 		<div className="profile">
-			{/* <img className="profile-pic" src={DefaultPicture} alt="Profile pic" />
-			 */}
 			{profilePicture ? (
 				<img className="profile-pic" src={`data:image/jpeg;base64,${profilePicture}`} />
  			) : (
@@ -139,9 +102,6 @@ function Profile () {
         				<h1 className='user_name'>{user.nickname}</h1>
       				)}
 	  		</span>
-
-
-
 			  {mine ? (
 			<div>
 				<motion.div >
@@ -156,25 +116,14 @@ function Profile () {
 							{error ? (
 								<RedAlert handleClose={closeError} text={'Error : upload failed'} />
 							): ("")}
-
 							</AnimatePresence>
-
-
 						</>
 					)}
 				</motion.div>
-
-				{/* <div className="file-upload-container"> */}
-  					{/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
-					  {/* <button onClick={handleUpload} className="upload-button">Upload</button> */}
-				{/* </div> */}
 			</div>
 				  ) : (
 						  <></>
 				)}
-
-
-
 			<AnimatePresence
 			initial={false}
 			onExitComplete={() => null}>
@@ -187,7 +136,6 @@ function Profile () {
 function Home () {
 	const [move, setmove ] = useState(false);
 	const [user, setUser] = useState<User>();
-
 	const [successQr, setSuccessQr] = useState(false);
 	const [successSword, setSuccessSword] = useState(false);
 	const [successCrown, setSuccessCrown] = useState(false);
@@ -210,8 +158,6 @@ function Home () {
 					const tmpUser = await api.post("/user", {username: username});
 					setUser(tmpUser.data);
 				}
-				// const tmpUser = await api.get("/profile");
-				// setUser(tmpUser.data);
 			}
 			catch (error)
 			{
@@ -239,10 +185,6 @@ function Home () {
 			</div>
 		<div className="home">
 			<motion.div
-				//   style={{
-				// 	backdropFilter: move ? "blur(10px)" : "none",
-				// 	WebkitBackdropFilter: move ? "blur(10px)" : "none"
-				//   }}
 				animate={{x: move ? '-50%' : '25%'}}
 				transition={{type: "tween", duration: 0.5}}>
 					<Profile/>
@@ -253,7 +195,6 @@ function Home () {
 			</div>
 			<motion.div
 				className="div_history"
-			// className="history"
 				onClick={ () => setmove(!move)}>
 					<Link to="#" className="history"> {move ? (<AiOutlineCloseCircle/>):(<AiOutlineHistory/>)}  Match History</Link>
 			</motion.div>

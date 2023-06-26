@@ -1,6 +1,5 @@
 import React from 'react';
 import '../styles/field.css';
-// import { useHistory } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 function PlayButton() {
@@ -15,8 +14,6 @@ function PlayButton() {
 	return (
 		<div className="notClicked" id="canvas_container">
 			<button onClick={handleButtonClick} className="playButton">Play</button>
-			{/* !buttonClicked && <button onClick={handleButtonClick}>Draw on Canvas</button> */}
-
 		</div>
 		);
 }

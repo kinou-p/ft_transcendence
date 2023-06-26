@@ -14,7 +14,6 @@ import RedAlert from "../components/Alert/RedAlert.tsx";
 const qrCode = new QRCodeStyling({
     width: 300,
     height: 300,
-    // image: "../assets/profile.jpg",
     dotsOptions: {
         color: "black",
         type: "rounded"
@@ -29,8 +28,6 @@ const qrCode = new QRCodeStyling({
     });
 
 function QrCode () {
-    // const url = "https://www.youtube.com";
-    // const ref = useRef(null);
 	const ref = useRef<HTMLDivElement>(null);
 	const [user, setUser] = useState(false);
 	const [url, setUrl] = useState("");
@@ -39,8 +36,6 @@ function QrCode () {
 	const [activated, setActivated] = useState(false);
 	const [err, setErr] = useState(false);
 	const closeErr = () => setErr(false);
-
-	// const history = useHistory();
 
     useEffect(() => {
 		if (ref.current)

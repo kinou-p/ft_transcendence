@@ -1,13 +1,9 @@
 import { useEffect } from 'react';
-// import { useState, useRef } from 'react';
 import DrawCanvas from './canvas.tsx';
 import queryString from 'query-string';
 import '../styles/field.css';
-
-import { useParams } from "react-router-dom";
 import React from 'react';
 
-// import { withRouter } from 'react-router-dom';
 
 interface GameProps {
 	privateParty: boolean,
@@ -18,7 +14,6 @@ interface GameProps {
 function Field()
 {
 	useEffect(() => {
-		// const location = useLocation();
 		const queryParams = queryString.parse(window.location.search);
 		
 		console.log("launch canva hehe")
@@ -56,7 +51,6 @@ function Field()
 	
 		return () => {
 		  console.log("Cleanup");
-		//   cleanup(); // Call the cleanup function to stop the ongoing process or perform necessary cleanup tasks
 			if (cleanup)
 				cleanup();
 		};

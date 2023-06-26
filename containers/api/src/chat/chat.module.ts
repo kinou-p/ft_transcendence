@@ -1,8 +1,3 @@
-// import { Module } from '@nestjs/common';
-
-// @Module({})
-// export class ChatModule {}
-
 import { Module } from '@nestjs/common';
 import { ChatService} from './chat.service';
 
@@ -17,7 +12,6 @@ import { Message } from '../model/chat.entity';
 	TypeOrmModule.forRoot(getTypeOrmConfig()),
 	TypeOrmModule.forFeature([Conv]),
 	TypeOrmModule.forFeature([Message]),
-	// TypeOrmModule.forFeature([UserRepository]),
   ],
   providers:[ChatService],
   exports: [ChatService],

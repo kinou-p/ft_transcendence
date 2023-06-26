@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 04:10:56 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 06:49:15 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,15 +183,12 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/nickname')
   async setNickname(@Request() req, @Body() data: any) {
-	// let user = req.user
-	// user.nickname = data.nickname
 	console.log(`user= ${req.user.username}`)
 	const taken = await this.userService.findNickname(data.nickname)
 	if (taken)
 		return (0);
 	let user = await this.userService.findOne(req.user.username)
 	user.nickname = data.nickname;
-	// return await this.userService.getFriends(req.user.username);
 	return await this.userService.save(user);
   }
 
@@ -210,14 +207,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/getPicture')
   async getProfilPicture(@Body() data: any) {
-	// console.log(`dataaaaa= ${data.username}`)
 	return await this.userService.getPic(data.username)
-
-	// return user.photo
-	// const photoData = user.photo;
-	// Buffer.from(user.photo, 'binary').buffer;
-	// const arrayBuffer = ArrayBuffer.from(photoData, 'binary');
-	// return await this.userService.save(user);
   }
 
 //========================================================================================================
@@ -229,42 +219,27 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/win')
   async addWin(@Request() req, @Body() data: any) {
-	console.log("WIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIN: ", req.user.username)
 	const user = await this.userService.findOne(req.user.username);
-	console.log("User", user)
-	// const user2 = await this.userService.findOne(data.opName);
 	user.win++;
 	const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
 	const newRank = user.rank + this.kFactor * (1 - Esp);
-
 	user.rank = newRank;
-	console.log(`win new rank= ${newRank}`);
-	console.log(`data win = ${data}`)
-
 	const newMatch = new MatchLog;
 	newMatch.myScore = data.myScore;
 	newMatch.opScore = data.opScore;
 	newMatch.opponent = data.opName;
 	newMatch.parent = user;
-	console.log(`newMatch WIIIN = ${newMatch}`);
 	await this.userService.saveChild(user, newMatch);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/loss')
   async addLoss(@Request() req, @Body() data: any) {
-	console.log("LOOOOOOOOOOOOOOOSE: ", req.user.username)
 	const user = await this.userService.findOne(req.user.username);
-	console.log("User", user)
 	user.loss++;
-
 	const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
 	const newRank = user.rank + this.kFactor * (0 - Esp);
-
 	user.rank = newRank;
-	console.log(`loss new rank= ${newRank}`);
-	console.log(`data loss = ${data}`)
-
 	const newMatch = new MatchLog;
 	newMatch.myScore = data.myScore;
 	newMatch.opScore = data.opScore;
@@ -282,7 +257,6 @@ export class AppController {
 	return user.rank;
   }
 
-//   @UseGuards(JwtAuthGuard)
   @Get('/ranking')
   async getRanking()
   {
@@ -293,27 +267,18 @@ export class AppController {
   @Post('/partyInvite')
   async partyInvite(@Request() req, @Body() data: any)
   {
-		//find data.username and add invite to list
-		console.log("data post priv invite=", data);
 		const user = await this.userService.findOne(data.username);
 		user.partyInvite = user.partyInvite || [];
 		user.partyInvite.push({ username: req.user.username, gameId: data.gameId });
-		console.log("usr === ", user)
 		await this.userService.save(user);
-		// user.partyInvite.push(data);
-		console.log("invite === ", user.partyInvite)
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/partyInvite')
-  async getPartyInvite(@Request() req, @Body() data: any)
+  async getPartyInvite(@Request() req)
   {
-		//find data.username and add invite to list
 		const user = await this.userService.findOne(req.user.username);
 		user.partyInvite = user.partyInvite || [];
-		// this.userService.save(user);
-		// user.partyInvite.push(data);
-		// console.log("data invite === ", data.username)
 		return user.partyInvite;
   }
 
@@ -321,14 +286,8 @@ export class AppController {
   @Post('/deleteInvite')
   async deleteInvite(@Request() req, @Body() data: any)
   {
-	console.log("delete invite user= ", data.username)
 	const user = await this.userService.findOne(req.user.username);
-
-
-	// user.partyInvite = user.partyInvite.filter(item => Object.values(item)[1] !== req.user.username);
-	console.log("user.partyInvite before", user.partyInvite)
 	user.partyInvite = user.partyInvite.filter((item) => Object.values(item)[1] !== data.username);
-	console.log("user.partyInvite after", user.partyInvite)
 	this.userService.save(user);
   }
 
@@ -336,22 +295,7 @@ export class AppController {
   @Post('/history')
   async getHistory(@Body() data: any)
   {
-	// const user = await this.userService.findOne(req.user.username);
-	// return user.rank;
 	return await this.userService.getHistory(data.username);
-
-	//   if (user) {
-	// 	const children = user.children;
-	// 	console.log(user);
-	// 	console.log(user.children); // or perform any operations with the children
-	// 	return children;
-	// 	// You can also access specific properties of each child
-	// 	// children.forEach((child) => {
-	// 	//   console.log(child.id);
-	// 	//   console.log(child.opponent);
-	// 	//   // Access other child properties as needed
-	// 	// });
-	//   }
   }
 
 
@@ -361,27 +305,15 @@ export class AppController {
 //========================================================================================================
 //========================================================================================================
 
-// import { Prisma } from "@prisma/client";
-// import { Request, Response, NextFunction } from "express";
-// import { prisma } from "../server";
-
-
 
 @Redirect('http://' + process.env.BASE_URL + '/token', 302)
 @Get('auth/login')
   async login2(@Req() request: Request) {
 	  const url = request.url;
 	  const user = await this.loginClass.Login42(url);
-	  console.log(`user in auth/login= ${user}`);
-	  console.log(`user in auth/login= ${user.username}`);
 	  const data = await this.authService.login(user);
-	  console.log(`all data in api = ${data}`);
 	  const myJSON = JSON.stringify(data);
-	  console.log(`all data json version= ${myJSON}`);
-	  console.log(`data in api = ${(await data).access_token}`);
-	//   console.log(`data i = ${(await data).access_token}`)
-	const token = (await data).access_token;
-	//   console
+  	  const token = (await data).access_token;
 	  await this.userService.save(user);
 	  return { url: 'http://' + process.env.BASE_URL + `/token?data=${encodeURIComponent(JSON.stringify(token))}` };
   }
@@ -394,16 +326,13 @@ export class AppController {
 	return user.otp_enabled;
   }
 
-
   @UseGuards(JwtAuthGuard)
   @Post('/otp')
   async createOTP(@Request() req)
   {
 	const user = await this.userService.findOne(req.user.username);
-	// const user2 = await this.userService.findOne(req.user.username);
 	const res = await generateOTP(user);
 	await this.userService.save(user);
-	// console.log(user);
 	return res;
   }
 
@@ -413,8 +342,6 @@ export class AppController {
   {
 	const user = await this.userService.findOne(req.user.username);
 	const res = await VerifyOTP(user, data.token)
-	console.log('token in verify=', data.token)
-	console.log('res in verify=', res)
 	await this.userService.save(user);
 	return res
   }
@@ -425,7 +352,6 @@ export class AppController {
   {
 	const user = await this.userService.findOne(req.user.username);
 	const res = await ValidateOTP(user, data.token)
-	// await this.userService.save(user);
 	return res
   }
 
@@ -436,22 +362,14 @@ export class AppController {
 	const user = await this.userService.findOne(req.user.username);
 	user.otp_verified = false;
 	await this.userService.save(user);
-	// const res = await ValidateOTP(user, data.token)
-	// await this.userService.save(user);
-	// return res
   }
-
-//   @UseGuards(JwtAuthGuard)
-//   @Get('/QRcode')
-//   async createQrCode(@Request() req)
-//   {
-// 	return (await generateQRcode(req));
-//   }
-
+  
   @UseGuards(JwtAuthGuard)
   @Post('/quit')
   async setOffline(@Request() req) {
 	const user = await this.userService.findOne(req.user.username);
+	if (!user)
+		return ;
 	user.sessionNumber-- ;
 	if (!user.sessionNumber)
 		user.status = 0;
@@ -477,22 +395,14 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/conv')
   async createConv(@Request() req, @Body() data: any) {
-	///create conv and return it ? id?
-	console.log(`data post /conv= ${data}`);
-	console.log(`data post /conv= ${data.members}`);
-	// console.log(`data post /conv= ${data.name}`);
-
-	// const param = data;
 	const amIhere = data.members.includes(req.user.username);
 	if (!amIhere)
 		data.members.push(req.user.username)
-	// let test = {id: 2, members: "cc"};
 	data.admin = []
 	data.admin.push(req.user.username)
 	data.owner = req.user.username
 	data.group = true;
 	return await this.chatService.createConv(data);
-	// res.json(messages);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -517,13 +427,11 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/message')
   async postMessage(@Request() req, @Body() data: any) {
-	//if i can post post ?
 	let message =
 	{
 		convid: data.convId,
 		sender: data.sender,
 		text: data.text,
-		// createdAt: null,
 		id: null,
 	}
 	console.log(data);
@@ -541,24 +449,12 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/getMessage')
   async getMessage(@Body() data: any) {
-	console.log(data);
-	// console.log(req.query)
-	console.log(`data get /conv= ${data.convId}`);
-	// let test = {id: 2, members: "cc"};
-
-
 	return await this.chatService.getMessages(data.convId);
-	// return await this.chatService.getConv(req.user.username);
-
-
-	// res.json(messages);
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('/name')
   async setName(@Body() data: any) {
-	//find conv
-	// data.convId
 	return await this.chatService.setName(data.convId, data.name)
   }
 
