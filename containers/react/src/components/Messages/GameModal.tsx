@@ -79,11 +79,7 @@ const GameModal = ({ handleClose }: ModalGame) => {
 	  path += 'superpower=true&';
 	}
   
-	const obstacleCheckbox = document.querySelector<HTMLInputElement>('input[value="obstacle"]');
-	if (obstacleCheckbox && obstacleCheckbox.checked) {
-	  path += 'obstacle=true&';
-	}
-  
+
 	const speedCheckbox = document.querySelector<HTMLInputElement>('input[value="speed"]');
 	if (speedCheckbox && speedCheckbox.checked) {
 	  path += 'speed=true&';
@@ -132,10 +128,9 @@ const GameModal = ({ handleClose }: ModalGame) => {
 			{/* <button onClick={handleButtonClick}>Draw on Canvas</button> */}
 			<div className='checkbox'>
 				<p><input type="checkbox" value="superpower"/> Super Power </p>
-				<p><input type="checkbox" value="obstacle"/> Obstacle </p>
 				<p><input type="checkbox" value="speed"/> Faster and Faster </p>
 			</div>
-			<button className="submit" onClick={handleButtonClick} >Play</button>
+			<button className="playInvite" onClick={handleButtonClick} >Play</button>
           	{/* <button className="submit" onClick={handleClose}>Cancel</button> */}
 		</div>
 

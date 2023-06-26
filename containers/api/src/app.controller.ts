@@ -455,6 +455,8 @@ export class AppController {
 	user.sessionNumber-- ;
 	if (!user.sessionNumber)
 		user.status = 0;
+	console.log("quit sessionNUmber :",user.sessionNumber);
+	
 	await this.userService.save(user);
 	console.log("User quit");
   }
@@ -465,6 +467,8 @@ export class AppController {
 
 	const user = await this.userService.findOne(req.user.username);
 	user.sessionNumber++ ;
+	console.log("addSession sessionNUmber :",user.sessionNumber);
+
 	await this.userService.save(user);
   }
 

@@ -65,7 +65,9 @@ export default function  Friend({currentUser}: UserProps)
 
 	function getStatus(friend: User)
 	{
-		let status = friend.status
+		let status = friend.status		
+		let session =friend.sessionNumber
+		console.log(`session= ${session}`)
 		console.log(`status= ${status}`)
 		let statusColor;
 
