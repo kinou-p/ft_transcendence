@@ -451,9 +451,6 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/quit')
   async setOffline(@Request() req) {
-	console.log("cc quit here");
-	const user = await this.userService.findOne(req.user.username);
-
 	const user = await this.userService.findOne(req.user.username);
 	user.sessionNumber-- ;
 	if (!user.sessionNumber)
