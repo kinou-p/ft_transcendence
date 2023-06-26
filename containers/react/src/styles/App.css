@@ -35,6 +35,11 @@ input.qr{
   height: 40vmin;
   pointer-events: none;
 }
+.centermargin
+{
+  margin-left: 40px;
+  margin-right: 40px;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

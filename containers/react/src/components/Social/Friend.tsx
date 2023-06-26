@@ -27,6 +27,7 @@ const UserChat = styled.div `
 	gap: 5px;
 	color: white;
 	cursor: pointer;
+    margin-top: 15px;
 
 	&:hover{
 		background-color: #3e3c61;
@@ -93,7 +94,7 @@ export default function  Friend({currentUser}: UserProps)
 	};
 
 	return (
-		<UserChat>
+		<UserChat className="centermargin">
 		{profilePicture ? (
 			<img className="pic-user" src={`data:image/jpeg;base64,${profilePicture}`} />
 		 ) : (

@@ -27,8 +27,6 @@ function AnimatedRoute () {
 
 	useEffect(() => {
 		const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
-			event.preventDefault(); // Cancel the default event behavior if needed
-			event.returnValue = ''; // Chrome requires a return value to display a custom message
 			if (!localStorage.getItem('token'))
 				return ;
 			try {
@@ -36,9 +34,6 @@ function AnimatedRoute () {
 			} catch(err) {
 				console.log(err);
 			}
-
-		  // Perform your desired actions before the user leaves the page
-		  // For example, you can show a confirmation dialog or save user data
 		};
 
 		window.addEventListener('beforeunload', handleBeforeUnload);

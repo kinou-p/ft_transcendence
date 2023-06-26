@@ -74,10 +74,13 @@ export class loginClass {
 				friends: null,
 				blocked: null,
 				photo: null,
-				sessionNumber: 1,
+				sessionNumber: 0,
 			  };
 			await this.usersService.create(user);
 		}
+		// if (user.status !== 2 || user.status === 0) //super
+		// 	user.status = 1;
+		// user.sessionNumber++;
 		// console.log(`in login42 user= ${user}`)
 		const myJSON = JSON.stringify(user);
 		console.log(`in login42 user= ${myJSON}`)
