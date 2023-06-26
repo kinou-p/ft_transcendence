@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import api from "../../script/axiosApi.tsx";
 import React from "react";
 import {User} from "../../../interfaces.tsx"
-// import { useNavigate } from "react-router-dom";
 
 const dropIn = {
   hidden: { y: "-100vh", opacity: 0 },
@@ -24,27 +23,18 @@ const dropIn = {
 
 interface ModalGame {
 	handleClose: Function,
-	// convId: string
 }
 
 const GameModal = ({ handleClose }: ModalGame) => {
   const [users, setUsers] = useState([]);
-//   const [user, setUser] = useState();
   const [selectedUser, setSelectedUser] = useState('');
-//   const [convs, setConvs] = useState([]);
   const [channel, setChannel] = useState('');
-
-//   const history = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const tmpUsers = await api.get("/users");
-		// const tmpUser = await api.get("/profile");
-        // const tmpConvs = await api.get("/convs");
         setUsers(tmpUsers.data);
-	    // setUser(tmpUser.data);
-        // setConvs(tmpConvs.data);
       } catch (err) {
         console.log(err);
       }
@@ -56,21 +46,8 @@ const GameModal = ({ handleClose }: ModalGame) => {
     setSelectedUser(event.target.value);
   };
 
-//   const joinChannel = async () => {
-//     try {
-//       await api.post("/join", { convId: channel });
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   const handleCheckButtonClick = () => {
-//     // Perform your check action here
-//     console.log("Checking user:", selectedUser);
-//   };
 
   const handleButtonClick = async () => {
-	// let path = `play?`;
 	let path = `http://` + process.env.REACT_APP_BASE_URL + `/pong/play?`;
 	
 
@@ -86,21 +63,11 @@ const GameModal = ({ handleClose }: ModalGame) => {
 	}
 
 	if (selectedUser.length > 0)
-		path += 'username=' + selectedUser;//important here
+		path += 'username=' + selectedUser;
   
-	// Remove the trailing '&' character
-	// path = path.slice(0, -1);
-	// console.log(path)
-
-	// await api.post("/partyInvite", {username: selectedUser, gameId})
-
-	// console.log("path= ", path)
-	// history(path, { replace: true });
-	// window.location.replace(path);
 	window.history.pushState({}, '', path);
 	window.location.reload();
 
-	// history(path);
   };
 
   return (
@@ -108,7 +75,6 @@ const GameModal = ({ handleClose }: ModalGame) => {
       <motion.div
         onClick={(e) => e.stopPropagation()}
         className="modal"
-        // variant={dropIn}
         initial="hidden"
         animate="visible"
         exit="exit"
@@ -125,20 +91,12 @@ const GameModal = ({ handleClose }: ModalGame) => {
         </div>
 
 		<div className="notClicked" id="canvas_container">
-			{/* <button onClick={handleButtonClick}>Draw on Canvas</button> */}
 			<div className='checkbox'>
 				<p><input type="checkbox" value="superpower"/> Super Power </p>
 				<p><input type="checkbox" value="speed"/> Faster and Faster </p>
 			</div>
 			<button className="playInvite" onClick={handleButtonClick} >Play</button>
-          	{/* <button className="submit" onClick={handleClose}>Cancel</button> */}
 		</div>
-
-        {/* <div className="div_submit">
-          <button className="submit" onClick={handleCheckButtonClick}>
-            Invite to play
-          </button>
-        </div> */}
       </motion.div>
     </Backdrop>
   );

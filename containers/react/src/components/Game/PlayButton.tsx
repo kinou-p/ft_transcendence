@@ -19,14 +19,13 @@ function PlayButton() {
 		}
 
 		path = path.slice(0, -1);
-		console.log(path)
 		history(path);
 	  };
 
 	return (
 		<div className="notClicked" id="canvas_container">
 			<button onClick={handleButtonClick} className="playButton">Play</button>
-			{/* !buttonClicked && <button onClick={handleButtonClick}>Draw on Canvas</button> */}
+			{}
 			<div className='checkbox'>
 				<p><input className="inside_checkbox" type="checkbox" value="superpower"/> Super Power <br/> ( w = wall power ) </p>
 				<p><input className="inside_checkbox" type="checkbox" value="speed"/> Faster and Faster </p>
