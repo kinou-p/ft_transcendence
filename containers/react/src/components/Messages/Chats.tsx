@@ -538,7 +538,7 @@ function Chats(){
 							{/* <img className="pic-user" src={DefaultPic} alt="User" /> */}
 							<HiChatBubbleLeft className="catchat"/>
 							<div className="infoSideBar">
-								<span>{c.name}</span>
+								<h2>{c.name}</h2>
 								{/* <SideP>Desc?</SideP> */}
 							</div>
 							</UserChat>

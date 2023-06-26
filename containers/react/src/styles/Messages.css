@@ -409,3 +409,8 @@ input.in_howLong{
 	margin-left: -50px;
 
 }
+
+h2{
+	overflow-wrap: break-word;
+	max-width: 200px;
+}

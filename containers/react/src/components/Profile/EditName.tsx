@@ -94,7 +94,7 @@ const ModalEdit = () => {
 			initial="hidden"
 			animate="visible"
 			exit="exit">
-			<h2>Type your new name</h2>
+			<h1>Type your new name</h1>
 			<input className="text" minLength={2} maxLength={10} type="text" value={nickname} onChange={handler} />
 			<div>
 				<div className="button" onClick={handlePostNickname}>
