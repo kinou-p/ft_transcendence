@@ -251,25 +251,27 @@ function Chats(){
 			return ;
 		handleSubmit(e);
 	}
-
-
-
+	
+	
+	
 	const [friend, setFriend] = useState("");
 	// const [modalOpen, setModalOpen] = useState(false);
 	const [addFriend, setAddFriend] = useState(false);
 	const [block, setBlock] = useState(false);
-
+	
 	const [showAddFriendAlert, setShowAddFriendAlert] = useState(false);
 	const [showBlockAlert, setShowBlockAlert] = useState(false);
-
+	
 	const [setting, setSetting] = useState(false);
-
+	
 	const [newGameModalOpen, setNewGameModalOpen] = useState(false);
 	const [newConversationModalOpen, setNewConversationModalOpen] = useState(false);
-
+	
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
 	const [users, setUsers] = useState<User[]>([]);
-
+	
+	const [unblock, setUnblock] = useState(false);
+	const closeUnblock = () => setUnblock(false);
 
 	const openNewGameModal = () => {
 	  setNewGameModalOpen(true);
@@ -323,10 +325,13 @@ function Chats(){
 		}
 	  };
 
+
 	  const handleBlockFriend = async () => {
 		try{
 			const res = await api.post("/block", {username: friend})
 			// if(1)
+			if (res.data === 2)
+				setUnblock(true);
 			if (res.data === 1)
 			{
 				setBlock(true);
@@ -469,6 +474,9 @@ function Chats(){
           {showBlockAlert && !block && (
             <RedAlert handleClose={closeBlock} text={friend + ' was not found'} />
           )}
+		  {unblock ? (
+            <GreenAlert handleClose={closeUnblock} text={friend + ' was unblocked'} />
+		  ):("")}
         </AnimatePresence>
       </TouchDiv>
 	  {currentChat && isAdmin ? (

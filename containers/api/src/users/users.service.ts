@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   users.service.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 23:30:52 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 02:23:16 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,11 @@ export class UsersService {
 			return (0);
 		user.blocked = user.blocked || [];
 		if (user.blocked.find(item => item === username))
-			return (1);
+		{
+			this.save(user);
+			user.blocked = user.blocked.filter((item) => item !== username);
+			return (2);
+		}
 		user.blocked.push(username);
 		this.save(user);
 		return (1);

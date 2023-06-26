@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Backdrop from "../Sidebar/Backdrop.tsx";
 // import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
@@ -9,6 +9,7 @@ import api from "../../script/axiosApi.tsx";
 import React from "react";
 import {User} from "../../../interfaces.tsx"
 import { Socket } from "socket.io-client";
+import GreenAlert from "../Alert/GreenAlert.tsx";
 
 
 const dropIn = {
@@ -161,13 +162,18 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 		handleClose();
 	}
 
+	const [unban, setUnban] = useState(false);
+	const closeUnban = () => setUnban(false);
     const handleBan = async () => {
 		// console.log("ban option= ", selectedUser)
 		try{
 			// console.log("user select=", selectedUser.length)
 			if (!selectedUser.length)
 				return ;
-			await api.post("/ban", {convId: convId, username: selectedUser})
+			const res = await api.post("/ban", {convId: convId, username: selectedUser})
+			if (res.data === 2)
+				setUnban(true);
+
 			if (socket)
 			{
 				console.log("emit to ban server")
@@ -293,7 +299,7 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 
 
                 <div>
-					<Link to="#" onClick={handleInvite} className="submit">Send</Link>
+					<Link to="#" onClick={handleInvite} className="submit">Invite</Link>
                     <Link to="#" onClick={handleBan} className="submit">Ban</Link>
                     <Link to="#" onClick={mute ? darkMute : lightMute} className={mute ? "darkSubmit": "submit"}>Mute</Link>
                     <Link to="#" onClick={handleAdmin} className="submit">Admin</Link>
@@ -310,6 +316,11 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
             				onChange={(e) => setTime(e.target.value)}
 						/>
 					):("")}
+					<AnimatePresence initial={false} onExitComplete={() => null}>
+			{unban ? (
+				<GreenAlert handleClose={closeUnban} text={selectedUser+": was unbanned"} />
+			): ("")}
+        </AnimatePresence>
 
             </motion.div>
         </Backdrop>
