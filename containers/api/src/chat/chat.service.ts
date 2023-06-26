@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 04:11:00 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 05:09:02 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ async findConv(number: number){
 async banUser(convId: number, username: string) {
 	const conv = await this.findConv(convId);
 
+	if (conv.owner === username)
+		return (0);
 	conv.banned = conv.banned || [];
 	if (conv.banned.find(item => item === username))
 	{
@@ -128,7 +130,12 @@ async muteUser(convId: number, username: string, time: string) {
 	const conv = await this.findConv(convId);
 
 	console.log("MUTE USER");
-
+	console.log("time = ", time);
+	console.log("int time = ", parseInt(time));
+	const intTime = parseInt(time) * 1000;
+	console.log("intTime = ", intTime);
+	if (conv.owner === username)
+		return (0);
 	conv.muted = conv.muted || [];
 	if (conv.muted.find(item => item === username))
 		return (1);
@@ -138,7 +145,7 @@ async muteUser(convId: number, username: string, time: string) {
 	setTimeout(() => {
 		conv.muted = conv.muted.filter((item) => item !== username)
 		this.save(conv);
-	  }, 5000);
+	  }, intTime);
 	  console.log("END MUTE USER");
 }
 
