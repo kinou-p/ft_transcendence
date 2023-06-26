@@ -7,27 +7,27 @@ import React from "react";
 
 const dropIn = {
     hidden: {
-		y: "-100vh",
-	},
-	visible: {
-		y: "0",
-	},
-	exit: {
-		y: "-100vh",
-	},
+        y: "-100vh",
+    },
+    visible: {
+        y: "0",
+    },
+    exit: {
+        y: "-100vh",
+    },
 };
 
 interface AlertProps {
-	handleClose: Function,
-	text: string
-  }
+    handleClose: Function,
+    text: string
+}
 
-function GreenAlert ({handleClose, text}: AlertProps){
-        {setTimeout(handleClose, 1500)}
-        return(
-            
-            <Backdrop onClick={handleClose}>
-        <motion.div
+function GreenAlert({ handleClose, text }: AlertProps) {
+    { setTimeout(handleClose, 1500) }
+    return (
+
+        <Backdrop onClick={handleClose}>
+            <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="greenAlert"
                 // variant={dropIn}
@@ -35,8 +35,10 @@ function GreenAlert ({handleClose, text}: AlertProps){
                 animate="visible"
                 exit="exit"
             >
-                <AiOutlineCheckCircle/>
-               <p>{text}</p>
+                <AiOutlineCheckCircle />
+                <div className="text_alert">
+                    <h5>{text}</h5>
+                </div>
             </motion.div>
         </Backdrop>
     )

@@ -35,7 +35,9 @@ function RedAlert ({handleClose, text}: AlertProps) {
                 exit="exit"
                 >
             <BiErrorCircle/>
-            <p>{text}</p>
+            <div className="text_alert">
+                <h5>{text}</h5>
+            </div>
             </motion.div>
         </Backdrop>
     )
