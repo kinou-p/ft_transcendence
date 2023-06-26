@@ -27,7 +27,7 @@ const dropIn = {
 // 	)
 // }
 
-const ModalEdit = (handleClose) => {
+const ModalEdit = () => {
 	// let new_name = "";
 	const [nickname, setNickname] = useState("");
 	const [errTaken, setErrTaken] = useState(false);
@@ -35,7 +35,7 @@ const ModalEdit = (handleClose) => {
 	const [errTooShort, setErrTooShort] = useState(false);
 	const closeTooShort = () => setErrTooShort(false);
 
-	const handler = e => {
+	const handler = (e: { target: { value: React.SetStateAction<string>; }; }) => {
 		setNickname(e.target.value);
 		console.log("testeeeee")
 		const postNickname = async () => {

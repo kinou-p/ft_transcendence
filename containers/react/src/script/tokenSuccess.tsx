@@ -16,7 +16,7 @@ function SuccessToken() {
 	useEffect(() => {
 	  if (!data) {
 		console.log("No data");
-		return;
+		return ;
 	  }
   
 	  const cleanData = data.slice(1, -1); // Declare cleanData here
@@ -94,7 +94,7 @@ function SuccessToken() {
 	  return <h1>Loading...</h1>;
 	}
 	if (!data)
-		return ;
+		return (<></>);
 	const cleanData = data.slice(1, -1); // Declare cleanData here as well
   
 	if (!user.otp_verified) {

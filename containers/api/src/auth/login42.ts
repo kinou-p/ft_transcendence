@@ -16,8 +16,6 @@ export class loginClass {
 		let token = null;
 		let userId = null;
 		let userName = null;
-		// let  = null;
-
 
 		const params = new URLSearchParams(url.split('?')[1]);
 		const code = params.get('code');

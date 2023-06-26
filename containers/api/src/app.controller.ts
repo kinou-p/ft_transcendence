@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/25 00:10:18 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 02:23:56 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -380,7 +380,7 @@ export class AppController {
 	  console.log(`all data json version= ${myJSON}`);
 	  console.log(`data in api = ${(await data).access_token}`);
 	//   console.log(`data i = ${(await data).access_token}`)
-	  const token = (await data).access_token;
+	const token = (await data).access_token;
 	//   console
 	  await this.userService.save(user);
 	  return { url: 'http://' + process.env.BASE_URL + `/token?data=${encodeURIComponent(JSON.stringify(token))}` };
@@ -451,6 +451,8 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/quit')
   async setOffline(@Request() req) {
+	console.log("cc quit here");
+	const user = await this.userService.findOne(req.user.username);
 
 	const user = await this.userService.findOne(req.user.username);
 	user.sessionNumber-- ;

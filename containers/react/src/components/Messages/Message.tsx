@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 18:24:46 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 16:00:48 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/25 23:24:46 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ function MessageMe({message, own}: MessageMeProps){
 			}
 		  };
 		fetchProfilePicture();
-	}, [])
+	}, []);
 
 	const handleButtonClick = () => {
 		if (!sender)
