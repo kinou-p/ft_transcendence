@@ -94,7 +94,7 @@ export default function  Friend({currentUser}: UserProps)
   	}
 
 	return (
-		<UserChat>
+		<UserChat className="centermargin">
 		{profilePicture ? (
 			<img className="pic-user" src={`data:image/jpeg;base64,${profilePicture}`} />
 		 ) : (

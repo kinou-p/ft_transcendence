@@ -28,7 +28,7 @@ export class loginClass {
 			code: code,
 			redirect_uri: process.env.REDIRECT_URI || 'http://' + process.env.REACT_APP_BASE_URL + '/api/auth/login',
 		  };
-
+		   
 		try {
 		const response = await axios.post('https://api.intra.42.fr/oauth/token', data);
 		token = response.data.access_token;
@@ -78,10 +78,6 @@ export class loginClass {
 			  };
 			await this.usersService.create(user);
 		}
-		// if (user.status !== 2 || user.status === 0) //super
-		// 	user.status = 1;
-		// user.sessionNumber++;
-		// console.log(`in login42 user= ${user}`)
 		const myJSON = JSON.stringify(user);
 		console.log(`in login42 user= ${myJSON}`)
 
