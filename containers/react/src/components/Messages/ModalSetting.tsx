@@ -300,7 +300,7 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 								</option>
 								{users.map((item, index) => (
 									<option key={index} value={item.username}>
-										{item.username}
+										{item.nickname}
 									</option>
 								))}
 							</select>

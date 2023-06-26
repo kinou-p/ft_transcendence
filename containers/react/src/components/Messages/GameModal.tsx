@@ -122,7 +122,7 @@ const GameModal = ({ handleClose }: ModalGame) => {
             <option value="">Select a user</option>
             {users.map((user: User) => (
               <option key={user.id} value={user.username}>
-                {user.username}
+                {user.nickname}
               </option>
             ))}
           </select>

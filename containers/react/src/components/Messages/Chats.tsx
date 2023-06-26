@@ -444,7 +444,7 @@ function Chats(){
 					}</option>
 				      {users.filter((item) => !selectTags.some((tag) => tag.selectedOption === item.username)).map((item, index) => (
 				        <option key={index} value={item.username}>
-				          {item.username}
+				          {item.nickname}
 				        </option>
 				      ))}
 				    </select>
