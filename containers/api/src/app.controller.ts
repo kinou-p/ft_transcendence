@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 07:50:53 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 08:00:13 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,11 @@ import { AuthService } from './auth/auth.service';
 import { loginClass } from './auth/login42'
 import { ChatService } from './chat/chat.service';
 import { UsersService } from './users/users.service';
-
 import { MatchLog } from './model/user.entity'
-import { generate } from 'rxjs';
-
-// import { generateQRcode } from './users/2fa';
 import { generateOTP } from './users/2fa';
 import { VerifyOTP } from './users/2fa';
 import { ValidateOTP } from './users/2fa';
-import { privateDecrypt } from 'crypto';
-import { formatWithOptions } from 'util';
 
-
-//2fa
-
-
-// import { initStorage, getUser, setUser } from './storage';
-
-// import { AuthGuard } from '@nestjs/passport';
-// import { Login42 } from './auth/login42'
-// import { loginClass } from './auth/test'
 
 
 @Controller('/api')
@@ -49,49 +34,39 @@ export class AppController {
 	kFactor = 36;
 	scaleFactor = 400;
 
-
-	//========================================================================================================
-	//========================================================================================================
-	//                                              User
-	//========================================================================================================
-	//========================================================================================================
+//========================================================================================================
+//========================================================================================================
+//                                              User
+//========================================================================================================
+//========================================================================================================
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/profile')
 	async getProfile(@Request() req) {
-		//   const myJSON = JSON.stringify(req.user);
-		//   console.log(`req user api= ${req.user}`)
-		//   console.log(`json user api= ${myJSON}`)
-		//   return req.user;
 		return await this.userService.findOne(req.user.username);
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/user')
 	async getUser(@Body() data: any) {
-		console.log(`usernamewwww= ${data.username}`)
 		return await this.userService.findOne(data.username);
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/users')
 	async getUsers(@Body() data: any) {
-		console.log(`usernamewwww= ${data.username}`)
 		return await this.userService.findAll();
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/friends')
 	async getFriends(@Request() req) {
-		// return await this.userService.getFriends(req.user.username);
 		return await this.userService.getFriends(req.user.username);
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@Post('/friend')//need to do it 2 time when user accept one for each
+	@Post('/friend')
 	async newFriend(@Request() req, @Body() data: any) {
-		// return await this.userService.getFriends(req.user.username);
-		console.log(`user= ${req.user.username}`)
 		const user = await this.userService.findOne(req.user.username)
 		if (!user)
 			return (0);
@@ -100,13 +75,6 @@ export class AppController {
 			this.userService.save(user);
 			return (1);
 		}
-		//create personnal conv for user
-		//await this.userService.addFriend(user, data.username);
-
-
-
-		// const amIhere = data.members.includes(req.user.username);
-		// if (!amIhere)
 		const conv = {
 			id: null,
 			name: req.user.username + ", " + data.username,
@@ -131,8 +99,6 @@ export class AppController {
 	@UseGuards(JwtAuthGuard)
 	@Post('/block')
 	async newBlocked(@Request() req, @Body() data: any) {
-		// return await this.userService.getFriends(req.user.username);
-		console.log(`user= ${req.user.username}`)
 		if (data.username === req.user.username)
 			return (0);
 		const user = await this.userService.findOne(req.user.username)
@@ -142,30 +108,23 @@ export class AppController {
 	@UseGuards(JwtAuthGuard)
 	@Post('/invite')
 	async newInvite(@Request() req, @Body() data: any) {
-		console.log(`user= ${req.user.username}`)
 		if (data.username === req.user.username)
 			return (0);
 		const user = await this.userService.findOne(data.username)
 		if (!user)
 			return (0);
-		console.log(`CALL IT!!!!!`)
 		return await this.userService.newInvite(user, req.user.username);
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/inviteRequest')
 	async getInvite(@Request() req) {
-		// return await this.userService.getFriends(req.user.username);
-		console.log(`useawdawd\n\n\nr= ${req.user.username}`)
-		// const user = await this.userService.findOne(req.user.username)
 		return await this.userService.getInvite(req.user.username);
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/refuseInvite')
 	async refuseInvite(@Request() req, @Body() data: any) {
-		// return await this.userService.getFriends(req.user.username);
-		// console.log(`useawdawd\n\n\nr= ${req.user.username}`)
 		const user = await this.userService.findOne(req.user.username)
 		return await this.userService.refuseInvite(user, data.username);
 	}
@@ -182,7 +141,6 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/nickname')
   async setNickname(@Request() req, @Body() data: any) {
-	console.log(`user= ${req.user.username}`)
 	const taken = await this.userService.findNickname(data.nickname)
 	if (taken)
 		return (0);
@@ -207,6 +165,16 @@ export class AppController {
   @Post('/getPicture')
   async getProfilPicture(@Body() data: any) {
 	return await this.userService.getPic(data.username)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/addSession')
+  async addSession(@Request() req) {
+	  const user = await this.userService.findOne(req.user.username);
+	  user.sessionNumber += 1;
+	  if (user.status !== 2)
+		  user.status = 1;
+	  await this.userService.save(user);
   }
 
 	//========================================================================================================
@@ -244,7 +212,6 @@ export class AppController {
 	newMatch.opScore = data.opScore;
 	newMatch.opponent = data.opName;
 	newMatch.parent = user;
-	console.log(`newMatch Loose= ${newMatch}`);
 	await this.userService.saveChild(user, newMatch);
   }
 
@@ -296,15 +263,15 @@ export class AppController {
 	return await this.userService.getHistory(data.username);
   }
 
-	@UseGuards(JwtAuthGuard)
-	@Post('/quit')
-	async setOffline(@Request() req) {
-		const user = await this.userService.findOne(req.user.username);
-		user.sessionNumber--;
-		if (!user.sessionNumber)
-			user.status = 0;
-		console.log("quit sessionNUmber :", user.sessionNumber);
-	}
+  @UseGuards(JwtAuthGuard)
+  @Post('/quit')
+  async setOffline(@Request() req) {
+	  const user = await this.userService.findOne(req.user.username);
+	  user.sessionNumber--;
+	  if (!user.sessionNumber)
+		  user.status = 0;
+	  await this.userService.save(user);
+  }
 
 //========================================================================================================
 //========================================================================================================
