@@ -19,20 +19,20 @@ import DoubleAuth from "../pages/2fa.tsx";
 import Game from "../pages/Game.tsx";
 import Social from "./Social/Social.tsx";
 import Logout from "./Profile/Logout.tsx";
-
+import api from "../script/axiosApi.tsx"
 
 
 function AnimatedRoute () {
 	// const location = useLocation();
 
 	useEffect(() => {
-		const handleBeforeUnload = (event: { preventDefault: () => void; returnValue: string; }) => {
+		const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
 			event.preventDefault(); // Cancel the default event behavior if needed
 			event.returnValue = ''; // Chrome requires a return value to display a custom message
 			if (!localStorage.getItem('token'))
 				return ;
 			try {
-				
+				await api.post("/quit");
 			} catch(err) {
 				console.log(err);
 			}

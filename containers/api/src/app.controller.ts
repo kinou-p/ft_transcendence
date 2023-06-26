@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 00:47:07 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 02:23:56 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -451,7 +451,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/quit')
   async setOffline(@Request() req) {
-	
+	console.log("cc quit here");
 	const user = await this.userService.findOne(req.user.username);
 
 	user.status = 0;
