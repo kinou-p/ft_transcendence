@@ -34,16 +34,30 @@ export class AppController {
 	kFactor = 36;
 	scaleFactor = 400;
 
-//========================================================================================================
-//========================================================================================================
-//                                              User
-//========================================================================================================
-//========================================================================================================
+	//========================================================================================================
+	//========================================================================================================
+	//                                              User
+	//========================================================================================================
+	//========================================================================================================
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/profile')
 	async getProfile(@Request() req) {
 		return await this.userService.findOne(req.user.username);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Post('/logout')
+	async logout(@Request() req, @Body() data: any) {
+		const user = await this.userService.findOne(req.user.username)
+		// return await this.userService.refuseInvite(user, data.username);
+		if (!user)
+			return;
+		if (user.sessionNumber === 1) {
+			user.status = 0;
+		}
+		user.sessionNumber--;
+		this.userService.save(user);
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -138,16 +152,16 @@ export class AppController {
 		await this.userService.save(user);
 	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/nickname')
-  async setNickname(@Request() req, @Body() data: any) {
-	const taken = await this.userService.findNickname(data.nickname)
-	if (taken)
-		return (0);
-	let user = await this.userService.findOne(req.user.username)
-	user.nickname = data.nickname;
-	return await this.userService.save(user);
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/nickname')
+	async setNickname(@Request() req, @Body() data: any) {
+		const taken = await this.userService.findNickname(data.nickname)
+		if (taken)
+			return (0);
+		let user = await this.userService.findOne(req.user.username)
+		user.nickname = data.nickname;
+		return await this.userService.save(user);
+	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/picture')
@@ -161,21 +175,21 @@ export class AppController {
 		return await this.userService.save(user);
 	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/getPicture')
-  async getProfilPicture(@Body() data: any) {
-	return await this.userService.getPic(data.username)
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/getPicture')
+	async getProfilPicture(@Body() data: any) {
+		return await this.userService.getPic(data.username)
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/addSession')
-  async addSession(@Request() req) {
-	  const user = await this.userService.findOne(req.user.username);
-	  user.sessionNumber += 1;
-	  if (user.status !== 2)
-		  user.status = 1;
-	  await this.userService.save(user);
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/addSession')
+	async addSession(@Request() req) {
+		const user = await this.userService.findOne(req.user.username);
+		user.sessionNumber += 1;
+		if (user.status !== 2)
+			user.status = 1;
+		await this.userService.save(user);
+	}
 
 	//========================================================================================================
 	//========================================================================================================
@@ -183,37 +197,38 @@ export class AppController {
 	//========================================================================================================
 	//========================================================================================================
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/win')
-  async addWin(@Request() req, @Body() data: any) {
-	const user = await this.userService.findOne(req.user.username);
-	user.win++;
-	const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
-	const newRank = user.rank + this.kFactor * (1 - Esp);
-	user.rank = newRank;
-	const newMatch = new MatchLog;
-	newMatch.myScore = data.myScore;
-	newMatch.opScore = data.opScore;
-	newMatch.opponent = data.opName;
-	newMatch.parent = user;
-	await this.userService.saveChild(user, newMatch);
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/win')
+	async addWin(@Request() req, @Body() data: any) {
+		const user = await this.userService.findOne(req.user.username);
+		user.win++;
+		const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
+		const newRank = user.rank + this.kFactor * (1 - Esp);
+		user.rank = newRank;
+		const newMatch = new MatchLog;
+		newMatch.myScore = data.myScore;
+		newMatch.opScore = data.opScore;
+		newMatch.opponent = data.opName;
+		newMatch.parent = user;
+		await this.userService.saveChild(user, newMatch);
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/loss')
-  async addLoss(@Request() req, @Body() data: any) {
-	const user = await this.userService.findOne(req.user.username);
-	user.loss++;
-	const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
-	const newRank = user.rank + this.kFactor * (0 - Esp);
-	user.rank = newRank;
-	const newMatch = new MatchLog;
-	newMatch.myScore = data.myScore;
-	newMatch.opScore = data.opScore;
-	newMatch.opponent = data.opName;
-	newMatch.parent = user;
-	await this.userService.saveChild(user, newMatch);
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/loss')
+	async addLoss(@Request() req, @Body() data: any) {
+		const user = await this.userService.findOne(req.user.username);
+		user.loss++;
+		user.status = 1;
+		const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
+		const newRank = user.rank + this.kFactor * (0 - Esp);
+		user.rank = newRank;
+		const newMatch = new MatchLog;
+		newMatch.myScore = data.myScore;
+		newMatch.opScore = data.opScore;
+		newMatch.opponent = data.opName;
+		newMatch.parent = user;
+		await this.userService.saveChild(user, newMatch);
+	}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/rank')
@@ -222,127 +237,119 @@ export class AppController {
 		return user.rank;
 	}
 
-  @Get('/ranking')
-  async getRanking()
-  {
-	return await this.userService.getRanking();
-  }
+	@Get('/ranking')
+	async getRanking() {
+		return await this.userService.getRanking();
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/partyInvite')
-  async partyInvite(@Request() req, @Body() data: any)
-  {
+	@UseGuards(JwtAuthGuard)
+	@Post('/partyInvite')
+	async partyInvite(@Request() req, @Body() data: any) {
 		const user = await this.userService.findOne(data.username);
 		user.partyInvite = user.partyInvite || [];
 		user.partyInvite.push({ username: req.user.username, gameId: data.gameId });
 		await this.userService.save(user);
-  }
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Get('/partyInvite')
-  async getPartyInvite(@Request() req)
-  {
+	@UseGuards(JwtAuthGuard)
+	@Get('/partyInvite')
+	async getPartyInvite(@Request() req) {
 		const user = await this.userService.findOne(req.user.username);
 		user.partyInvite = user.partyInvite || [];
 		return user.partyInvite;
 	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/deleteInvite')
-  async deleteInvite(@Request() req, @Body() data: any)
-  {
-	const user = await this.userService.findOne(req.user.username);
-	user.partyInvite = user.partyInvite.filter((item) => Object.values(item)[1] !== data.username);
-	this.userService.save(user);
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/deleteInvite')
+	async deleteInvite(@Request() req, @Body() data: any) {
+		const user = await this.userService.findOne(req.user.username);
+		user.partyInvite = user.partyInvite.filter((item) => Object.values(item)[1] !== data.username);
+		this.userService.save(user);
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/history')
-  async getHistory(@Body() data: any)
-  {
-	return await this.userService.getHistory(data.username);
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/history')
+	async getHistory(@Body() data: any) {
+		return await this.userService.getHistory(data.username);
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/quit')
-  async setOffline(@Request() req) {
-	  const user = await this.userService.findOne(req.user.username);
-	  user.sessionNumber--;
-	  if (!user.sessionNumber)
-		  user.status = 0;
-	  await this.userService.save(user);
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/quit')
+	async setOffline(@Request() req) {
+		const user = await this.userService.findOne(req.user.username);
+		if (!user)
+			return;
+		user.sessionNumber--;
+		if (!user.sessionNumber)
+			user.status = 0;
+		await this.userService.save(user);
+	}
 
-//========================================================================================================
-//========================================================================================================
-//                                              Auth
-//========================================================================================================
-//========================================================================================================
+	//========================================================================================================
+	//========================================================================================================
+	//                                              Auth
+	//========================================================================================================
+	//========================================================================================================
 
 
-@Redirect('http://' + process.env.BASE_URL + '/token', 302)
-@Get('auth/login')
-  async login2(@Req() request: Request) {
-	  const url = request.url;
-	  const user = await this.loginClass.Login42(url);
-	  const data = await this.authService.login(user);
-	  const myJSON = JSON.stringify(data);
-  	  const token = (await data).access_token;
-	  await this.userService.save(user);
-	  return { url: 'http://' + process.env.BASE_URL + `/token?data=${encodeURIComponent(JSON.stringify(token))}` };
-  }
+	@Redirect('http://' + process.env.BASE_URL + '/token', 302)
+	@Get('auth/login')
+	async login2(@Req() request: Request) {
+		const url = request.url;
+		const user = await this.loginClass.Login42(url);
+		const data = await this.authService.login(user);
+		const myJSON = JSON.stringify(data);
+		const token = (await data).access_token;
+		await this.userService.save(user);
+		return { url: 'http://' + process.env.BASE_URL + `/token?data=${encodeURIComponent(JSON.stringify(token))}` };
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Get('/2fa')
-  async get2fa(@Request() req)
-  {
-	const user = await this.userService.findOne(req.user.username);
-	return user.otp_enabled;
-  }
+	@UseGuards(JwtAuthGuard)
+	@Get('/2fa')
+	async get2fa(@Request() req) {
+		const user = await this.userService.findOne(req.user.username);
+		return user.otp_enabled;
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/otp')
-  async createOTP(@Request() req)
-  {
-	const user = await this.userService.findOne(req.user.username);
-	const res = await generateOTP(user);
-	await this.userService.save(user);
-	return res;
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/otp')
+	async createOTP(@Request() req) {
+		const user = await this.userService.findOne(req.user.username);
+		const res = await generateOTP(user);
+		await this.userService.save(user);
+		return res;
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/verifyOtp')
-  async verifyOTP(@Request() req, @Body() data: any)
-  {
-	const user = await this.userService.findOne(req.user.username);
-	const res = await VerifyOTP(user, data.token)
-	await this.userService.save(user);
-	return res
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/verifyOtp')
+	async verifyOTP(@Request() req, @Body() data: any) {
+		const user = await this.userService.findOne(req.user.username);
+		const res = await VerifyOTP(user, data.token)
+		await this.userService.save(user);
+		return res
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/validateOtp')
-  async validateOTP(@Request() req, @Body() data: any)
-  {
-	const user = await this.userService.findOne(req.user.username);
-	const res = await ValidateOTP(user, data.token)
-	return res
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/validateOtp')
+	async validateOTP(@Request() req, @Body() data: any) {
+		const user = await this.userService.findOne(req.user.username);
+		const res = await ValidateOTP(user, data.token)
+		return res
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/deleteOtp')
-  async deleteOTP(@Request() req, @Body() data: any)
-  {
-	const user = await this.userService.findOne(req.user.username);
-	user.otp_verified = false;
-	await this.userService.save(user);
-  }
+	@UseGuards(JwtAuthGuard)
+	@Post('/deleteOtp')
+	async deleteOTP(@Request() req, @Body() data: any) {
+		const user = await this.userService.findOne(req.user.username);
+		user.otp_verified = false;
+		await this.userService.save(user);
+	}
 
-//========================================================================================================
-//========================================================================================================
-//                                              Chat
-//========================================================================================================
-//========================================================================================================
+	//========================================================================================================
+	//========================================================================================================
+	//                                              Chat
+	//========================================================================================================
+	//========================================================================================================
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/conv')
@@ -418,9 +425,12 @@ export class AppController {
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/verifyPassword')
-	async verifyPassword(@Body() data: any) {
-		return await this.chatService.verifyPassword(data.convId, data.password)
+	async verifyPassword(@Request() req, @Body() data: any) {
+		return await this.chatService.verifyPassword(data.convId, data.password, req.user.username)
 	}
+	// async verifyPassword(@Body() data: any) {
+	// 	return await this.chatService.verifyPassword(data.convId, data.password)
+	// }
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/inviteConv')
