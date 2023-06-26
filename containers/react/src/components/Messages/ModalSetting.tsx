@@ -207,7 +207,8 @@ const ModalSetting = ({handleClose, convId,  socket }: ModalSettingProps) => {
 
 	const handleInvite = async () => {
 		try{
-			await api.post("/invite", {convId: convId, username: selectedUser})
+			console.log("post invite bitch")
+			await api.post("/inviteConv", {convId: convId, username: selectedUser})
 		} catch(err) {
 			console.log(err);
 		}

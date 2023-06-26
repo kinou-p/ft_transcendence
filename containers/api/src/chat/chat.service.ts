@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 02:07:45 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 04:02:50 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,12 @@ async banUser(convId: number, username: string) {
 }
 
 async inviteUser(convId: number, username: string) {
-	// const conv = await this.findConv(convId);
-	// this.save(conv);
+	const conv = await this.findConv(convId);
 
-	//find user
-	//add in chanInvite chanID
-	//save user
+	if (conv.members.find(item => item === username))
+		return (1);	
+	conv.members.push(username);
+	this.save(conv);
 }
 
 

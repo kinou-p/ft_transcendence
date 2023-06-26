@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 02:23:56 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 03:23:42 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ export class AppController {
 	const user = await this.userService.findOne(data.username)
 	if (!user)
 		return (0);
+	console.log(`CALL IT!!!!!`)
 	return await this.userService.newInvite(user, req.user.username);
   }
 
@@ -451,7 +452,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/quit')
   async setOffline(@Request() req) {
-	console.log("cc quit here");
+	
 	const user = await this.userService.findOne(req.user.username);
 
 	user.status = 0;
@@ -567,7 +568,7 @@ export class AppController {
 	}
 
   @UseGuards(JwtAuthGuard)
-  @Post('/invite')
+  @Post('/inviteConv')
   async inviteUser(@Body() data: any) {
       return await this.chatService.inviteUser(data.convId, data.username)
 	}
