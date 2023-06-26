@@ -57,6 +57,45 @@ const Modal = ({handleClose}: ModalProps) => {
 		getConv();
 	}, []);
 
+	const [askPass, setAskPass] = useState(false);
+	const [PassWord, setPassWord] = useState('');
+	useEffect(()=> {
+
+		const getConv = async ()=>{
+			console.log("chan changed")
+			console.log("chan = ", channel);
+			try{
+
+				const tmpConv = await api.post("/convId", {convId: channel});
+				if (tmpConv.data.password)
+					setAskPass(true);
+			}
+			catch(err){
+				console.log(err);
+			}
+			// if (channel.password)
+			// 	console.log("password true")
+			// else 
+			// 	console.log("password false")
+		}
+		getConv();
+	}, [channel]);
+
+	const handlePassword = async (e: { key: string; }) => {
+		if (e.key !== "Enter")
+			return;
+		try {
+			const ret = await api.post("/verifyPassword", {convId: channel, password: PassWord})
+			if (ret)
+				console.log("ici ret password", ret);
+
+				// window.location.reload();
+		} catch (err) {
+			console.log(err);
+		}
+		handleClose();
+	}
+
     const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("selected Option=", selectedOption)
         setSelectTag((prevTags) =>
@@ -75,6 +114,8 @@ const Modal = ({handleClose}: ModalProps) => {
 	const joinChannel = async () => {
 		try {
 			console.log("channel= ", channel)
+			console.log("ici test channel= ", channel)
+
 			await api.post("/join", {convId: channel})
 		} catch(err) {
 			console.log(err);
@@ -155,15 +196,20 @@ const Modal = ({handleClose}: ModalProps) => {
 						  !(!conv.group || conv.private || (conv.banned && user && conv.banned.includes(user.username)) || (conv.members && user && conv.members.includes(user.username))) && (
 							  <option key={conv.id} value={conv.id}>
         			        {conv.name}
-        			      </option>
+        			      </option> 
         			    )
+						// {conv.password ? (console.log("here is test")):("")}
 						))}
         			</select>
       			)}
-				  {/* {channel.private ? (
-					  <input className="mdp" placeholder="passdddddword" type="text" />
-					  ):("")} */}
+				  {/* {console.log("here is channel == ",channel.password)} */}
+ 				
+				<div>
 
+				  {askPass ? (
+					  <input className="mdp" placeholder="password" type="password" onChange={(e) => setPassWord(e.target.value)} onKeyDown={handlePassword}/>
+					  ):("") }
+					  </div>
 
 				<div className="div_submit">
 					<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>
