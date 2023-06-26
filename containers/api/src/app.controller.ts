@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 08:00:13 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 10:16:19 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,21 @@ export class AppController {
 	@Get('/profile')
 	async getProfile(@Request() req) {
 		return await this.userService.findOne(req.user.username);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Post('/logout')
+	async logout(@Request() req, @Body() data: any) {
+		const user = await this.userService.findOne(req.user.username)
+		// return await this.userService.refuseInvite(user, data.username);
+		if(!user)
+			return ;
+		if (user.sessionNumber === 1)
+		{
+			user.status = 0;
+		}
+		user.sessionNumber--;
+		this.userService.save(user);
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -204,6 +219,7 @@ export class AppController {
   async addLoss(@Request() req, @Body() data: any) {
 	const user = await this.userService.findOne(req.user.username);
 	user.loss++;
+	user.status = 1;
 	const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
 	const newRank = user.rank + this.kFactor * (0 - Esp);
 	user.rank = newRank;
@@ -267,7 +283,10 @@ export class AppController {
   @Post('/quit')
   async setOffline(@Request() req) {
 	  const user = await this.userService.findOne(req.user.username);
+	  if (!user)
+	  	return ;
 	  user.sessionNumber--;
+	  console.log("seesion number=", user.sessionNumber)
 	  if (!user.sessionNumber)
 		  user.status = 0;
 	  await this.userService.save(user);
@@ -413,13 +432,15 @@ export class AppController {
 	@UseGuards(JwtAuthGuard)
 	@Post('/password')
 	async setPassword(@Body() data: any) {
+		// console.log("PASSSSSSSSSSSSSSSSSSSSSSSSSSs= ", data.password);
 		return await this.chatService.setPassword(data.convId, data.password)
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/verifyPassword')
-	async verifyPassword(@Body() data: any) {
-		return await this.chatService.verifyPassword(data.convId, data.password)
+	async verifyPassword(@Request() req, @Body() data: any) {
+		// const user = await this.userService.findOne(req.user.username);
+		return await this.chatService.verifyPassword(data.convId, data.password, req.user.username)
 	}
 
 	@UseGuards(JwtAuthGuard)

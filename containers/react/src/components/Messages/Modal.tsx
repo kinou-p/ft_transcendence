@@ -29,7 +29,6 @@ interface ModalProps {
   }
 
 const Modal = ({handleClose}: ModalProps) => {
-    // const [multi, setMulti] = useState(false);
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
     const [selectedOptionArray, setSelectedOptionArray] = useState<string[]>([]);
 	const [users, setUsers] = useState<User[]>([]);
@@ -39,7 +38,6 @@ const Modal = ({handleClose}: ModalProps) => {
 	const [channel, setChannel] = useState('');
 
 	useEffect(()=> {
-
 		const getConv = async ()=>{
 			try {
 				const tmpUsers = await api.get("/users");
@@ -50,7 +48,7 @@ const Modal = ({handleClose}: ModalProps) => {
 				setUsers(tmpUsers.data);
 				setUser(tmpUser.data);
 				setConvs(tmpConvs.data);
-			} catch(err){
+			} catch(err) {
 				console.log(err)
 			}
 		}
@@ -117,17 +115,16 @@ const Modal = ({handleClose}: ModalProps) => {
 			console.log("ici test channel= ", channel)
 
 			await api.post("/join", {convId: channel})
+			window.location.reload();
 		} catch(err) {
 			console.log(err);
 		}
     };
 
     const saveSelectedOptions = async () => {
-        // const selectedOptions = selectTags.map((tag) => tag.selectedOption);
 		const selectedOptions = selectTags.map((tag) => tag.selectedOption).filter((option) => option !== '');
 
 		console.log("selected= ", selectedOptions);
-		//do db stuff here
 		const data = {
 			members: selectedOptions,
 		}
@@ -142,20 +139,17 @@ const Modal = ({handleClose}: ModalProps) => {
         setSelectedOptionArray(selectedOptions);
 
     }
-    // let new_name;
 
     return (
         <Backdrop onClick={handleClose}>
             <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="modalSetting"
-                // variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
             >
-                {/* <p>New Conversation</p> */}
-				<div className="settingFirstPart2">
+			  <div className="settingFirstPart2">
 
 				{selectTags.map((selectTag) => (
 					<div key={selectTag.id}>
@@ -198,11 +192,9 @@ const Modal = ({handleClose}: ModalProps) => {
         			        {conv.name}
         			      </option> 
         			    )
-						// {conv.password ? (console.log("here is test")):("")}
 						))}
         			</select>
       			)}
-				  {/* {console.log("here is channel == ",channel.password)} */}
  				
 				<div>
 
@@ -214,10 +206,7 @@ const Modal = ({handleClose}: ModalProps) => {
 				<div className="div_submit">
 					<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>
 				</div>
-
-
-
-				</div>
+			  </div>
             </motion.div>
         </Backdrop>
     )
