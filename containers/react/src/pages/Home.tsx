@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 06:58:05 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 07:06:35 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ function Profile () {
 			<AnimatePresence
 			initial={false}
 			onExitComplete={() => null}>
-				{modalOpen && <ModalEdit modalOpen={modalOpen} handleclose={close}/>}
+				{modalOpen && <ModalEdit/>}
 			</AnimatePresence>
 		</div>
 	)

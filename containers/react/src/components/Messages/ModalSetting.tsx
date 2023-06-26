@@ -1,38 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Backdrop from "../Sidebar/Backdrop.tsx";
-// import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
 import { useState, useEffect } from "react";
-import { GrAdd } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import api from "../../script/axiosApi.tsx";
 import React from "react";
 import { User } from "../../../interfaces.tsx"
 import { Socket } from "socket.io-client";
 import GreenAlert from "../Alert/GreenAlert.tsx";
-
-
-const dropIn = {
-	hidden: {
-		y: "-100vh",
-		opacity: 0,
-	},
-	visible: {
-		y: "0",
-		opacity: 0,
-		transotion: {
-			duration: 0.1,
-			type: "spring",
-			damping: 100,
-			stiffness: 500,
-		}
-	},
-	exit: {
-		y: "100vh",
-		opacity: 0,
-	},
-
-};
 
 interface ModalSettingProps {
 	handleClose: Function,
@@ -63,8 +38,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 		const getUsers = async () => {
 			try {
 				const currentConv = await api.post("/convId", { convId: convId });
-
-				// console.log("conv private =================== ", )
 				if (currentConv.data.private)
 					setPrivateConv(true);
 				const tmpUsers = await api.get("/users");
@@ -79,7 +52,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 	}, []);
 
 	useEffect(() => {
-		// Function to run when myVariable changes
 		const handleVariableChange = () => {
 			console.log('Variable changed:', privateConv);
 			if (privateConv === undefined) {
@@ -97,14 +69,7 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 		};
 		if (!loading)
 			handleVariableChange();
-		// return () => {
-		//   handleVariableChange();
-		// };
 	}, [privateConv]);
-
-	// const [multi, setMulti] = useState(false);
-	// const [selectedOptionArray, setSelectedOptionArray] = useState([]);
-
 
 	const handleOptionChange = (selectId: number, selectedOption: string) => {
 		console.log("tag= ", selectTags)
@@ -121,28 +86,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 		setPassword(e.target.checked);
 		console.log("password??", e.target.checked);
 	}
-
-	// const handleCheckPriv = (e: { target: { checked: any; }; }) => {
-	// 	// setPassword(e.target.checked);
-	// 	if (e.target.checked)
-	// 	{
-	// 		console.log("chack true", e.target.checked)
-	// 		try{
-	// 			api.post("/private", {convId: convId})
-	// 		} catch(err) {
-	// 			console.log(err);
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		console.log("chack false", e.target.checked)
-	// 		try{
-	// 			api.post("/private", {convId: convId})
-	// 		} catch(err) {
-	// 			console.log(err);
-	// 		}
-	// 	}
-	// }
 
 	const handleName = async (e: { key: string; }) => {
 		if (e.key !== "Enter")
@@ -169,16 +112,18 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 
 	const [unban, setUnban] = useState(false);
 	const closeUnban = () => setUnban(false);
+	
 	const handleBan = async () => {
-		// console.log("ban option= ", selectedUser)
 		try {
-			// console.log("user select=", selectedUser.length)
 			if (!selectedUser.length)
 				return;
 			const res = await api.post("/ban", { convId: convId, username: selectedUser })
-			if (res.data === 2)
-				setUnban(true);
+			console.log("res of ban", res.data)
 
+			if (res.data === 2) {
+				console.log("hehe true");
+				setUnban(true);
+			}
 			if (socket) {
 				console.log("emit to ban server")
 				socket.emit("ban", { username: selectedUser })
@@ -186,7 +131,7 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 		} catch (err) {
 			console.log(err);
 		}
-		handleClose();
+		setTimeout(handleClose, 1500);
 	};
 
 	const handleAdmin = async () => {
@@ -207,8 +152,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 		console.log(`e in press= ${e.key}`)
 		if (e.key != "Enter")
 			return;
-
-		// console.log("value mute = ", e.target.value);
 		console.log("value mute = ", time);
 		try {
 			const ret = await api.post("/mute", { convId: convId, username: selectedUser, time: time })
@@ -230,17 +173,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 		handleClose();
 	};
 
-	const handleKeyPress = async (e: { key: string; }) => {
-		if (e.key !== "Enter")
-			return;
-		try {
-
-		}
-		catch (err) {
-
-		}
-	}
-
 	return (
 		<Backdrop onClick={handleClose}>
 			<motion.div
@@ -250,18 +182,13 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 				animate="visible"
 				exit="exit"
 			>
-
-				{/* First selection  */}
 				<div className="settingFirstPart">
 					<div>
 						<div>
 							<Link to="#" onClick={light} className={privateConv ? "submit" : "darkSubmit"}>Public</Link>
 							<Link to="#" onClick={dark} className={privateConv ? "darkSubmit" : "submit"}>Private</Link>
 						</div>
-						{/* <p className="checkbox">Private<input className="check"type="checkbox" value="private" onChange={handleCheckPriv}/></p> */}
 						<p className="checkbox">Password<input className="inside_ckeckbox" type="checkbox" value="password" checked={password} onChange={handleCheckPass} /> </p>
-
-
 						{password ? (
 							<input
 								onChange={(e) => setNewPassword(e.target.value)}
@@ -285,8 +212,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 					</div>
 				</div>
 
-				{/* Second selection  */}
-
 				<div className="settingSecondPart">
 
 
@@ -307,7 +232,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 							</select>
 						</div>
 					))}
-
 
 					<div>
 						<Link to="#" onClick={handleInvite} className="submit">Invite</Link>
@@ -332,8 +256,8 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 						<GreenAlert handleClose={closeUnban} text={selectedUser + ": was unbanned"} />
 					) : ("")}
 					{muteAlert ? (
-						<GreenAlert handleClose={closeMuteAlert} text="Mute"/>
-					):("")}
+						<GreenAlert handleClose={closeMuteAlert} text="Mute" />
+					) : ("")}
 				</AnimatePresence>
 
 			</motion.div>
