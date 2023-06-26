@@ -6,20 +6,11 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 console.log(process.env);
 
-// async function bootstrap() {
-//   const app = await NestFactory.create(AppModule);
-//   await app.listen(3000);
-// }
-// bootstrap();
-
-
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule, {
 		cors: {
 		  origin: '*',
 		  methods: '*',
-		//   preflightContinue: false,
-		//   optionsSuccessStatus: 204,
 		  credentials: true,
 		  allowedHeaders: '*',
 		},

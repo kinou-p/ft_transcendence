@@ -2,14 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import io, { Socket } from 'socket.io-client';
 import '../../styles/Messages.css'
 import styled from "styled-components";
-import DefaultPic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi.tsx';
 import { motion , AnimatePresence} from "framer-motion";
 import Modal from "./Modal.tsx";
 import GameModal from "./GameModal.tsx";
 
 import Message from "./Message.tsx"
-// import Input from "./Input";
 
 //react icons
 import { TbSend } from 'react-icons/tb';
@@ -19,14 +17,11 @@ import { GrAdd } from 'react-icons/gr';
 import { RiListSettingsLine } from 'react-icons/ri'
 import { HiChatBubbleLeft } from 'react-icons/hi2'
 
-// import { Rank } from "../../DataBase/DataRank";
 import GreenAlert from "../Alert/GreenAlert.tsx";
 import RedAlert from "../Alert/RedAlert.tsx";
-import YellowAlert from "../Alert/YellowAlert";
 import ModalSetting from "./ModalSetting.tsx";
 import PartyInvite from "./PartyInvite.tsx";
 
-// import {User, Conv, Message} from "../../../interfaces.tsx"
 import {User, Conv} from "../../../interfaces.tsx"
 import { IoLogoOctocat } from "react-icons/io5";
 
@@ -59,11 +54,6 @@ const UserChat = styled.div `
 	}
 `
 
-// const SideSpan = styled.span`
-// 	font-size: 18px;
-// 	font-weight: 500;
-// `
-
 const SideP = styled.p`
 	font-size: 14px;
 	color: lightgray;
@@ -92,15 +82,11 @@ function Chats(){
 	const [user, setUser] = useState<User>();
 	const [currentChat, setCurrentChat] = useState<Conv>(); // false is good?
 	const [isAdmin, setIsAdmin] = useState<boolean>(false); // false is good?
-	// const [currentChat, setCurrentChat] = useState(false); // false is good?
 	const [messages, setMessage] = useState<MessageProps[]>([]);
 	const [newMessages, setNewMessage] = useState("");
 	const [incomingMessage, setIncomingMessage] = useState<MessageProps>();
 
-	// let socket: Socket;
 	const socket = useRef<Socket | null>(null);
-	// const socket = Socket<DefaultEventsMap, DefaultEventsMap> | null
-	// socket = useRef( useRef<SocketIOClient.Socket | null>(null));
 
 
 	useEffect(()=> {
@@ -114,47 +100,38 @@ function Chats(){
 
 				console.log(convs);
 
-				// console.log("invite data use effect= ", tmpInvite.data);
 				setPartyInvite(tmpInvite.data);
 				setUser(tmpUser.data);
 				setConversation(convs.data);
 				setUsers(tmpUsers.data);
 
-				// console.log(`connection....`);
 				socket.current = io('http://' + process.env.REACT_APP_SOCKET_URL + ':4001', { transports: ['polling'] });
-				// console.log(`connection done`);
 				socket.current.emit('connection', {username: tmpUser.data.username})
 				socket.current.on('message', (data) => { //data should be a message ?)
 					setIncomingMessage(data);
 				});
 
 				socket.current.on('ban', (data) => {
-					// setIncomingMessage(data);
-					console.log("banned hehe");
 					window.location.reload()
 				});
 
-				socket.current.on('mute', (data) => {
-					console.log("muted hehe");
-					//set mute var to true and do nothing
-				});
+				// socket.current.on('mute', (data) => {
+				// 	console.log("muted hehe");
+				// 	//set mute var to true and do nothing
+				// });
 
 				setIsLoading(false)
 
 			}
 			catch(err){
-				console.log("ERRORRRRR")
 				console.log(err);
 			}
 		};
 		getConv();
 
 		return () => {
-			console.log("Cleanup");
 			if (socket.current)
 				socket.current.disconnect();
-		  //   cleanup(); // Call the cleanup function to stop the ongoing process or perform necessary cleanup tasks
-				// cleanup();
 		  };
 
 	}, [])
@@ -162,14 +139,11 @@ function Chats(){
 	useEffect(()=> {
 
 		const updateChat = async ()=> {
-			// if (currentChat)
-			// 	console.log(currentChat.id)
 			if (currentChat)
 			{
 
 				try {
 					const res = await api.post("/isAdmin", {convId: currentChat.id})
-					console.log("isadmin= ", res.data)
 					setIsAdmin(res.data);
 				} catch (err) {
 					console.log(err);
@@ -177,13 +151,7 @@ function Chats(){
 			}
 			// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
 			if (currentChat && incomingMessage && currentChat.id === incomingMessage.convId)
-			{
-				console.log("incoming meaasge=",incomingMessage)
-				// if (user && !user.blocked.find(incomingMessage.sender))
-					// setMessage((prev) => [...prev, incomingMessage, key: incomingMessage.id]);
-					// setMessage((prev) => [...prev, { ...incomingMessage, key: incomingMessage.id }]);
-					setMessage((prev) => [...prev, incomingMessage]);
-			}
+				setMessage((prev) => [...prev, incomingMessage]);
 		}
 		updateChat();
 
@@ -198,7 +166,6 @@ function Chats(){
 
 			try {
 				const res = await api.post('/getMessage', data);
-				console.log("message of conv=", res.data)
 				setMessage(res.data);
 			} catch(err) {
 
@@ -209,10 +176,6 @@ function Chats(){
 
 	const handleSubmit = async (e: { key?: any; preventDefault: any; })=>{
 		e.preventDefault();
-		// console.log(`e= ${e.key}`)
-		// console.log(`name= ${user.username}`)
-		// let message;
-		console.log("in handle");
 		if (!user || !currentChat)
 			return ;
 		const message = {
@@ -224,13 +187,8 @@ function Chats(){
 		};
 		try{
 			const allowed = await api.post('/allowed', {convId: currentChat.id});
-			console.log("convid:", currentChat.id);
 			if (!allowed.data)
-			{
-				console.log("muted or banned");
 				return ;
-			}
-			console.log("not muted or banned");
 			const res = await api.post('/message', message);
 			const convMember = await api.post('/member', message);
 			message.members = convMember.data.members;
@@ -246,7 +204,6 @@ function Chats(){
 	}
 
 	const handleKeyPress = async (e: { key?: any; preventDefault: () => void; })=> {
-		// console.log(`e in press= ${e.key}`)
 		if (e.key !== "Enter")
 			return ;
 		handleSubmit(e);
@@ -255,7 +212,6 @@ function Chats(){
 	
 	
 	const [friend, setFriend] = useState("");
-	// const [modalOpen, setModalOpen] = useState(false);
 	const [addFriend, setAddFriend] = useState(false);
 	const [block, setBlock] = useState(false);
 	
@@ -289,16 +245,7 @@ function Chats(){
 	  setNewConversationModalOpen(false);
 	};
 
-	// const close = () => setModalOpen(false);
-	// const open = () => setModalOpen(true);
-	// const closeAddFriend = () => setAddFriend(false);
-	// const closeBlock = () => setBlock(false);
 	const closeSetting = () => setSetting(false);
-
-
-	// const closeAddFriend = () => setAddFriend(false);
-	// const closeBlock = () => setBlock(false);
-
 
 	const handleFriend = (event: { target: { value: React.SetStateAction<string>; }; }) => {
 		setFriend(event.target.value);
@@ -308,8 +255,6 @@ function Chats(){
 		try{
 			console.log("friend= ", friend);
 			const res = await api.post("/invite", {username: friend})
-			// if (res.data === 1)
-			// console.log("res in friend= ", res)
 			console.log("res in friend= ", res.data)
 			if(res.data === 1)
 			{
@@ -335,7 +280,7 @@ function Chats(){
 			if (res.data === 1)
 			{
 				setBlock(true);
-				setAddFriend(false); // Reset addFriend state
+				setAddFriend(false);
 				setShowAddFriendAlert(false);
 			}
 			else
@@ -377,7 +322,6 @@ function Chats(){
 		<div className="chat">
 
 			<div className='navbar'>
-				{/* <img src={DefaultPic} alt="profile" className="pic"/> */}
 				<IoLogoOctocat className="catchat"/>
 				<span>
 					{isLoading || !user ? (
@@ -386,50 +330,6 @@ function Chats(){
         				<h2>Chat</h2>
       				)}
 	  			</span>
-				{/* <div className="end">
-					<input className="lookForFriends" type="text" value={friend} onChange={handleFriend}/>
-					<TouchDiv>
-						<motion.div
-						onClick={() => (addFriend ? setAddFriend(false) : setAddFriend(true))}>
-							<MdOutlineGroupAdd/>
-						</motion.div>
-						<AnimatePresence
-							initial={false}
-							onExitComplete={() => null}
-						>
-							{addFriend && <GreenAlert handleClose={closeAddFriend} text={friend + " was successfuly added"}/>}
-						</AnimatePresence>
-					</TouchDiv>
-					<TouchDiv>
-						<motion.div
-						onClick={() => (block ? setBlock(false) : setBlock(true))}
-						>
-						<ImBlocked/>
-						<AnimatePresence
-							initial={false}
-							onExitComplete={() => null}
-							>
-							{block && <RedAlert handleClose={closeBlock} text={friend + " was successfuly blocked"}/>}
-						</AnimatePresence>
-						</motion.div>
-					</TouchDiv>
-					{currentChat ? (
-
-						<TouchDiv>
-						<motion.div
-						onClick={() => (setting ? setSetting(false) : setSetting(true))}
-						>
-						<RiListSettingsLine/>
-						<AnimatePresence
-							initial={false}
-							onExitComplete={() => null}
-							>
-							{setting && <ModalSetting handleClose={closeSetting} convId={currentChat.id}/>}
-						</AnimatePresence>
-						</motion.div>
-					</TouchDiv>
-					):("")}
-				</div> */}
 
 				<div className="end">
 					{selectTags.map((selectTag) => (
@@ -519,13 +419,6 @@ function Chats(){
       				  )}
       				</UserChat>
 
-
-					{/* {partyInvite.map((c) => {
-						return (
-
-						)})
-					} */}
-
 					{partyInvite.map( i =>(
 						<PartyInvite currentInvite={i}/>
 					))}
@@ -535,11 +428,9 @@ function Chats(){
 						<div key={index}
 							onClick={() => setCurrentChat(c)}>
 							<UserChat>
-							{/* <img className="pic-user" src={DefaultPic} alt="User" /> */}
 							<HiChatBubbleLeft className="catchat"/>
 							<div className="infoSideBar">
 								<span>{c.name}</span>
-								{/* <SideP>Desc?</SideP> */}
 							</div>
 							</UserChat>
 						</div>
@@ -556,7 +447,6 @@ function Chats(){
 								<Message key={m.id} message= {m} own={m.sender === user.username}/>
 								))}
 						</div>
-						{/* <Input/> */}
 						<div className="input">
 							<input
 								onKeyDown={handleKeyPress}
@@ -578,7 +468,6 @@ function Chats(){
 				)}
 			</div>
 		</div>
-		// </div>
 	);
 }
 

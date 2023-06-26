@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:20 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 15:18:19 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 06:55:03 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } 
 	@Column({ nullable: true })
     private: boolean
 
-	// @Column()
-	// members: string;// arry ??? one to many ???
-
 	@Column('text', { array: true, nullable: true })
 	banned: string[];
 
@@ -49,18 +46,6 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } 
 	
 	@Column({ nullable: true })
 	messages: string;
-	 
-	// @CreateDateColumn()
-	// createdAt: Date;
-
-
-
-	//ban user
-	//user list
-	//blocked user (in user model ?)
-	//op list
-	//a way to stock conv ?
-	
    }
 
    @Entity()
@@ -77,7 +62,6 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BaseEntity } 
    @Column()
    text: string;
    
-
    @CreateDateColumn({ nullable: true })
    createdAt?: Date;
    

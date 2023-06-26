@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 05:09:02 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 06:56:08 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Conv } from '../model/chat.entity';
 import { Message } from '../model/chat.entity';
-
 import * as bcrypt from 'bcrypt';
-
-import { ArrayContains } from "typeorm"
-import { query } from 'express';
-import { InitializeOnPreviewAllowlist } from '@nestjs/core';
 
  
 @Injectable()
@@ -43,13 +38,10 @@ async findAll(): Promise<Conv[]> {
 
   async getConv(username: string): Promise<Conv[]>{
 	const convs = await this.chatRepository.query("SELECT * FROM \"conv\" WHERE $1 = ANY (ARRAY[members]);", [username])
-	console.log(`convs= ${convs}`)
 	return convs;
 }
 
 async findConv(number: number){
-	// username = "apommier"
-	console.log(`fincConv; ${number}`)
 	const conv = await this.chatRepository.findOneBy({id: number})
 	return conv;
 }
@@ -109,31 +101,21 @@ async inviteUser(convId: number, username: string) {
 
 
 async setPassword(convId: number, password: string) {
-	//verify is user is admin ?
 	const conv = await this.findConv(convId);
 	const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    // return hashedPassword;
 	conv.password = hashedPassword
 	this.save(conv);
 }
 
 async verifyPassword(convId: number, password: string) {
-	//verify is user is admin ?
 	const conv = await this.findConv(convId);
 	return await bcrypt.compare(password, conv.password);
-	
-	// conv.password = password
 }
 
 async muteUser(convId: number, username: string, time: string) {
 	const conv = await this.findConv(convId);
-
-	console.log("MUTE USER");
-	console.log("time = ", time);
-	console.log("int time = ", parseInt(time));
 	const intTime = parseInt(time) * 1000;
-	console.log("intTime = ", intTime);
 	if (conv.owner === username)
 		return (0);
 	conv.muted = conv.muted || [];
@@ -146,7 +128,6 @@ async muteUser(convId: number, username: string, time: string) {
 		conv.muted = conv.muted.filter((item) => item !== username)
 		this.save(conv);
 	  }, intTime);
-	  console.log("END MUTE USER");
 }
 
 async setAdmin(convId: number, username: string) {
@@ -173,10 +154,6 @@ async setPrivate(convId: number, bool: boolean) {
 	const conv = await this.findConv(convId);
 	console.log("bool= ", bool);
 	conv.private = bool;
-	// if (conv.private === true)
-	// 	conv.private = false;
-	// else
-	// 	conv.private = true;
 	this.save(conv);
 }
 
@@ -192,7 +169,6 @@ async joinChannel(convId: number, username: string) {
 	if (conv.members.find(item => item === username))
 		return ;
 	conv.members.push(username);
-	// conv.name = name;
 	this.save(conv);
 }
 
