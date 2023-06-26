@@ -1,11 +1,10 @@
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react'
 import queryString from 'query-string';
-import api from "./axiosApi.tsx";
 import axios from 'axios';
 import React from 'react';
 
-import {Matchlog, User} from "../../interfaces.tsx"
+import {User} from "../../interfaces.tsx"
 
 function SuccessToken() {
 	const location = useLocation();

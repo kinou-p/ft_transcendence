@@ -10,7 +10,6 @@ interface GameProps {
 
 function DrawCanvas(option: number, gameParam: GameProps) {
 
-
 	useEffect(() => {
 		const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
 			try {
@@ -19,12 +18,12 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 				console.log(err);
 			}
 		};
-
 		window.addEventListener('beforeunload', handleBeforeUnload);
 		return () => {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 		};
 	}, []);
+
 
 	console.log(`option= ${option}`);
 	const superpowerModifier = option & 1;  // Retrieves the superpower modifier
