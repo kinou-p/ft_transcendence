@@ -36,18 +36,7 @@ function AnimatedRoute() {
 			}
 		};
 
-
-		window.addEventListener('beforeunload', handleBeforeUnload);
-		return () => {
-			window.removeEventListener('beforeunload', handleBeforeUnload);
-		};
-	}, []);
-
-	useEffect(() => {
-
 		const handleLoad = async () => {
-			console.log('Page loaded');
-			console.log("je suis a addSession");
 			if (!localStorage.getItem('token'))
 				return;
 			try {
@@ -57,9 +46,10 @@ function AnimatedRoute() {
 			}
 		};
 
-		window.addEventListener('load', handleLoad);
+		handleLoad();
+		window.addEventListener('beforeunload', handleBeforeUnload);
 		return () => {
-			window.removeEventListener('load', handleLoad);
+			window.removeEventListener('beforeunload', handleBeforeUnload);
 		};
 	}, []);
 
