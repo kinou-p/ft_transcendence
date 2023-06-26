@@ -1,12 +1,5 @@
-// import io from 'socket.io-client';
-
 import api from '../script/axiosApi.tsx';
-
-// import { useEffect, useRef } from 'react';
 import io from 'socket.io-client';
-// const socket = io('http://192.168.1.14:4000');
-// const socket = io('http://86.209.110.20:4000');
-// const socket = io('http://172.29.113.91:4000');
 
 interface GameProps {
 	privateParty: boolean,
@@ -24,11 +17,6 @@ function DrawCanvas(option: number, gameParam: GameProps) {
     console.log(`superpowerModifier = ${superpowerModifier}`);
     console.log(`obstacleModifier = ${obstacleModifier}`);
     console.log(`speedModifier = ${speedModifier}`);
-	
-	
-	
-	// const socketRef = useRef(null);
-	// socketRef.current = io('http://localhost:4000');
 	
 	function launchGame()
 	{
@@ -49,10 +37,7 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 		}
 	}
 	
-	// const socket = socketRef.current
 	console.log("start function");
-	
-	// let canvas: HTMLElement | null;
 	const canvas = document.getElementById('myCanvas') as HTMLCanvasElement | null;;
 	if (!canvas)
 		return ;
@@ -62,14 +47,6 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 		return ;
 	
 	const socket = io('http://' + process.env.REACT_APP_SOCKET_URL + ':4000', { transports: ['polling'] });
-	// useEffect(() => {
-		// 	console.log("useeffect?????????????????")
-	// 	return () => {
-	// 		console.log("000000000000000000000000000000000")
-	// 	  socketRef.current.disconnect();
-	// 	};
-	//   }, []);
-
 
 //========================================================================================================
 //========================================================================================================
@@ -87,7 +64,6 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 	let running = true;
 	const scale = window.devicePixelRatio; 
 	canvas.width = canvas.offsetWidth;
-	// canvas.height = canvas.width * 0.7
 	canvas.height = canvas.offsetHeight;
 
 	//paddle var
@@ -139,25 +115,13 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 socket.on('pong:win', async () => {
 	myScore = maxScore;
 	console.log("instant win opponent disconnect")
-	// const data = {
-	// 	myScore: myScore,
-	// 	opScore: hisScore,
-	// 	opName: opName,
-	// 	opRank: opRank,
-	// };
-
-	// await api.post('/win', data);
 	console.log("after request1")
 	await api.post('/status', {status: 1});
 	console.log("after request2")
-	//disconnect ?
 	running = false;
 	socket.emit('pong:disconnect', {id: myId});
 	console.log("before reload")
-	// window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
-	// window.location.reload();
 	return ;
-	// console.log("send all ?? win");
 
 });
 
@@ -206,17 +170,12 @@ socket.on('pong:gameId', async (data) => {
 	  }
 	} catch (error) {
 	  console.log(error);
-	  // Handle error here
 	  return;
 	}
   });
 
 socket.on('pong:name', (data) => {
 	opName = data.name;
-	// if (data.myId === myId)
-	// 	vX = 0.0001;
-	// else
-	// 	vX = -0.0001;
 	console.log(`opponent Name= ${opName}`)
 });
 
@@ -252,22 +211,15 @@ socket.on('pong:power', (data) => {
 	opPaddleHeight = canvas.height;
 
 	setTimeout(() => {
-		// code à exécuter après 5 secondes
 		opPaddleHeight = canvas.height * 0.25;
 		oPaddleY = canvas.height / 2 - paddleHeight / 2;
 		console.log('Cinq secondes se sont écoulées.');
 	}, 5000);
-	// oPaddleY = (data.paddleY / data.height) * canvas.height
 });
 
 socket.on('pong:point', (data) => {
-	// hisScore += 1;
 	console.log("gain point");
-	// if (vX != 0)
-	// {
-		// console.log("up point");
 	myScore = data.point;
-	// }
 	vX = -0.0005;
 	vY = 0;
 	ballX = canvas.width / 2;
@@ -275,18 +227,12 @@ socket.on('pong:point', (data) => {
 });
 
 socket.on('pong:hisPoint', (data) => {
-	// hisScore += 1;
 	console.log("myPointawdawdawdawd point");
-	// if (vX != 0)
-	// {
-		// console.log("up point");
 	hisScore = data.point;
-	// }
 	vX = -0.0005;
 	vY = 0;
 	ballX = canvas.width / 2;
 	ballY = canvas.height / 2;
-	// send_forced_info();
 });
 
 //========================================================================================================
@@ -362,7 +308,6 @@ socket.on('pong:hisPoint', (data) => {
 	{
 		if (!gameId || !canvas)
 			return ;
-		// console.log("send point");
 		const info = {
 			id: myId,
 			gameId: gameId,
@@ -384,7 +329,6 @@ socket.on('pong:hisPoint', (data) => {
 		const info = {
 			id: myId,
 			paddleY: paddleY,
-			// width: canvas.width,
 			height: canvas.height,
 			gameId: gameId,
 		};
@@ -437,7 +381,6 @@ socket.on('pong:hisPoint', (data) => {
 		ctx.fillRect(canvas.width / 2 - ctx.lineWidth / 2, 0, canvas.width / 300, canvas.height);
 		
 		ctx.beginPath();
-		// ctx.lineWidth = 5;
 		ctx.arc(canvas.width / 2, canvas.height / 2, circleRadius, 0, 2 * Math.PI);
 		ctx.strokeStyle = 'white'; // couleur de dessin
 		ctx.stroke(); // dessin du contour
@@ -463,7 +406,6 @@ socket.on('pong:hisPoint', (data) => {
 			return ;
 		ctx.beginPath();
 		ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
-		// ctx.lineWidth = 2;
 		ctx.fillStyle = 'red ';
 		ctx.fill();
 	}
@@ -475,11 +417,6 @@ socket.on('pong:hisPoint', (data) => {
 //========================================================================================================
 //========================================================================================================
 
-
-// while (!gameId)
-// 	;
-
-  // Define a function to stop the drawing process
   const stopDrawCanvas = async () => {
     running = false;
 
@@ -489,11 +426,6 @@ socket.on('pong:hisPoint', (data) => {
 	{
 		console.log("stopDrawCanvas2")
 		try{
-			// const info = {
-				// 	id: myId,
-				// 	option: option,
-				// };
-				// await api.post("status", {status: 1});
 				await api.post('/status', {status: 1});
 				await api.post("deleteInvite", {username: gameParam.username})
 		}
@@ -503,9 +435,6 @@ socket.on('pong:hisPoint', (data) => {
 	}
 	socket.emit('pong:disconnect', {id: myId});
 	window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
-	// window.location.reload();
-    // Perform any necessary cleanup tasks
-    // ...
   };
 
 async function draw(timestamp: number)
@@ -518,7 +447,6 @@ async function draw(timestamp: number)
 	}
 	if (!gameId || !canvas )
 	{
-		// console.log("nogameid score= ", myScore);
 		requestAnimationFrame(draw);
 		return ;
 	}
@@ -535,9 +463,7 @@ async function draw(timestamp: number)
 		{
 			await api.post('/win', data);
 			await api.post('/status', {status: 1});
-			//disconnect ?
 			socket.emit('pong:disconnect', {id: myId});
-
 			console.log("send all ?? win");	
 		}
 		else
@@ -545,11 +471,9 @@ async function draw(timestamp: number)
 			await api.post('/loss', data);
 			await api.post('/status', {status: 1});
 			socket.emit('pong:disconnect', {id: myId});
-			//disconnect ?
 			console.log("send loose");
 		}
 		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
-		// window.location.reload();
 		return ;
 	}
 
@@ -560,7 +484,6 @@ async function draw(timestamp: number)
 
 	if (!ctx)
 		return ;
-		// requestAnimationFrame(draw);
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	drawPaddle();
 	drawcenter();
@@ -624,13 +547,11 @@ async function draw(timestamp: number)
 		}
 		if (ballY - ballRadius - 2 <= 0 || ballY + ballRadius + 2 >= canvas.height) //touch up or down wall
 		{
-			// if ()
 			vY = -vY;
 			if (ballY > (canvas.height / 2))//down wall
 				ballY = canvas.height - ballRadius - 2
 			else
 				ballY = ballRadius + 2
-			// send_info();
 		}
 	}
 
@@ -653,28 +574,11 @@ async function draw(timestamp: number)
 			vY = 0;
 			hisScore += 1;
 			send_point();
-			// send_forced_info();
 		}
 		if (ballX > (canvas.width * 1.2) && ballX - (vX * 2) > canvas.width)
 		{
 			console.log("ball out win point pls")
 			send_my_point();
-			// if (ballX > canvas.width * 2)
-			// console.log("win point")
-			// if (ballY <= paddleY + paddleHeight + ballRadius && ballY >= paddleY - ballRadius)
-			// {
-			// 	console.log('true hehe');
-			// 	ballX = paddleX + paddleWidth + ballRadius;
-			// 	updateVector();
-			// 	return ;
-			// }
-			// ballX = canvas.width / 2;
-			// ballY = canvas.height / 2;
-			// vX = 0;
-			// vY = 0;
-			// hisScore += 1;
-			// send_point();
-			// // send_forced_info();
 		}
 
 	}
@@ -703,21 +607,14 @@ async function draw(timestamp: number)
 
     document.addEventListener("touchmove", event => {
         const touchY = event.touches[0].pageY;
-
-        // if (!lastTouchY)
-		// {
-		// 	vX = -0.01;
-        //     lastTouchY = touchY;
-        //     return;
-        // }
         const newY = touchY > lastTouchY ? paddleY - (lastTouchY - touchY) : paddleY + (touchY - lastTouchY);
+
         updatePaddlePosition(newY);
         lastTouchY = touchY;
 		send_paddle_info();
     });
 
 	document.addEventListener("keydown", event => {
-		// console.log(event.code);
 		if (event.code === "ArrowUp")
 		{
 			if ((paddleY - paddleSpeed) > 0)
@@ -729,36 +626,6 @@ async function draw(timestamp: number)
 			if (paddleY + paddleSpeed < canvas.height - paddleHeight)
 				paddleY += paddleSpeed; // déplacer la raquette vers le bas
 			send_paddle_info();
-		}
-		else if (event.code === "Space")//space
-		{
-			console.log('vx change to -1');
-			vX = -0.0001;
-
-			// ballSpeed = 0.0001;
-			vY = 0;
-			send_forced_info();
-			// vX = 0.0001;
-		}
-		else if (event.code === "KeyE")
-		{
-			// console.log('vx change to -1');
-			vX = 0;
-			vY = 0;
-			ballX = canvas.width / 2;
-			ballY = canvas.height / 2;
-			send_forced_info();
-		}
-		else if (event.code === "KeyQ" )
-		{
-			if (vX < 0.003 * canvas.width && vX > -0.003 * canvas.width)
-			{
-				if (vX > 0)
-					vX += 0.0001;
-				else
-					vX -= 0.0001;
-			}
-			send_forced_info();
 		}
 		else if (event.code === "KeyW")
 		{
@@ -772,14 +639,12 @@ async function draw(timestamp: number)
 			paddleHeight = canvas.height;
 			use_power();
 			setTimeout(() => {
-				// code à exécuter après 5 secondes
 				paddleHeight = canvas.height * 0.25;
 				paddleY = canvas.height / 2 - paddleHeight / 2;
 				console.log('Cinq secondes se sont écoulées.');
 			  }, 5000);
 			date = new Date();
 			lastPower = date.getTime();
-			// console.log("date= ", date.getTime())
 		}
 	});
 

@@ -20,9 +20,6 @@ export class User {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	// otp_enabled  Boolean @default(false)
-	// otp_verified Boolean @default(false)
-
 	@Column({ default: false })
 	otp_enabled: boolean;
 
@@ -62,17 +59,11 @@ export class User {
 	@Column({ default: 0 })
 	userId: number;
 
-	// @Column({ default: 0 })
-	// doubleAuth: number;
-
 	@Column('text', { array: true, nullable: true })
 	friendRequest: string[];
 
 	@Column({ type: 'jsonb', nullable: true })
 	partyInvite: Record<string, string>[];
-
-	// @Column('text', { array: true, nullable: true })
-	// friendRequest: string[];
 
 	@Column('text', { array: true, nullable: true })
 	friends: string[];

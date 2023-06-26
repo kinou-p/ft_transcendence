@@ -13,25 +13,18 @@ async function bootstrap() {
 	cors: {
 	  origin: '*',
 	  methods: '*',
-	//   preflightContinue: false,
-	//   optionsSuccessStatus: 204,
-	//   credentials: true,
 	  allowedHeaders: '*',
 	},
   });
-// const app = await NestFactory.create(AppModule);
-
   const httpServer = app.getHttpServer();
   const io = new socketio.Server(httpServer);
 
   io.on('connection', (socket) => {
 	console.log('Client connected:', socket.id);
   
-	// Gestion des événements personnalisés ici
 	socket.on('customEvent', (data) => {
 	  console.log('Custom event received:', data);
   
-	  // Exemple de réponse à un événement personnalisé
 	  socket.emit('customEventResponse', { message: 'Event processed.' });
 	});
   

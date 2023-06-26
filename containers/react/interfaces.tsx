@@ -16,6 +16,7 @@ export interface User {
 	partyInvite: Record<string, string>[];
 	friends: string[];
 	blocked: string[];
+	sessionNumber: number;
   }
 
 export interface Conv {

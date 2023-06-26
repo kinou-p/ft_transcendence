@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   users.service.ts                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 02:23:16 by sadjigui         ###   ########.fr       */
+/*   Updated: 2023/06/26 07:52:08 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ export class UsersService {
 	}
 
 	async saveChild(user: User, match: MatchLog): Promise<User> {
-		// user.match = savedChild;
 		user.children.push(match)
 		await this.matchRepository.save(match);
 		return await this.userRepository.save(user);
@@ -58,9 +57,7 @@ export class UsersService {
 
 	async getFriends(username: string) {
 		const user = await this.findOne(username)
-		let friendsTab = user.friends
-		console.log(friendsTab)
-		// friendsTab = ['apommier', 'syd']
+		let friendsTab = user.friends || [];
 		const friends = await this.userRepository.query("SELECT * FROM \"User\" WHERE username = ANY ($1);", [friendsTab]);
 		console.log(friends)
 		return (friends)
@@ -69,9 +66,6 @@ export class UsersService {
 	async newInvite(user: User, username: string) {
 		if (!(await this.findOne(username)))
 			return (0);
-		// user.friendRequest = user.friendRequest || [];
-		// console.log("newInvite")
-		// console.log(user.friendRequest)
 		user.friendRequest = user.friendRequest || [];
 		if (user.friendRequest.find(item => item === username))
 			return (1);
@@ -86,10 +80,7 @@ export class UsersService {
 	async getInvite(username: string) {
 		const user = await this.findOne(username)
 		let friendsTab = user.friendRequest
-		// console.log(friendsTab[0])
-		// console.log(friendsTab[1])
 		console.log(friendsTab)
-		// friendsTab = ['apommier', 'syd']
 		const friends = await this.userRepository.query("SELECT * FROM \"User\" WHERE username = ANY ($1);", [friendsTab]);
 		console.log(friends)
 		return (friends)
@@ -103,25 +94,13 @@ export class UsersService {
 	async getHistory(username: string) {
 		const user = await this.findOne(username);
 
-		if (user)
-		{
-			// const ret = await this.matchRepository.query("SELECT * FROM \"MatchLog\"");
-
-			console.log("user id=0 ", user.id);
-			// const matchLog = await this.userRepository.query("SELECT * FROM \"MatchLog\" WHERE \"parentId\" = ANY ($1);", [[user.id]]);
-
-			return await this.userRepository.query("SELECT * FROM \"MatchLog\" WHERE \"parentId\" = ANY ($1);", [[user.id]]);
-
-
-			// console.log("all match2= ", matchLog);
-		}
+		return await this.userRepository.query("SELECT * FROM \"MatchLog\" WHERE \"parentId\" = ANY ($1);", [[user.id]]);
 	}
 
 	async addFriend(user: User, username: string) {
 		const user2 = await this.findOne(username)
 		if (!user)
 			return (0);
-			// user.friendRequest = user.friendRequest || [];
 		user.friends = user.friends || [];
 		if (user.friends.find(item => item === username))
 		{
@@ -158,40 +137,11 @@ export class UsersService {
 	}
 
 	async getPic( username: string) {
-		// const user = await this.findOne(username);
 		let result =  await this.userRepository.query("select encode(photo, 'base64') FROM public.\"User\" WHERE username = $1;", [username]);
 		if (result.length > 0) {
 			const encodedPhoto = result[0].encode;
-			console.log(`pic!!! =`)
 			return encodedPhoto;
 		  }
-		  console.log(`no pic`)
 		return undefined
 	}
 }
-
-
-// }
-// type orm here
-
-// This should be a real class/interface representing a user entity
-// export type User = any;
-
-// @Injectable()
-// export class UsersService {
-//   private readonly users = [
-//     {
-//       userId: 1,
-//       username: 'john',
-//       password: 'changeme',
-//     },
-//     {
-//       userId: 2,
-//       username: 'maria',
-//       password: 'guess',
-//     },
-//   ];
-
-//   async findOne(username: string): Promise<User | undefined> {
-//     return this.users.find(user => user.username === username);
-//   }
