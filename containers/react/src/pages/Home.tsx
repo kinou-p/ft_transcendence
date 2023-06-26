@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 07:06:35 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 11:31:57 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,11 @@ function Profile () {
 	const [profilePicture, setProfilePicture] = useState('');
 	const handleFileChange = async (event: { target: { files: any; }; }) => {
 		  const photo = (event.target.files[0]);
-		  console.log("file selected")
 		  if (photo) {
-			console.log("selected photo")
 			  const formData = new FormData();
 			  formData.append('photo', photo);
 			  try {
 				await api.post('/picture', formData);
-				console.log('File uploaded successfully');
 				window.location.reload();
 			  } catch (error) {
 				setError(true);

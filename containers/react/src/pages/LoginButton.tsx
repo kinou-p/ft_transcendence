@@ -6,7 +6,6 @@ function HomeLogin()
 {
 	const handleButtonClick = () => {
 		const token = localStorage.getItem('token')
-		console.log(`token type= ${typeof token}`);
 		if (token !== null && typeof token === 'string')
 			return ;
 		let path = process.env.REACT_APP_INTRA_URL || "";
