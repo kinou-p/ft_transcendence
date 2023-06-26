@@ -23,6 +23,7 @@ interface AlertProps {
   }
 
 function RedAlert ({handleClose, text}: AlertProps) {
+    {setTimeout(handleClose, 1500)}
     return(
         <Backdrop onClick={handleClose}>
         <motion.div
@@ -36,7 +37,6 @@ function RedAlert ({handleClose, text}: AlertProps) {
             <BiErrorCircle/>
             <p>{text}</p>
             </motion.div>
-                {setTimeout(handleClose, 1500)}
         </Backdrop>
     )
 }

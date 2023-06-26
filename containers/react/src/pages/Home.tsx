@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Home.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 23:26:45 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 04:03:16 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ function Home () {
 				// 	backdropFilter: move ? "blur(10px)" : "none",
 				// 	WebkitBackdropFilter: move ? "blur(10px)" : "none"
 				//   }}
-				animate={{x: move ? '-50%' : '30%'}}
+				animate={{x: move ? '-50%' : '25%'}}
 				transition={{type: "tween", duration: 0.5}}>
 					<Profile/>
 			</motion.div>

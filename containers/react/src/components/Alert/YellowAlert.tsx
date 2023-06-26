@@ -25,6 +25,7 @@ interface AlertProps {
   }
 
 function YellowAlert ({handleClose, text, icon}: AlertProps) {
+    {setTimeout(handleClose, 3000)}
     return(
         <Backdrop onClick={handleClose}>
         <motion.div
@@ -53,7 +54,6 @@ function YellowAlert ({handleClose, text, icon}: AlertProps) {
 
             <h5>{text}</h5>
             </motion.div>
-            {setTimeout(handleClose, 3000)}
         </Backdrop>
     )
 }
