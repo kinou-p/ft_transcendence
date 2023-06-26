@@ -6,7 +6,7 @@
 /*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 02:19:48 by sadjigui         ###   ########.fr       */
+/*   Updated: 2023/06/26 02:57:07 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ import { formatWithOptions } from 'util';
 
 @Controller('/api')
 export class AppController {
-  constructor(private authService: AuthService, 
+  constructor(private authService: AuthService,
 			  private loginClass: loginClass,
 			  private chatService: ChatService,
 			  private userService: UsersService, ) {}
@@ -53,7 +53,7 @@ export class AppController {
 
 //========================================================================================================
 //========================================================================================================
-//                                              User			                                  
+//                                              User
 //========================================================================================================
 //========================================================================================================
 
@@ -127,7 +127,7 @@ export class AppController {
 	await this.chatService.createConv(conv);
 
 	return await this.userService.addFriend(user, data.username);
-	
+
   }
 
   @UseGuards(JwtAuthGuard)
@@ -167,7 +167,7 @@ export class AppController {
   async refuseInvite(@Request() req, @Body() data: any) {
 	// return await this.userService.getFriends(req.user.username);
 	// console.log(`useawdawd\n\n\nr= ${req.user.username}`)
-	const user = await this.userService.findOne(req.user.username) 
+	const user = await this.userService.findOne(req.user.username)
 	return await this.userService.refuseInvite(user, data.username);
   }
 
@@ -222,7 +222,7 @@ export class AppController {
 
 //========================================================================================================
 //========================================================================================================
-//                                              Pong			                                  
+//                                              Pong
 //========================================================================================================
 //========================================================================================================
 
@@ -260,7 +260,7 @@ export class AppController {
 
 	const Esp = 1 / (1 + Math.pow(10, (data.opRank - user.rank) / this.scaleFactor))
 	const newRank = user.rank + this.kFactor * (0 - Esp);
-	
+
 	user.rank = newRank;
 	console.log(`loss new rank= ${newRank}`);
 	console.log(`data loss = ${data}`)
@@ -323,8 +323,8 @@ export class AppController {
   {
 	console.log("delete invite user= ", data.username)
 	const user = await this.userService.findOne(req.user.username);
-	
-	
+
+
 	// user.partyInvite = user.partyInvite.filter(item => Object.values(item)[1] !== req.user.username);
 	console.log("user.partyInvite before", user.partyInvite)
 	user.partyInvite = user.partyInvite.filter((item) => Object.values(item)[1] !== data.username);
@@ -339,10 +339,10 @@ export class AppController {
 	// const user = await this.userService.findOne(req.user.username);
 	// return user.rank;
 	return await this.userService.getHistory(data.username);
-	
+
 	//   if (user) {
 	// 	const children = user.children;
-	// 	console.log(user); 
+	// 	console.log(user);
 	// 	console.log(user.children); // or perform any operations with the children
 	// 	return children;
 	// 	// You can also access specific properties of each child
@@ -357,7 +357,7 @@ export class AppController {
 
 //========================================================================================================
 //========================================================================================================
-//                                              Auth			                                  
+//                                              Auth
 //========================================================================================================
 //========================================================================================================
 
@@ -380,7 +380,7 @@ export class AppController {
 	  console.log(`all data json version= ${myJSON}`);
 	  console.log(`data in api = ${(await data).access_token}`);
 	//   console.log(`data i = ${(await data).access_token}`)
-	  const token = (await data).access_token;
+	const token = (await data).access_token;
 	//   console
 	  await this.userService.save(user);
 	  return { url: 'http://' + process.env.BASE_URL + `/token?data=${encodeURIComponent(JSON.stringify(token))}` };
@@ -451,18 +451,26 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('/quit')
   async setOffline(@Request() req) {
-	
 	const user = await this.userService.findOne(req.user.username);
-
-	user.status = 0;
+	user.sessionNumber-- ;
+	if (!user.sessionNumber)
+		user.status = 0;
 	await this.userService.save(user);
 	console.log("User quit");
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('/addSession')
+  async addSession(@Request() req) {
+
+	const user = await this.userService.findOne(req.user.username);
+	user.sessionNumber++ ;
+	await this.userService.save(user);
+  }
 
 //========================================================================================================
 //========================================================================================================
-//                                              Chat			                                  
+//                                              Chat
 //========================================================================================================
 //========================================================================================================
 
@@ -510,7 +518,7 @@ export class AppController {
   @Post('/message')
   async postMessage(@Request() req, @Body() data: any) {
 	//if i can post post ?
-	let message = 
+	let message =
 	{
 		convid: data.convId,
 		sender: data.sender,
@@ -521,7 +529,7 @@ export class AppController {
 	console.log(data);
 	return await this.chatService.createMessage(message, req.user.username);
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/member')
   async getMember(@Body() data: any) {
@@ -529,7 +537,7 @@ export class AppController {
 	console.log(`get member= ${data.convId}`);
 	return await this.chatService.findConv(data.convId);
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/getMessage')
   async getMessage(@Body() data: any) {
@@ -541,11 +549,11 @@ export class AppController {
 
 	return await this.chatService.getMessages(data.convId);
 	// return await this.chatService.getConv(req.user.username);
-	
-	
+
+
 	// res.json(messages);
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/name')
   async setName(@Body() data: any) {
@@ -553,13 +561,13 @@ export class AppController {
 	// data.convId
 	return await this.chatService.setName(data.convId, data.name)
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/password')
   async setPassword(@Body() data: any) {
 	  return await this.chatService.setPassword(data.convId, data.password)
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/verifyPassword')
   async verifyPassword(@Body() data: any) {
@@ -579,7 +587,7 @@ export class AppController {
 		return ;
 	  return await this.chatService.banUser(data.convId, data.username)
 	}
-	
+
   @UseGuards(JwtAuthGuard)
   @Post('/admin')
   async setAdmin(@Body() data: any) {
@@ -587,7 +595,7 @@ export class AppController {
 		return ;
 	return await this.chatService.setAdmin(data.convId, data.username)
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/mute')
   async muteUser(@Body() data: any) {
@@ -595,14 +603,14 @@ export class AppController {
 		return ;
 	return await this.chatService.muteUser(data.convId, data.username, data.time)
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/isAdmin')
   async isAdmin(@Request() req, @Body() data: any) {
 	console.log("isdamin= ", req.user.username, " id=", data.convId)
 	return await this.chatService.isAdmin(data.convId, req.user.username)
   }
-  
+
   @UseGuards(JwtAuthGuard)
   @Post('/private')
   async setPrivate(@Body() data: any) {
@@ -627,4 +635,4 @@ export class AppController {
 	return await this.chatService.joinChannel(data.convId, req.user.username)
   }
 
-} 
+}

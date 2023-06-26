@@ -197,12 +197,12 @@ socket.on('pong:gameId', async (data) => {
 	  if (data.id === myId)
 	  {
 		console.log("myId= true")
-	  	vX = 0.0001;
+	  	vX = 0.0005;
 	  }
 	  else
 	  {
 		console.log("myId= false")
-	  	vX = -0.0001;
+	  	vX = -0.0005;
 	  }
 	} catch (error) {
 	  console.log(error);
@@ -268,7 +268,7 @@ socket.on('pong:point', (data) => {
 		// console.log("up point");
 	myScore = data.point;
 	// }
-	vX = -0.0001;
+	vX = -0.0005;
 	vY = 0;
 	ballX = canvas.width / 2;
 	ballY = canvas.height / 2;
@@ -282,7 +282,7 @@ socket.on('pong:hisPoint', (data) => {
 		// console.log("up point");
 	hisScore = data.point;
 	// }
-	vX = -0.0001;
+	vX = -0.0005;
 	vY = 0;
 	ballX = canvas.width / 2;
 	ballY = canvas.height / 2;
@@ -355,7 +355,7 @@ socket.on('pong:hisPoint', (data) => {
 			point: hisScore,
 		}
 		socket.emit('pong:point', info);
-		vX = 0.0001;
+		vX = 0.0005;
 	}
 
 	function send_my_point()
@@ -370,7 +370,7 @@ socket.on('pong:hisPoint', (data) => {
 		}
 		socket.emit('pong:myPoint', info);
 		myScore++;
-		vX = 0.0001;
+		vX = 0.0005;
 		vY = 0;
 		ballX = canvas.width / 2;
 		ballY = canvas.height / 2;
@@ -494,6 +494,7 @@ socket.on('pong:hisPoint', (data) => {
 				// 	option: option,
 				// };
 				// await api.post("status", {status: 1});
+				await api.post('/status', {status: 1});
 				await api.post("deleteInvite", {username: gameParam.username})
 		}
 		catch (err){
@@ -648,7 +649,7 @@ async function draw(timestamp: number)
 			}
 			ballX = canvas.width / 2;
 			ballY = canvas.height / 2;
-			vX = 0.0001;
+			vX = 0.0005;
 			vY = 0;
 			hisScore += 1;
 			send_point();

@@ -16,9 +16,7 @@ export class loginClass {
 		let token = null;
 		let userId = null;
 		let userName = null;
-		// let  = null;
 
-		
 		const params = new URLSearchParams(url.split('?')[1]);
 		const code = params.get('code');
 
@@ -62,11 +60,11 @@ export class loginClass {
 				password: null,
 				username: userName,
 				nickname: userName,
-				win: 0, 
+				win: 0,
 				loss: 0,
 				rank: 1200,
 				userId: userId,
-				otp_base32: null,	
+				otp_base32: null,
 				children: null,
 				status: 1,
 				// doubleAuth: 0,
@@ -76,13 +74,14 @@ export class loginClass {
 				friends: null,
 				blocked: null,
 				photo: null,
+				sessionNumber: 1,
 			  };
 			await this.usersService.create(user);
 		}
 		// console.log(`in login42 user= ${user}`)
 		const myJSON = JSON.stringify(user);
 		console.log(`in login42 user= ${myJSON}`)
-		
+
 		console.log("end of login");
 		return (user);
 		// return (await this.usersService.findOne(userName));
