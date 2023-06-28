@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/28 17:43:13 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 18:49:39 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ export class AppController {
 		const user = await this.userService.findOne(req.user.username)
 		if(!user)
 			return ;
-		if (user.sessionNumber === 1)
-			user.status = 0;
-		user.sessionNumber--;
+		if (user.sessionNumber > 0)
+			user.sessionNumber--;
+		if (!user.sessionNumber)
+			  user.status = 0;
 		this.userService.save(user);
 	}
 

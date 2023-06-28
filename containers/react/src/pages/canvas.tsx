@@ -98,7 +98,7 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 
 socket.on('pong:win', async () => {
 	myScore = maxScore;
-	await api.post('/status', {status: 1});
+	await api.post('/rmGame');
 	running = false;
 	socket.emit('pong:disconnect', {id: myId});
 	return ;
@@ -376,8 +376,8 @@ socket.on('pong:hisPoint', (data) => {
 	if (gameParam.privateParty && !gameId) //delete invite
 	{
 		try{
-				await api.post('/status', {status: 1});
-				await api.post("deleteInvite", {username: gameParam.username})
+				await api.post('/rmGame');
+				await api.post("deleteInvite", {username: gameParam.username});
 		}
 		catch (err){
 			console.log(err)
@@ -421,13 +421,13 @@ async function draw(timestamp: number)
 		if (myScore === maxScore)
 		{
 			await api.post('/win', data);
-			await api.post('/status', {status: 1});
+			await api.post('/rmGame');
 			socket.emit('pong:disconnect', {id: myId});
 		}
 		else
 		{
 			await api.post('/loss', data);
-			await api.post('/status', {status: 1});
+			await api.post('/rmGame');
 			socket.emit('pong:disconnect', {id: myId});
 		}
 		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");

@@ -47,12 +47,12 @@ function Social (){
 
 			</div>
 
-			{invite.map(c=> (
-				<FriendRequest currentUser={c}/>
+			{invite.map((c: User)=> (
+				<FriendRequest currentUser={c} key={c.username}/>
 			))}
 
-			{friends.map(c=> (
-				<Friend currentUser={c}/>
+			{friends.map((c: User)=> (
+				<Friend currentUser={c} key={c.username}/>
 			))}
 
 		</div>
