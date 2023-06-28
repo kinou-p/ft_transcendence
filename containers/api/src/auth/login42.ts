@@ -63,6 +63,7 @@ export class loginClass {
 				blocked: null,
 				photo: null,
 				sessionNumber: 0,
+				gameSession: 0,
 			  };
 			await this.usersService.create(user);
 		}

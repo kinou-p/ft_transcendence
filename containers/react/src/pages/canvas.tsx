@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import api from '../script/axiosApi.tsx';
 import io from 'socket.io-client';
 
@@ -11,20 +11,20 @@ interface GameProps {
 function DrawCanvas(option: number, gameParam: GameProps) {
 
 
-	useEffect(() => {
-		const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
-			try {
-				await api.post("/status", {status: 1});
-			} catch (err) {
-				console.log(err);
-			}
-		};
+	// useEffect(() => {
+	// 	const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
+	// 		try {
+	// 			await api.post("/status", {status: 1});
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 		}
+	// 	};
 
-		window.addEventListener('beforeunload', handleBeforeUnload);
-		return () => {
-			window.removeEventListener('beforeunload', handleBeforeUnload);
-		};
-	}, []);
+	// 	window.addEventListener('beforeunload', handleBeforeUnload);
+	// 	return () => {
+	// 		window.removeEventListener('beforeunload', handleBeforeUnload);
+	// 	};
+	// }, []);
 
 	console.log(`option= ${option}`);
 	const superpowerModifier = option & 1;  // Retrieves the superpower modifier

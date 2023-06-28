@@ -3,7 +3,7 @@ import DrawCanvas from './canvas.tsx';
 import queryString from 'query-string';
 import '../styles/field.css';
 import React from 'react';
-
+import api from '../script/axiosApi.tsx';
 
 interface GameProps {
 	privateParty: boolean,
@@ -13,6 +13,34 @@ interface GameProps {
 
 function Field()
 {
+
+	useEffect(() => {
+
+		const addGameSession = async () => {
+			try {
+				await api.post("/addGame");
+			} catch (err) {
+				console.log(err);
+			}
+		};
+
+		addGameSession();
+
+		const handleBeforeUnload = async () => {
+			try {
+				await api.post("/rmGame");
+			} catch (err) {
+				console.log(err);
+			}
+		};
+
+		window.addEventListener('beforeunload', handleBeforeUnload);
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		};
+	}, []);
+
+
 	useEffect(() => {
 		const queryParams = queryString.parse(window.location.search);
 		
