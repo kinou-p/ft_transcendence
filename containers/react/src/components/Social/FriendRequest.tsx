@@ -28,7 +28,7 @@ interface UserProps {
 export default function  Friend({currentUser}: UserProps)
 {
 	const [profilePicture, setProfilePicture] = useState('');
-	const [request, setRequest] = useState<User>(); //user who invite
+	const [request, setRequest] = useState<User>();
 	const [clickEvent, setClickEvent] = useState(false);
 
 	useEffect(() => {

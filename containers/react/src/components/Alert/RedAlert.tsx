@@ -4,19 +4,6 @@ import { BiErrorCircle } from "react-icons/bi";
 import '../../styles/Messages.css'
 import React from "react";
 
-
-const dropIn = {
-    hidden: {
-		y: "-100vh",
-	},
-	visible: {
-		y: "0",
-	},
-	exit: {
-		y: "-100vh",
-	},
-};
-
 interface AlertProps {
 	handleClose: Function,
 	text: string
