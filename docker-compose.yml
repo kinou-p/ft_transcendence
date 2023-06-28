@@ -63,7 +63,7 @@ services:
       - 5432:5432
     volumes:
       - db:/var/lib/postgresql/data
-      - ./conf/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      # - ./conf/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
     networks:
       - pongNetwork
 

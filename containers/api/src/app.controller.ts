@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/28 13:57:06 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 16:50:11 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ export class AppController {
 		if(!user)
 			return ;
 		if (user.sessionNumber === 1)
-		{
 			user.status = 0;
-		}
 		user.sessionNumber--;
 		this.userService.save(user);
 	}
@@ -210,7 +208,8 @@ export class AppController {
 	@Post('/rmGame')
 	async removeGame(@Request() req, @Body() data: any) {
 	  const user = await this.userService.findOne(req.user.username);
-	  user.gameSession -= 1;
+	  if (user.gameSession > 0)
+	  	user.gameSession -= 1;
 	  if (user.gameSession === 0)
 		user.status = 1;
 	  await this.userService.save(user);
@@ -303,7 +302,8 @@ export class AppController {
 	  const user = await this.userService.findOne(req.user.username);
 	  if (!user)
 	  	return ;
-	  user.sessionNumber--;
+	  if (user.sessionNumber > 0)
+	    user.sessionNumber--;
 	  console.log("seesion number=", user.sessionNumber)
 	  if (!user.sessionNumber)
 		  user.status = 0;

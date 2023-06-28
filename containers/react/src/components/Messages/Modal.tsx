@@ -86,8 +86,7 @@ const Modal = ({handleClose}: ModalProps) => {
 			const ret = await api.post("/verifyPassword", {convId: channel, password: PassWord})
 			if (ret)
 				console.log("ici ret password", ret);
-
-				// window.location.reload();
+			// window.location.reload();
 		} catch (err) {
 			console.log(err);
 		}
@@ -115,7 +114,7 @@ const Modal = ({handleClose}: ModalProps) => {
 			console.log("ici test channel= ", channel)
 
 			await api.post("/join", {convId: channel})
-			window.location.reload();
+			// window.location.reload();
 		} catch(err) {
 			console.log(err);
 		}

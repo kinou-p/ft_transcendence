@@ -48,11 +48,13 @@ function AnimatedRoute() {
 		handleLoad();
 
 		window.addEventListener("beforeunload", async (event) => {
+			if (!localStorage.getItem('token'))
+				return;
 			await api.post("/quit");
 		});
-		window.addEventListener("unload", async (event) => {	
-			await api.post("/quit");
-		});
+		// window.addEventListener("unload", async (event) => {	
+		// 	await api.post("/quit");
+		// });
 
 
 		return () => {
