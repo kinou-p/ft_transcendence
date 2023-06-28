@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:18:58 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/28 17:50:52 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:59:49 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ export default function  Friend({currentUser}: UserProps)
 	function getStatus(friend: User)
 	{
 		let status = friend.status		
-		let session =friend.sessionNumber
 		let statusColor;
 
 		if (status === 0)

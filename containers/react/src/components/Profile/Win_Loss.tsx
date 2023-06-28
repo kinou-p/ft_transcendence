@@ -1,6 +1,6 @@
 import '../../styles/Win_Loss.css'
 import { User, Matchlog } from "../../../interfaces.tsx"  
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import { useParams } from 'react-router-dom';
 import api from '../../script/axiosApi.tsx';
 
@@ -9,7 +9,6 @@ function WinLoss() {
 	const [user, setUser] = useState<User>();
 	const [history, setHistory] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	
 	const { username } = useParams();
 
 	useEffect(()=> {

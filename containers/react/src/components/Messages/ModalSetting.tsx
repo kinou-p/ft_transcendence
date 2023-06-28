@@ -139,7 +139,7 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 	const closeMuteAlert = () => setMuteAlert(false);
 
 	const handleMute = async (e: { key: string; }) => {
-		if (e.key != "Enter")
+		if (e.key !== "Enter")
 			return;
 		try {
 			const ret = await api.post("/mute", { convId: convId, username: selectedUser, time: time })

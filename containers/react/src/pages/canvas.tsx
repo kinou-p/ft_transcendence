@@ -11,7 +11,6 @@ interface GameProps {
 function DrawCanvas(option: number, gameParam: GameProps) {
 
 	const superpowerModifier = option & 1;  // Retrieves the superpower modifier
-    const obstacleModifier = (option >> 1) & 1;  // Retrieves the obstacle modifier
     const speedModifier = (option >> 2) & 1;  // Retrieves the speed modifier
 
 	function launchGame()
@@ -48,7 +47,6 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 
 	//general canvas
 	let running = true;
-	const scale = window.devicePixelRatio; 
 	canvas.width = canvas.offsetWidth;
 	canvas.height = canvas.offsetHeight;
 
