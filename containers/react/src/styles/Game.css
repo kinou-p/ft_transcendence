@@ -7,7 +7,6 @@
 .rank_elements {
 	border-width:1px;
 	border-style:solid;
-	/* background-color: #5843e4; */
 	border-color: grey;
 	/* overflow: scroll; */
 	padding: 5px 100px;
@@ -15,16 +14,12 @@
 }
 
 .scroll {
-	/* border:3px; */
-	/* background-color: #5843e4; */
-	/* border-color: white; */
 	overflow: scroll;
 	height: 68vh;
 }
 
 .profilePic{
 	margin-left: 10px;
-	/* margin-top: 10px; */
 	height: 30px;
 	width: 30px;
 	border-radius: 50%;

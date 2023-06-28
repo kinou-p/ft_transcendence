@@ -1,5 +1,4 @@
 body {
-	/* display: flex; */
 	margin: 0%;
 	width: 100vw;
 	height: 100vh;
@@ -20,7 +19,6 @@ footer {
 	width: 7vw;
 	max-height: 7vh;
 	max-width: 7vh;
-	/* max-width: ; */
 	border-radius: 50%;
 	border: 5px solid rgb(255, 255, 255);
 }
@@ -66,7 +64,6 @@ input{
 }
 
 .username {
-	/* justify-content: center; */
 	margin-right: 1vw;
 	display: flex;
 	align-items: center;
@@ -90,7 +87,6 @@ input{
 .menu {
 	margin-left: 2vw;
 	color: aqua;
-	/* font-size: 4vh; */
 	font-size: 2vw;
 	text-decoration: none;
 }
@@ -111,9 +107,7 @@ input{
 	display:flex;
 	max-width: 33%;
 	height: 100%;
-	/* font-size: 50px; */
 	color:blueviolet;
-	/* font-size: 10vw; */
 	font-size: min(10vw, 10vh);
 	justify-content: center;
 }

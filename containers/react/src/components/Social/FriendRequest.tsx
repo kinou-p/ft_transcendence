@@ -21,12 +21,6 @@ const UserChat = styled.div `
 	}
 `
 
-const SideP = styled.p`
-	font-size: 14px;
-	color: lightgray;
-	margin-left: 15px;
-`
-
 interface UserProps {
 	currentUser: User
   }
@@ -34,21 +28,15 @@ interface UserProps {
 export default function  Friend({currentUser}: UserProps)
 {
 	const [profilePicture, setProfilePicture] = useState('');
-	const [request, setRequest] = useState<User>(); //user who invite
+	const [request, setRequest] = useState<User>();
 	const [clickEvent, setClickEvent] = useState(false);
-	// const [user, setUser] = useState(null);
 
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
-			//   const user = await api.get("/profile");\
-				// const tmpUser = await api.get("/profile")
 				const pic = await api.post("/getPicture", {username: currentUser.username})
 				const tmpRequest = await api.post("/user", {username: currentUser.username})
-				// setUser(tmpUser.data);
 				setRequest(tmpRequest.data);
-				// console.log(`user naem profile pic222= ${currentUser.username}`)
-				// console.log(` profile pic222= ${pic.data}`)
 				setProfilePicture(pic.data);
 			} catch (error) {
 				console.error('Error fetching profile picture:', error);
@@ -60,8 +48,6 @@ export default function  Friend({currentUser}: UserProps)
 
 	const handleButtonClick = (user: User) => {
 		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`;
-		// history(path, { replace: true });
-		// window.location.replace(path);
 		window.history.pushState({}, '', path);
 		window.location.reload();
 	};
@@ -73,8 +59,6 @@ export default function  Friend({currentUser}: UserProps)
 		} catch(err) {
 			console.log(err);
 		}
-		console.log("accept")
-		console.log(`request = ${request}`)
 	}
 
 	const Refuse = async (request: User) => {
@@ -84,13 +68,10 @@ export default function  Friend({currentUser}: UserProps)
 		} catch(err) {
 			console.log(err);
 		}
-		console.log("refuse")
-		console.log(`request = ${request}`)
 	}
 
-  // Vérifier si le contenu doit être caché
   	if (clickEvent) {
-    	return null; // Rendre null pour ne pas afficher le contenu
+    	return null;
   	}
 
 	return (

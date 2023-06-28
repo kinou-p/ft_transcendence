@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Friend.tsx                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:18:58 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 17:12:07 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/26 11:34:53 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ import DefaultPicture from '../../assets/profile.jpg'
 import styled from "styled-components";
 
 import { RxCircle } from "react-icons/rx";
-import { CgFontSpacing } from "react-icons/cg";
 import React from "react";
 import {User} from "../../../interfaces.tsx"
 
@@ -34,16 +33,10 @@ const UserChat = styled.div `
 	}
 `
 
-const SideP = styled.p`
-	font-size: 14px;
-	color: lightgray;
-	margin-left: 15px;
-`
 interface UserProps {
 	currentUser: User
   }
 
-//   export default function  Friend({currentUser})
 export default function  Friend({currentUser}: UserProps)
 {
 	const [profilePicture, setProfilePicture] = useState('');
@@ -51,10 +44,7 @@ export default function  Friend({currentUser}: UserProps)
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
-			//   const user = await api.get("/profile");
 				const pic = await api.post("/getPicture", {username: currentUser.username})
-				// console.log(`user naem profile pic222= ${currentUser.username}`)
-				// console.log(` profile pic222= ${pic.data}`)
 				setProfilePicture(pic.data);
 			} catch (error) {
 				console.error('Error fetching profile picture:', error);
@@ -80,17 +70,8 @@ export default function  Friend({currentUser}: UserProps)
 		return statusColor;
 	}
 
-	const handleSpectate = (user: User) => {
-		//socket connection and add to party with one with username
-		console.log(`spectate hehe`)
-		console.log(`user= ${user}`)
-	};
-
 	const handleButtonClick = (user: User) => {
 		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`;
-		console.log("path= ", path)
-		// history(path, { replace: true });
-		// window.location.replace(path);
 		window.history.pushState({}, '', path);
 		window.location.reload();
 	};
@@ -111,9 +92,3 @@ export default function  Friend({currentUser}: UserProps)
 		</UserChat>
 	)
 }
-// spectate visible
-// {getStatus(currentUser) !== 'blue' ? (
-// 	<></>
-// ) : (
-// 	<button className="friendRequest" onClick={() => handleSpectate(currentUser)} >Spectate</button>
-// )}
