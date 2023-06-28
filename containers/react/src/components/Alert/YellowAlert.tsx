@@ -31,7 +31,6 @@ function YellowAlert({ handleClose, text, icon }: AlertProps) {
             <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="yellowAlert"
-                // variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"

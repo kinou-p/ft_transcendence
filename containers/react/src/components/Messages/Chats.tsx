@@ -80,8 +80,8 @@ function Chats(){
 	const [conversations, setConversation] = useState([]);
 	const [partyInvite, setPartyInvite] = useState([]);
 	const [user, setUser] = useState<User>();
-	const [currentChat, setCurrentChat] = useState<Conv>(); // false is good?
-	const [isAdmin, setIsAdmin] = useState<boolean>(false); // false is good?
+	const [currentChat, setCurrentChat] = useState<Conv>(); 
+	const [isAdmin, setIsAdmin] = useState<boolean>(false); 
 	const [messages, setMessage] = useState<MessageProps[]>([]);
 	const [newMessages, setNewMessage] = useState("");
 	const [incomingMessage, setIncomingMessage] = useState<MessageProps>();
@@ -98,8 +98,6 @@ function Chats(){
 				const tmpUser = await api.get("/profile")
 				const tmpUsers = await api.get("/users");
 
-				console.log(convs);
-
 				setPartyInvite(tmpInvite.data);
 				setUser(tmpUser.data);
 				setConversation(convs.data);
@@ -107,19 +105,13 @@ function Chats(){
 
 				socket.current = io('http://' + process.env.REACT_APP_SOCKET_URL + ':4001', { transports: ['polling'] });
 				socket.current.emit('connection', {username: tmpUser.data.username})
-				socket.current.on('message', (data) => { //data should be a message ?)
+				socket.current.on('message', (data) => {
 					setIncomingMessage(data);
 				});
 
 				socket.current.on('ban', (data) => {
 					window.location.reload()
 				});
-
-				// socket.current.on('mute', (data) => {
-				// 	console.log("muted hehe");
-				// 	//set mute var to true and do nothing
-				// });
-
 				setIsLoading(false)
 
 			}
@@ -149,7 +141,6 @@ function Chats(){
 					console.log(err);
 				}
 			}
-			// console.log(`result1 = ${currentChat.id !== incomingMessage.convId}`)
 			if (currentChat && incomingMessage && currentChat.id === incomingMessage.convId)
 				setMessage((prev) => [...prev, incomingMessage]);
 		}
@@ -253,9 +244,7 @@ function Chats(){
 
 	  const handleAddFriend = async () => {
 		try{
-			console.log("friend= ", friend);
 			const res = await api.post("/invite", {username: friend})
-			console.log("res in friend= ", res.data)
 			if(res.data === 1)
 			{
 			  setAddFriend(true);
@@ -302,7 +291,6 @@ function Chats(){
 	  };
 
 	  const handleOptionChange = (selectId: number, selectedOption: string) => {
-		console.log("selected Option=", selectedOption)
 		setFriend(selectedOption);
         setSelectTag((prevTags) =>
             prevTags.map((tag) =>
@@ -431,7 +419,6 @@ function Chats(){
 							<HiChatBubbleLeft className="catchat"/>
 							<div className="infoSideBar">
 								<h2>{c.name}</h2>
-								{/* <SideP>Desc?</SideP> */}
 							</div>
 							</UserChat>
 						</div>

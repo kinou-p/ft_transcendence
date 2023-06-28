@@ -34,14 +34,12 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 
 	useEffect(() => {
 
-		console.log("convid =", convId)
 		const getUsers = async () => {
 			try {
 				const currentConv = await api.post("/convId", { convId: convId });
 				if (currentConv.data.private)
 					setPrivateConv(true);
 				const tmpUsers = await api.get("/users");
-				console.log("users=", tmpUsers.data);
 				setUsers(tmpUsers.data);
 				setLoading(false);
 			} catch (err) {
@@ -53,9 +51,7 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 
 	useEffect(() => {
 		const handleVariableChange = () => {
-			console.log('Variable changed:', privateConv);
 			if (privateConv === undefined) {
-				console.log("return")
 				return;
 			}
 			try {
@@ -72,8 +68,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 	}, [privateConv]);
 
 	const handleOptionChange = (selectId: number, selectedOption: string) => {
-		console.log("tag= ", selectTags)
-		console.log("option= ", selectedOption)
 		setSelectTag((prevTags) =>
 			prevTags.map((tag) =>
 				tag.id === selectId ? { ...tag, selectedOption } : tag
@@ -84,7 +78,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 
 	const handleCheckPass = (e: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
 		setPassword(e.target.checked);
-		console.log("password??", e.target.checked);
 	}
 
 	const handleName = async (e: { key: string; }) => {
@@ -118,14 +111,11 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 			if (!selectedUser.length)
 				return;
 			const res = await api.post("/ban", { convId: convId, username: selectedUser })
-			console.log("res of ban", res.data)
 
 			if (res.data === 2) {
-				console.log("hehe true");
 				setUnban(true);
 			}
 			if (socket) {
-				console.log("emit to ban server")
 				socket.emit("ban", { username: selectedUser })
 			}
 		} catch (err) {
@@ -149,10 +139,8 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 	const closeMuteAlert = () => setMuteAlert(false);
 
 	const handleMute = async (e: { key: string; }) => {
-		console.log(`e in press= ${e.key}`)
 		if (e.key != "Enter")
 			return;
-		console.log("value mute = ", time);
 		try {
 			const ret = await api.post("/mute", { convId: convId, username: selectedUser, time: time })
 			if (ret.data)
@@ -165,7 +153,6 @@ const ModalSetting = ({ handleClose, convId, socket }: ModalSettingProps) => {
 
 	const handleInvite = async () => {
 		try {
-			console.log("post invite bitch");
 			await api.post("/inviteConv", { convId: convId, username: selectedUser });
 		} catch (err) {
 			console.log(err);

@@ -14,13 +14,8 @@ function Ranking(){
 
 		const getRanking = async ()=>{
 			try{
-				// const tmpFriends = await api.get("/friends")
 				const Ranking = await api.get("/ranking")
 				setRanking(Ranking.data);
-				console.log(`ranking= ${Ranking.data}`)
-				// setFriends(tmpFriends.data);
-				// return tmpUser;
-				// console.log(`user= ${tmpUser.data.username}`);
 				setIsLoading(false);
 			}
 			catch(err){
@@ -29,14 +24,12 @@ function Ranking(){
 		};
 		getRanking();
 	}, []);
-	console.log(`ranking after= ${ranking}`);
 
 	return (
 		<div>
 			{isLoading ? (
         		<></>
       		) : (
-				//   <h1 className='title'>Ranking</h1>
             <div className='scroll'>
                 {ranking.map((user, index) => (
 					<Rank user={user} index={index} key={user.username}/>
