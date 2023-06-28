@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 16:44:29 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/20 23:53:01 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 18:08:11 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,6 @@ const UserChat = styled.div `
 	&:hover{
 		background-color: #3e3c61;
 	}
-`
-
-const SideP = styled.p`
-	font-size: 14px;
-	color: lightgray;
-	margin-left: 15px;
 `
 
 interface InviteProps {

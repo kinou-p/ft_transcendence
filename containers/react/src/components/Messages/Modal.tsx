@@ -20,6 +20,7 @@ const Modal = ({handleClose}: ModalProps) => {
 
 	const [channel, setChannel] = useState('');
 
+	
 	useEffect(()=> {
 		const getConv = async ()=>{
 			try {
