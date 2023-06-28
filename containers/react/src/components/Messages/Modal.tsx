@@ -110,7 +110,6 @@ const Modal = ({handleClose}: ModalProps) => {
 			members: selectedOptions,
 		}
 		try{
-			// test
 			await api.post("/conv", data);
 			handleClose();
 			window.location.reload();

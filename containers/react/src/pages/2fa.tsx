@@ -3,7 +3,6 @@ import api from '../script/axiosApi.tsx';
 
 
 const DoubleAuth = () => {
-	// const [imageSrc, setImageSrc] = useState('');
 	const [imageSrc, setImageSrc] = useState<string | ArrayBuffer | null>('');
 
 	useEffect(() => {

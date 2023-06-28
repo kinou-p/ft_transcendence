@@ -51,6 +51,9 @@ export class User {
 	sessionNumber: number;
 
 	@Column({ default: 0 })
+	gameSession: number;
+
+	@Column({ default: 0 })
 	rank: number;
 
 	@Column({ default: 0 }) //0 = offline | 1 = connected | 2 = in game

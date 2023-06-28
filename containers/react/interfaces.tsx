@@ -17,6 +17,7 @@ export interface User {
 	friends: string[];
 	blocked: string[];
 	sessionNumber: number;
+	gameSession : number;
   }
 
 export interface Conv {

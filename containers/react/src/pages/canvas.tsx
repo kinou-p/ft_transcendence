@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import api from '../script/axiosApi.tsx';
 import io from 'socket.io-client';
 
@@ -10,51 +10,20 @@ interface GameProps {
 
 function DrawCanvas(option: number, gameParam: GameProps) {
 
-
-	useEffect(() => {
-		const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
-			try {
-				await api.post("/status", {status: 1});
-			} catch (err) {
-				console.log(err);
-			}
-		};
-
-		window.addEventListener('beforeunload', handleBeforeUnload);
-		return () => {
-			window.removeEventListener('beforeunload', handleBeforeUnload);
-		};
-	}, []);
-
-	console.log(`option= ${option}`);
 	const superpowerModifier = option & 1;  // Retrieves the superpower modifier
     const obstacleModifier = (option >> 1) & 1;  // Retrieves the obstacle modifier
     const speedModifier = (option >> 2) & 1;  // Retrieves the speed modifier
 
-    console.log(`superpowerModifier = ${superpowerModifier}`);
-    console.log(`obstacleModifier = ${obstacleModifier}`);
-    console.log(`speedModifier = ${speedModifier}`);
-	
 	function launchGame()
 	{
 		if (!gameParam.privateParty)
-		{
-			console.log("laucnh matchmaking")
 			matchmaking();
-		}
 		else if (!gameParam.gameId)
-		{
-			console.log("laucnh private")
 			privateParty();
-		}
 		else
-		{
-			console.log("join private")
 			joinPrivateParty();
-		}
 	}
 	
-	console.log("start function");
 	const canvas = document.getElementById('myCanvas') as HTMLCanvasElement | null;
 	if (!canvas)
 		return ;
@@ -131,13 +100,9 @@ function DrawCanvas(option: number, gameParam: GameProps) {
 
 socket.on('pong:win', async () => {
 	myScore = maxScore;
-	console.log("instant win opponent disconnect")
-	console.log("after request1")
 	await api.post('/status', {status: 1});
-	console.log("after request2")
 	running = false;
 	socket.emit('pong:disconnect', {id: myId});
-	console.log("before reload")
 	return ;
 
 });
@@ -152,19 +117,13 @@ socket.on('pong:privateId', async (data) => {
 });
 
 socket.on('pong:gameId', async (data) => {
-	console.log("gameId received");
 	gameId = data.gameId;
-	console.log("gameid = ", gameId);
-	console.log("data gameid = ", data);
-  
 	try {
 	  let response = await api.get('/profile');
 	  const myName = response.data.username;
 	  response = await api.get('/rank');
 	  await api.post('/status', {status: 2});
 	  opRank = response.data
-	  console.log(`rank= ${opRank}`);
-	  console.log(`myname= ${myName}`);
 
 	  const info = {
 		id: myId,
@@ -173,18 +132,11 @@ socket.on('pong:gameId', async (data) => {
 		rank: opRank,
 	  };
   
-	  console.log("emit to name");
 	  socket.emit('pong:name', info);
 	  if (data.id === myId)
-	  {
-		console.log("myId= true")
 	  	vX = 0.0005;
-	  }
 	  else
-	  {
-		console.log("myId= false")
 	  	vX = -0.0005;
-	  }
 	} catch (error) {
 	  console.log(error);
 	  return;
@@ -193,7 +145,6 @@ socket.on('pong:gameId', async (data) => {
 
 socket.on('pong:name', (data) => {
 	opName = data.name;
-	console.log(`opponent Name= ${opName}`)
 });
 
 socket.on('connect', () => {
@@ -201,9 +152,7 @@ socket.on('connect', () => {
 });
 
 socket.on('pong:clientId', (data) => {
-	console.log("receive id")
 	myId = data;
-	console.log(`id is= ${myId}`)
 	launchGame();
 });
 
@@ -217,12 +166,10 @@ socket.on('pong:info', (data) => {
 });
 
 socket.on('pong:paddle', (data) => {
-	console.log("paddle info receive")
 	oPaddleY = (data.paddleY / data.height) * canvas.height
 });
 
 socket.on('pong:power', (data) => {
-	console.log("paddle info receive")
 	
 	oPaddleY = 0;
 	opPaddleHeight = canvas.height;
@@ -230,12 +177,10 @@ socket.on('pong:power', (data) => {
 	setTimeout(() => {
 		opPaddleHeight = canvas.height * 0.25;
 		oPaddleY = canvas.height / 2 - paddleHeight / 2;
-		console.log('Cinq secondes se sont écoulées.');
 	}, 5000);
 });
 
 socket.on('pong:point', (data) => {
-	console.log("gain point");
 	myScore = data.point;
 	vX = -0.0005;
 	vY = 0;
@@ -244,7 +189,6 @@ socket.on('pong:point', (data) => {
 });
 
 socket.on('pong:hisPoint', (data) => {
-	console.log("myPointawdawdawdawd point");
 	hisScore = data.point;
 	vX = -0.0005;
 	vY = 0;
@@ -260,7 +204,6 @@ socket.on('pong:hisPoint', (data) => {
 
 	function matchmaking()
 	{
-		console.log(`id ion matcj= ${myId}`)
 		const info = {
 			id: myId,
 			option: option,
@@ -270,7 +213,6 @@ socket.on('pong:hisPoint', (data) => {
 
 	function privateParty()
 	{
-		console.log(`id private party= ${myId}`)
 		const info = {
 			id: myId,
 			option: option,
@@ -280,7 +222,6 @@ socket.on('pong:hisPoint', (data) => {
 
 	function joinPrivateParty()
 	{
-		console.log(`id private party= ${myId}`)
 		const info = {
 			id: myId,
 			gameId: gameParam.gameId,
@@ -311,7 +252,6 @@ socket.on('pong:hisPoint', (data) => {
 	{
 		if (!gameId || !canvas)
 			return ;
-		console.log("send point");
 		const info = {
 			id: myId,
 			gameId: gameId,
@@ -391,7 +331,6 @@ socket.on('pong:hisPoint', (data) => {
 
 	function drawcenter()
 	{
-		// ctx.restore();
 		if (!ctx || !canvas)
 			return ;
 		ctx.fillStyle = 'white';
@@ -459,18 +398,14 @@ socket.on('pong:hisPoint', (data) => {
 			opRank: opRank,
 		};
 		await api.post('/loss', data);
-		// await api.post('/status', {status: 1});
 	}
 
-
-	//here
 	socket.emit('pong:disconnect', {id: myId});
 	window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
   };
 
 async function draw(timestamp: number)
 {
-	console.log("turning, running= ", running);
 	if (!running)
 	{
 		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong")
@@ -483,7 +418,6 @@ async function draw(timestamp: number)
 	}
 	if (myScore === maxScore || hisScore === maxScore)
 	{
-		console.log("maxScore!!!!")
 		const data = {
 			myScore: myScore,
 			opScore: hisScore,
@@ -495,14 +429,12 @@ async function draw(timestamp: number)
 			await api.post('/win', data);
 			await api.post('/status', {status: 1});
 			socket.emit('pong:disconnect', {id: myId});
-			console.log("send all ?? win");	
 		}
 		else
 		{
 			await api.post('/loss', data);
 			await api.post('/status', {status: 1});
 			socket.emit('pong:disconnect', {id: myId});
-			console.log("send loose");
 		}
 		window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
 		return ;
@@ -567,10 +499,7 @@ async function draw(timestamp: number)
 			if (ballY <= paddleY + paddleHeight + ballRadius && ballY >= paddleY - ballRadius)//touch paddle
 			{
 				if (ballX +  ballRadius > paddleX && ballX - ballRadius < paddleX + paddleWidth)
-				{
-					console.log("hehe here")
 					ballX = paddleX + paddleWidth + ballRadius;
-				}
 				updateVector();
 			}
 			send_info();
@@ -594,7 +523,6 @@ async function draw(timestamp: number)
 		{
 			if (ballY <= paddleY + paddleHeight + ballRadius && ballY >= paddleY - ballRadius)
 			{
-				console.log('true hehe');
 				ballX = paddleX + paddleWidth + ballRadius;
 				updateVector();
 				return ;
@@ -607,11 +535,7 @@ async function draw(timestamp: number)
 			send_point();
 		}
 		if (ballX > (canvas.width * 1.2) && ballX - (vX * 2) > canvas.width)
-		{
-			console.log("ball out win point pls")
 			send_my_point();
-		}
-
 	}
 
 
@@ -672,7 +596,6 @@ async function draw(timestamp: number)
 			setTimeout(() => {
 				paddleHeight = canvas.height * 0.25;
 				paddleY = canvas.height / 2 - paddleHeight / 2;
-				console.log('Cinq secondes se sont écoulées.');
 			  }, 5000);
 			date = new Date();
 			lastPower = date.getTime();
@@ -680,7 +603,6 @@ async function draw(timestamp: number)
 	});
 
 	requestAnimationFrame(draw);
-	console.log("retuuuuuuuuuuurn")
 	return (stopDrawCanvas);
 }
 
