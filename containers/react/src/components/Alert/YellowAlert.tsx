@@ -6,18 +6,6 @@ import React from "react";
 import { MdQrCodeScanner } from "react-icons/md";
 import { GiCrownedSkull, GiWingedSword } from "react-icons/gi";
 
-const dropIn = {
-    hidden: {
-        y: "-100vh",
-    },
-    visible: {
-        y: "0",
-    },
-    exit: {
-        y: "-100vh",
-    },
-};
-
 interface AlertProps {
     handleClose: Function,
     text: string,
