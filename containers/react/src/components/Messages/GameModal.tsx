@@ -6,21 +6,6 @@ import api from "../../script/axiosApi.tsx";
 import React from "react";
 import {User} from "../../../interfaces.tsx"
 
-const dropIn = {
-  hidden: { y: "-100vh", opacity: 0 },
-  visible: {
-    y: "0",
-    opacity: 1,
-    transition: {
-      duration: 0.3,
-      type: "spring",
-      damping: 100,
-      stiffness: 500,
-    },
-  },
-  exit: { y: "100vh", opacity: 0 },
-};
-
 interface ModalGame {
 	handleClose: Function,
 }
@@ -28,8 +13,7 @@ interface ModalGame {
 const GameModal = ({ handleClose }: ModalGame) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState('');
-  const [channel, setChannel] = useState('');
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {

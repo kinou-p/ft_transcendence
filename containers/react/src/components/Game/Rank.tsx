@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Rank.tsx                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:49:24 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/28 17:39:43 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:55:55 by sadjigui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import DefaultPicture from '../../assets/profile.jpg'
 import api from '../../script/axiosApi.tsx';
 import {User} from "../../../interfaces.tsx"

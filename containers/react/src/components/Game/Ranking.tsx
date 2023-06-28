@@ -1,7 +1,5 @@
-// import React from "react"
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Rank from './Rank.tsx'
-import defaultpic from '../../assets/profile.jpg'
 import api from '../../script/axiosApi.tsx';
 import {User} from "../../../interfaces.tsx"
 

@@ -54,12 +54,6 @@ const UserChat = styled.div `
 	}
 `
 
-const SideP = styled.p`
-	font-size: 14px;
-	color: lightgray;
-	margin-left: 15px;
-`
-
 //========================================================================================================
 //========================================================================================================
 //                                              Logical part
@@ -237,10 +231,6 @@ function Chats(){
 	};
 
 	const closeSetting = () => setSetting(false);
-
-	const handleFriend = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-		setFriend(event.target.value);
-	  };
 
 	  const handleAddFriend = async () => {
 		try{
