@@ -6,17 +6,14 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:49:24 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/23 17:16:40 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:39:43 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// import React from "react"
 import React, { useState, useEffect, useRef } from "react";
-// import {Rank} from '../../DataBase/DataRank.js'
 import DefaultPicture from '../../assets/profile.jpg'
 import api from '../../script/axiosApi.tsx';
-import {Matchlog, User} from "../../../interfaces.tsx"
-// import { Match } from "@testing-library/react";
+import {User} from "../../../interfaces.tsx"
 
 interface RankProps {
 	user: User

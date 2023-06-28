@@ -30,7 +30,6 @@ const ModalEdit = () => {
 	}
 
 	const handlePostNickname = async () => {
-		console.log("nickname=", nickname)
 		try {
 			if (nickname.length > 3) {
 				const ret = await api.post("/nickname", { nickname: nickname });

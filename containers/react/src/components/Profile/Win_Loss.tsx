@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from 'react-router-dom';
 import api from '../../script/axiosApi.tsx';
 
-
 function WinLoss() {
 	
 	const [user, setUser] = useState<User>();
@@ -16,7 +15,6 @@ function WinLoss() {
 	useEffect(()=> {
 		const getUser = async ()=>{
 			try{
-				console.log("username win loss=", username)
 				let tmpUser;
 				let tmpHistory;
 

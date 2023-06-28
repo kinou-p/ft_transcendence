@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:25 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 10:17:36 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:43:35 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,13 +153,11 @@ async isAdmin(convId: number, username: string) {
 	conv.admin = conv.admin || [];
 	if (conv.admin.find(item => item === username))
 		return (1);
-	console.log("nope");
 	return (0);
 }
 
 async setPrivate(convId: number, bool: boolean) {
 	const conv = await this.findConv(convId);
-	console.log("bool= ", bool);
 	conv.private = bool;
 	this.save(conv);
 }

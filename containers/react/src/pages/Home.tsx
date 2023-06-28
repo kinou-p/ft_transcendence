@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 08:19:04 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 11:31:57 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:47:35 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,13 @@ function Profile () {
 
 	useEffect(()=> {
 		const getUser = async ()=>{
-			console.log(`username= ${username}`)
 			let pic;
 			try{
-				console.log("before request")
 				const me = await api.get("/profile")
 				if (!username)
 				{
 					setMine(true);
 					setUser(me.data);
-					console.log(`mine= true = ${mine}`)
 					pic = await api.post("/getPicture", {username: me.data.username}) //good one?
 				}
 				else

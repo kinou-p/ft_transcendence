@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/28 16:50:11 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:43:13 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ export class AppController {
 	@Post('/logout')
 	async logout(@Request() req, @Body() data: any) {
 		const user = await this.userService.findOne(req.user.username)
-		// return await this.userService.refuseInvite(user, data.username);
 		if(!user)
 			return ;
 		if (user.sessionNumber === 1)
@@ -304,7 +303,6 @@ export class AppController {
 	  	return ;
 	  if (user.sessionNumber > 0)
 	    user.sessionNumber--;
-	  console.log("seesion number=", user.sessionNumber)
 	  if (!user.sessionNumber)
 		  user.status = 0;
 	  await this.userService.save(user);
@@ -423,15 +421,12 @@ export class AppController {
 			text: data.text,
 			id: null,
 		}
-		console.log(data);
 		return await this.chatService.createMessage(message, req.user.username);
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/member')
 	async getMember(@Body() data: any) {
-		console.log(data);
-		console.log(`get member= ${data.convId}`);
 		return await this.chatService.findConv(data.convId);
 	}
 
@@ -450,14 +445,12 @@ export class AppController {
 	@UseGuards(JwtAuthGuard)
 	@Post('/password')
 	async setPassword(@Body() data: any) {
-		// console.log("PASSSSSSSSSSSSSSSSSSSSSSSSSSs= ", data.password);
 		return await this.chatService.setPassword(data.convId, data.password)
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/verifyPassword')
 	async verifyPassword(@Request() req, @Body() data: any) {
-		// const user = await this.userService.findOne(req.user.username);
 		return await this.chatService.verifyPassword(data.convId, data.password, req.user.username)
 	}
 
@@ -494,7 +487,6 @@ export class AppController {
 	@UseGuards(JwtAuthGuard)
 	@Post('/isAdmin')
 	async isAdmin(@Request() req, @Body() data: any) {
-		console.log("isdamin= ", req.user.username, " id=", data.convId)
 		return await this.chatService.isAdmin(data.convId, req.user.username)
 	}
 

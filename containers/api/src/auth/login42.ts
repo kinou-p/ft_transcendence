@@ -55,7 +55,6 @@ export class loginClass {
 				otp_base32: null,
 				children: null,
 				status: 1,
-				// doubleAuth: 0,
 				otp_enabled: false,
 				otp_verified: false,
 				friendRequest: null,

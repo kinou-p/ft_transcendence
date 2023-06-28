@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:07 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 07:52:08 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:43:46 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ export class UsersService {
 		const user = await this.findOne(username)
 		let friendsTab = user.friends || [];
 		const friends = await this.userRepository.query("SELECT * FROM \"User\" WHERE username = ANY ($1);", [friendsTab]);
-		console.log(friends)
 		return (friends)
 	}
 
@@ -80,9 +79,7 @@ export class UsersService {
 	async getInvite(username: string) {
 		const user = await this.findOne(username)
 		let friendsTab = user.friendRequest
-		console.log(friendsTab)
 		const friends = await this.userRepository.query("SELECT * FROM \"User\" WHERE username = ANY ($1);", [friendsTab]);
-		console.log(friends)
 		return (friends)
 	}
 

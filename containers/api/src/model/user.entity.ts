@@ -1,18 +1,5 @@
-// item.entity.ts
-// import { BaseEntity } from './base.entity';
-
-//   @Column({ type: 'varchar', length: 300 , nullable: true})
-//   name: string;
-
-//   @Column({ type: 'varchar', length: 300 , nullable: true})
-//   description: string;
-
-
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { ManyToOne, OneToMany } from 'typeorm';
-
-
-
 
 @Entity({ name: 'User' })
 export class User {
@@ -56,7 +43,7 @@ export class User {
 	@Column({ default: 0 })
 	rank: number;
 
-	@Column({ default: 0 }) //0 = offline | 1 = connected | 2 = in game
+	@Column({ default: 0 })
 	status: number;
 
 	@Column({ default: 0 })

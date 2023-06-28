@@ -82,7 +82,7 @@ function QrCode () {
 				window.location.reload();
 			}
 			else
-				console.log("bad code")
+				console.log("Bad code")
 		}
 		catch(err){
 			 console.log(err)

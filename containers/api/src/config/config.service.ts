@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config.service.ts                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sadjigui <sadjigui@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 14:53:49 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/24 15:09:20 by sadjigui         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:41:26 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ export const getTypeOrmConfig = (): TypeOrmModuleOptions => ({
 	password: process.env.POSTGRES_PASSWORD || 'postgres',
 	database: process.env.POSTGRES_DATABASE || 'postgres',
 	entities: ["dist/**/*.entity.js"],
-	// entities: [join(__dirname, '**', '*.entity.{ts,js}')]
-	// entities: ['**/*.entity{.ts,.js}'], //basic
 	migrationsTableName: 'migration',
 	migrations: ['src/migration/*.ts'],
 	ssl: process.env.MODE !== 'DEV',

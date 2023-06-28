@@ -75,9 +75,8 @@ const Modal = ({handleClose}: ModalProps) => {
 			return;
 		try {
 			const ret = await api.post("/verifyPassword", {convId: channel, password: PassWord})
-			if (ret)
-				console.log("ici ret password", ret);
-			// window.location.reload();
+			if (ret.data)
+				window.location.reload();
 		} catch (err) {
 			console.log(err);
 		}
@@ -100,7 +99,7 @@ const Modal = ({handleClose}: ModalProps) => {
 	const joinChannel = async () => {
 		try {
 			await api.post("/join", {convId: channel})
-			// window.location.reload();
+			window.location.reload();
 		} catch(err) {
 			console.log(err);
 		}
@@ -183,12 +182,14 @@ const Modal = ({handleClose}: ModalProps) => {
 
 				  {askPass ? (
 					  <input className="mdp" placeholder="password" type="password" onChange={(e) => setPassWord(e.target.value)} onKeyDown={handlePassword}/>
-					  ):("") }
+					  ):(
+						<div className="div_submit">
+							<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>
+						</div>
+					  )}
 					  </div>
 
-				<div className="div_submit">
-					<Link to='#' className="submit" onClick={ joinChannel }>Join</Link>
-				</div>
+
 			  </div>
             </motion.div>
         </Backdrop>

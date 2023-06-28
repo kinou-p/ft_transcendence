@@ -14,7 +14,6 @@ function SuccessToken() {
   
 	useEffect(() => {
 	  if (!data) {
-		console.log("No data");
 		return ;
 	  }
   
@@ -59,7 +58,7 @@ function SuccessToken() {
 				window.location.replace("http://" + process.env.REACT_APP_BASE_URL + "/pong");
 			}
 			else
-				console.log("bad code")
+				console.log("Bad code")
 		} 
 		catch(err){
 			 console.log(err)

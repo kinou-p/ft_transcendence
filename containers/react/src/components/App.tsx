@@ -22,19 +22,7 @@ import api from "../script/axiosApi.tsx"
 
 
 function AnimatedRoute() {
-	useEffect(() => {
-		// const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
-		// 	console.log("git ")
-		// 	if (!localStorage.getItem('token'))
-		// 		return;
-		// 	try {
-		// 		await api.post("/quit");
-		// 		// navigator.sendBeacon("http://" + process.env.REACT_APP_BASE_URL + "/api/quit", {username: user.username})
-		// 	} catch (err) {
-		// 		console.log(err);
-		// 	}
-		// };
-		
+	useEffect(() => {	
 		const handleLoad = async () => {
 			if (!localStorage.getItem('token'))
 				return;
@@ -52,14 +40,7 @@ function AnimatedRoute() {
 				return;
 			await api.post("/quit");
 		});
-		// window.addEventListener("unload", async (event) => {	
-		// 	await api.post("/quit");
-		// });
-
-
-		return () => {
-			// window.removeEventListener('beforeunload', handleBeforeUnload);
-		};
+		return () => {};
 	}, []);
 
 	const location = useLocation();

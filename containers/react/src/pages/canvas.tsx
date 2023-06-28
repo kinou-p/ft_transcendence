@@ -108,7 +108,6 @@ socket.on('pong:win', async () => {
 });
 
 socket.on('pong:privateId', async (data) => {
-	console.log("private id = ", data)
 	try{
 		await api.post("/partyInvite", {username: gameParam.username, gameId: data});
 	} catch(err) {
@@ -376,11 +375,8 @@ socket.on('pong:hisPoint', (data) => {
   const stopDrawCanvas = async () => {
     running = false;
 
-	console.log("stopDrawCanvas 1")
-
 	if (gameParam.privateParty && !gameId) //delete invite
 	{
-		console.log("stopDrawCanvas2")
 		try{
 				await api.post('/status', {status: 1});
 				await api.post("deleteInvite", {username: gameParam.username})
@@ -585,7 +581,6 @@ async function draw(timestamp: number)
 		else if (event.code === "KeyW")
 		{
 			let date = new Date();
-			console.log("last time =", date.getTime() - lastPower)
 			if (date.getTime() - lastPower < 15000)//10000 + 5000
 				return ;
 			if (!superpowerModifier)

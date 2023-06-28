@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:18:38 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 07:04:47 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:46:12 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ export class PongGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage('pong:disconnect')
 	disconnectClient(client: Socket, payload: any): void {
-		console.log("disconnect forced client= ", client.id)
+		console.log("Forced disconnect client= ", client.id)
 		
 		for (const key in this.clients) {
 			if (this.clients.hasOwnProperty(key) && this.clients[key] === client) 
@@ -184,8 +184,6 @@ addPrivateParty(client: Socket, payload: any): void {
 	@SubscribeMessage('pong:power')
 	sendPower(client: Socket, payload: any): void
 	{
-		console.log(`from: ${client.id}`);
-		
 		const game = this.games.get(payload.gameId);
 		const playersIds = game.map(socket => socket.id);
 			if (playersIds[0] === payload.id)
@@ -197,8 +195,6 @@ addPrivateParty(client: Socket, payload: any): void {
 	@SubscribeMessage('pong:message')
 	handleMessage(client: Socket, payload: any): void
 	{
-		console.log(`from: ${client.id}`);
-		
 		const game = this.games.get(payload.gameId);
 		const playersIds = game.map(socket => socket.id);
 			if (playersIds[0] === payload.id)
@@ -249,7 +245,6 @@ addPrivateParty(client: Socket, payload: any): void {
 	{
 		const game = this.games.get(payload.gameId);
 		const playersIds = game.map(socket => socket.id);
-		console.log(`id of 0= ${playersIds[0]}`);
 
 		if (playersIds[0] === payload.id)
 		{
@@ -266,7 +261,6 @@ addPrivateParty(client: Socket, payload: any): void {
 	{
 		const game = this.games.get(payload.gameId);
 		const playersIds = game.map(socket => socket.id);
-		console.log(`id of 0 mypoint= ${playersIds[0]}`);
 
 		if (playersIds[0] === payload.id)
 			this.clients[playersIds[1]].emit('pong:hisPoint', payload);
@@ -279,7 +273,7 @@ addPrivateParty(client: Socket, payload: any): void {
 	{
 		const game = this.games.get(payload.gameId);
 		const playersIds = game.map(socket => socket.id);
-		console.log(`name of client= ${payload.name}`);
+
 		if (playersIds[0] === payload.id) 
 		{
 			this.clients[playersIds[1]].emit('pong:name', payload);

@@ -76,8 +76,6 @@ banUser(client: any, payload: any): void {
 	}
 	const bannedClients = this.clientsNames.get(payload.username);
 	bannedClients.forEach(client => {
-		console.log("Banning client:", client);
-		console.log("clietn socket=", this.clients[client])
 		this.clients[client].emit('ban', payload);
 	  });
 }
@@ -106,8 +104,6 @@ muteUser(client: any, payload: any): void {
 			{
 			  if (targetClient && targetClient !== client.id)
 				this.clients[targetClient].emit('message', payload)
-			  else
-				console.log("not sending");
 			});
 		}
 	  });

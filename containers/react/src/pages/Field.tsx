@@ -44,7 +44,6 @@ function Field()
 	useEffect(() => {
 		const queryParams = queryString.parse(window.location.search);
 		
-		console.log("launch canva hehe")
 		let Modifiers = 0;
 		let info: GameProps;
 
@@ -66,19 +65,16 @@ function Field()
 		}
 		if (queryParams.username)
 		{
-				console.log("user= ", queryParams.username)
 				info = {
 					privateParty: true,
 					username: queryParams.username as string,
 					gameId: queryParams.gameId as unknown as number
 				}
-			console.log("info of param vefore canvas=", info)
 		}
 
 		const cleanup = DrawCanvas(Modifiers, info);
 	
 		return () => {
-		  console.log("Cleanup");
 			if (cleanup)
 				cleanup();
 		};
