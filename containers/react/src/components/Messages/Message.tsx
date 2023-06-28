@@ -14,8 +14,6 @@ import { useEffect, useState, useRef } from "react";
 import api from '../../script/axiosApi.tsx';
 import styled from "styled-components"
 import DefaultPicture from '../../assets/profile.jpg'
-// import { useRef } from "react";
-// import { useEffect } from "react";
 import '../../styles/Messages.css'
 import {User, Conv, Message} from "../../../interfaces.tsx"
 import React from "react";
@@ -51,15 +49,10 @@ function MessageMe({message, own}: MessageMeProps){
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
-				console.log("useEffect message")
-			//   const user = await api.get("/profile");
 				const tmpSender = await api.post("/user", {username: message.sender})
 				const tmpConv = await api.post("/convId", {convId: message.convId})
-				// const tmpSender = await api.post("/user", {username: message.sender})
 				const tmpUser = await api.get("/profile")
 				const pic = await api.post("/getPicture", {username: message.sender})
-				// console.log(`user naem profile pic222= ${currentUser.username}`)
-				// console.log(` profile pic222= ${pic.data}`)
 				setConv(tmpConv.data);
 				setUser(tmpUser.data);
 				setSender(tmpSender.data);
@@ -75,32 +68,13 @@ function MessageMe({message, own}: MessageMeProps){
 		if (!sender)
 			return ;
 		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${sender.username}`;
-		// console.log("path= ", path)
-		// history(path, { replace: true });
-		// window.location.replace(path);
 		window.history.pushState({}, '', path);
 		window.location.reload();
 	};
 
-	// const isAllowed = async () => {
-	// 	const ret = await api.post("/allowed", {convId: message.convId});
-	// 	return ret.data;
-	// }
 
 	if (!user || !sender || !conv)
 		return (<></>);
-	// console.log("result includes=", conv.banned.includes(user.username))
-	// console.log("result includes=", conv.blocked.includes(user.username))
-	// const conv2: Conv = getConv();
-	// if (!conv)
-	// isAllowed().then((ret: number) => {
-	// 	if (!ret)
-	// 	{
-	// 		console.log("return not allowed");
-	// 		return ;
-	// 	}
-	// 	// Use the resolved currentConv here
-	//   });
 
 	if (user.blocked && user.blocked.includes(message.sender))
 		return (<></>);
@@ -108,11 +82,8 @@ function MessageMe({message, own}: MessageMeProps){
 		return (<></>);
 	else if (conv.muted && conv.muted.includes(user.username))
 	{
-		// console.log("muted00")
 		return (<></>);
 	}
-	// if (user.blocked.includes(message.sender))/
-	console.log("no return message good");
 	return (
 		<div className={own ? "meMessage" : "youMessage"} ref={scrollRef}>
 			<div>
@@ -122,7 +93,6 @@ function MessageMe({message, own}: MessageMeProps){
 					<img className="messageInfo" onClick={() => handleButtonClick()} src={DefaultPicture} alt="Default Profile Picture" />
 				)}
 			</div>
-			{/* <div className="usernameMesage">{message.senderNickname}</div>	 */}
 			{sender ? (
 			<div className="usernameMesage">{sender.nickname}</div>
 			): ""}

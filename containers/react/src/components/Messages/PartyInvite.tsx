@@ -53,19 +53,13 @@ export default function  PartyInvite({currentInvite}: UserProps)
 	const [profilePicture, setProfilePicture] = useState('');
 	const [request, setRequest] = useState<User>(); //user who invite
 	const [clickEvent, setClickEvent] = useState(false);
-	// const [user, setUser] = useState(null);
 	
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
-			//   const user = await api.get("/profile");\
-				// const tmpUser = await api.get("/profile")
 				const pic = await api.post("/getPicture", {username: currentInvite.username})
 				const tmpRequest = await api.post("/user", {username: currentInvite.username})
-				// setUser(tmpUser.data);
 				setRequest(tmpRequest.data);
-				// console.log(`user naem profile pic222= ${currentInvite.username}`)
-				// console.log(` profile pic222= ${pic.data}`)
 				setProfilePicture(pic.data);
 			} catch (error) {
 				console.error('Error fetching profile picture:', error);
@@ -77,45 +71,33 @@ export default function  PartyInvite({currentInvite}: UserProps)
 
 	const handleButtonClick = (user: InviteProps) => {
 		let path = `http://` + process.env.REACT_APP_BASE_URL + `/profile/${user.username}`; 
-		// history(path, { replace: true });
-		// window.location.replace(path);
 		window.history.pushState({}, '', path);
 		window.location.reload();
 	};
 	
 	const Accept = async (request: User) => {
 		try{
-			//call canvas ??
-			// await api.post("/friend", {username: request.username})
 			await api.post("/deleteInvite", {username: request.username})
 			let path = `http://` + process.env.REACT_APP_BASE_URL + `/pong/play?` 
 			path += 'username=' + request.username;
 			path += '&gameId=' + currentInvite.gameId;
-			// setClickEvent(true);
 			window.history.pushState({}, '', path);
 			window.location.reload();
 		} catch(err) {
 			console.log(err);
 		}
-		console.log("accept")
-		console.log(`request = ${request}`)
 	}
 
 	const Refuse = async (request: User) => {
 		try{
 			await api.post("/deleteInvite", {username: request.username})
-			// await api.post("/refuseInvite", {username: request.username})
 			setClickEvent(true);
 		} catch(err) {
 			console.log(err);
 		}
-		console.log("refuse")
-		console.log(`request = ${request}`)
 	}
 
-  // Vérifier si le contenu doit être caché
   	if (clickEvent) {
-		console.log("retrun true")
     	return null; // Rendre null pour ne pas afficher le contenu
   	}
 

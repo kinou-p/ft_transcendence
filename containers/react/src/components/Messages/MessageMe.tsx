@@ -14,7 +14,6 @@ const MeStyleP = styled.p`
 `
 
 function MessageMe(){
-	// const scrollRef = useRef();
 	const scrollRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {

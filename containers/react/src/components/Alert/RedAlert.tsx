@@ -29,7 +29,6 @@ function RedAlert ({handleClose, text}: AlertProps) {
         <motion.div
                 onClick={(e) => e.stopPropagation()}
                 className="redAlert"
-                // variant={dropIn}
                 initial="hidden"
                 animate="visible"
                 exit="exit"

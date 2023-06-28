@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import Backdrop from "../Sidebar/Backdrop.tsx";
-// import { Rank } from "../../DataBase/DataRank"
 import '../../styles/Messages.css'
 import { useState, useEffect } from "react";
 import { GrAdd } from "react-icons/gr";
@@ -43,8 +42,6 @@ const Modal = ({handleClose}: ModalProps) => {
 				const tmpUsers = await api.get("/users");
 				const tmpUser = await api.get("/profile");
 				const tmpConvs = await api.get("/convs");
-				console.log("users=", tmpUsers.data);
-				console.log("convs=", tmpConvs.data);
 				setUsers(tmpUsers.data);
 				setUser(tmpUser.data);
 				setConvs(tmpConvs.data);
@@ -60,8 +57,6 @@ const Modal = ({handleClose}: ModalProps) => {
 	useEffect(()=> {
 
 		const getConv = async ()=>{
-			console.log("chan changed")
-			console.log("chan = ", channel);
 			try{
 
 				const tmpConv = await api.post("/convId", {convId: channel});
@@ -71,10 +66,6 @@ const Modal = ({handleClose}: ModalProps) => {
 			catch(err){
 				console.log(err);
 			}
-			// if (channel.password)
-			// 	console.log("password true")
-			// else 
-			// 	console.log("password false")
 		}
 		getConv();
 	}, [channel]);
@@ -94,7 +85,6 @@ const Modal = ({handleClose}: ModalProps) => {
 	}
 
     const handleOptionChange = (selectId: number, selectedOption: string) => {
-		console.log("selected Option=", selectedOption)
         setSelectTag((prevTags) =>
             prevTags.map((tag) =>
                 tag.id === selectId ? { ...tag, selectedOption } : tag
@@ -105,14 +95,10 @@ const Modal = ({handleClose}: ModalProps) => {
     const addNewSelectedTag = () => {
         const newSelectedId = Math.max (...selectTags.map((tag) => tag.id)) + 1;
         setSelectTag([...selectTags, { id: newSelectedId, selectedOption: ''}]);
-		console.log(selectTags)
     };
 
 	const joinChannel = async () => {
 		try {
-			console.log("channel= ", channel)
-			console.log("ici test channel= ", channel)
-
 			await api.post("/join", {convId: channel})
 			// window.location.reload();
 		} catch(err) {
@@ -123,7 +109,6 @@ const Modal = ({handleClose}: ModalProps) => {
     const saveSelectedOptions = async () => {
 		const selectedOptions = selectTags.map((tag) => tag.selectedOption).filter((option) => option !== '');
 
-		console.log("selected= ", selectedOptions);
 		const data = {
 			members: selectedOptions,
 		}

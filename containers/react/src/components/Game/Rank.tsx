@@ -30,10 +30,7 @@ function Rank({user, index}: RankProps){
 	useEffect(() => {
 		const fetchProfilePicture = async () => {
 			try {
-			//   const user = await api.get("/profile");
 				const pic = await api.post("/getPicture", {username: user.username})
-				// console.log(`user naem profile pic222= ${currentUser.username}`)
-				// console.log(` profile pic222= ${pic.data}`)
 				setProfilePicture(pic.data);
 			} catch (error) {
 				console.error('Error fetching profile picture:', error);
@@ -43,11 +40,9 @@ function Rank({user, index}: RankProps){
 		  fetchProfilePicture();
 	}, [])
 	
-	// console.log(index);
 	return (
 		<div className='rank_elements'>
 			<div >
-				{/* <p>{(index + 1).toString()}</p> */}
 				<p>{(index + 1)}</p> 
 				<h4>{user.rank}: {user.nickname} 
 					{profilePicture ? (
@@ -55,10 +50,8 @@ function Rank({user, index}: RankProps){
 					) : (
 						<img className="profilePic" src={DefaultPicture} alt="Default Profile Picture" />
 					)}
-					{/* <img className="profilePic" src={defaultpic}/> */}
 				</h4>
 			</div>
-			{/* <h4 className='content'>{user.opponent}</h4> */}
 		</div>
 	)
 }
