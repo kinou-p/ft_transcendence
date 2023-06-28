@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import HomeLogin from "../pages/LoginButton.tsx";
 
@@ -23,17 +23,18 @@ import api from "../script/axiosApi.tsx"
 
 function AnimatedRoute() {
 	useEffect(() => {
-		const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
-			console.log("git ")
-			if (!localStorage.getItem('token'))
-				return;
-			try {
-				await api.post("/quit");
-			} catch (err) {
-				console.log(err);
-			}
-		};
-
+		// const handleBeforeUnload = async (event: { preventDefault: () => void; returnValue: string; }) => {
+		// 	console.log("git ")
+		// 	if (!localStorage.getItem('token'))
+		// 		return;
+		// 	try {
+		// 		await api.post("/quit");
+		// 		// navigator.sendBeacon("http://" + process.env.REACT_APP_BASE_URL + "/api/quit", {username: user.username})
+		// 	} catch (err) {
+		// 		console.log(err);
+		// 	}
+		// };
+		
 		const handleLoad = async () => {
 			if (!localStorage.getItem('token'))
 				return;
@@ -45,9 +46,17 @@ function AnimatedRoute() {
 		};
 
 		handleLoad();
-		window.addEventListener('beforeunload', handleBeforeUnload);
+
+		window.addEventListener("beforeunload", async (event) => {
+			await api.post("/quit");
+		});
+		window.addEventListener("unload", async (event) => {	
+			await api.post("/quit");
+		});
+
+
 		return () => {
-			window.removeEventListener('beforeunload', handleBeforeUnload);
+			// window.removeEventListener('beforeunload', handleBeforeUnload);
 		};
 	}, []);
 

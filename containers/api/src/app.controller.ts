@@ -6,7 +6,7 @@
 /*   By: apommier <apommier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 01:00:00 by apommier          #+#    #+#             */
-/*   Updated: 2023/06/26 10:16:19 by apommier         ###   ########.fr       */
+/*   Updated: 2023/06/28 13:57:06 by apommier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,24 @@ export class AppController {
 	//                                              Pong
 	//========================================================================================================
 	//========================================================================================================
+
+	@UseGuards(JwtAuthGuard)
+	@Post('/addGame')
+	async addGame(@Request() req, @Body() data: any) {
+	  const user = await this.userService.findOne(req.user.username);
+	  user.gameSession += 1;
+	  await this.userService.save(user);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Post('/rmGame')
+	async removeGame(@Request() req, @Body() data: any) {
+	  const user = await this.userService.findOne(req.user.username);
+	  user.gameSession -= 1;
+	  if (user.gameSession === 0)
+		user.status = 1;
+	  await this.userService.save(user);
+	}
 
   @UseGuards(JwtAuthGuard)
   @Post('/win')
