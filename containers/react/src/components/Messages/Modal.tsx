@@ -8,28 +8,12 @@ import api from "../../script/axiosApi.tsx";
 import React from "react";
 import {User, Conv} from "../../../interfaces.tsx"
 
-const dropIn = {
-    hidden:{y:"-100vh",
-            opacity: 0,},
-    visible:{y: "0",
-            opacity: 0,
-            transotion:{
-                duration:0.1,
-                type:"spring",
-                damping: 100,
-                stiffness: 500,
-            }},
-    exit:{y: "100vh",
-            opacity: 0,},
-};
-
 interface ModalProps {
 	handleClose: Function,
   }
 
 const Modal = ({handleClose}: ModalProps) => {
     const [selectTags, setSelectTag] = useState([{ id: 1, selectedOption: ''}]);
-    const [selectedOptionArray, setSelectedOptionArray] = useState<string[]>([]);
 	const [users, setUsers] = useState<User[]>([]);
 	const [user, setUser] = useState<User>();
 	const [convs, setConvs] = useState<Conv[]>([]);
@@ -118,8 +102,6 @@ const Modal = ({handleClose}: ModalProps) => {
 		} catch(err) {
 			console.log(err);
 		}
-        setSelectedOptionArray(selectedOptions);
-
     }
 
     return (

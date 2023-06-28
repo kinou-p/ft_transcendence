@@ -29,7 +29,6 @@ const qrCode = new QRCodeStyling({
 
 function QrCode () {
 	const ref = useRef<HTMLDivElement>(null);
-	const [user, setUser] = useState(false);
 	const [url, setUrl] = useState("");
 	const [secret, setSecret] = useState(false);
 	const [code, setCode] = useState('');
@@ -43,7 +42,6 @@ function QrCode () {
 		const getUser = async ()=>{
 			try{
 				const tmpUser = await api.get("/profile");
-				setUser(tmpUser.data);
 				if (tmpUser.data.otp_verified)
 				{
 					setActivated(true);

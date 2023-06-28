@@ -18,7 +18,6 @@ function Social (){
 				const tmpFriends = await api.get("/friends")
 				const tmpUser = await api.get("/profile")
 				const tmpInv = await api.get("/inviteRequest")
-				const pic = await api.post("/getPicture", {username: tmpUser.data.username})
 
 				setInvite(tmpInv.data);
 				setUser(tmpUser.data);
